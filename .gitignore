@@ -26,9 +26,9 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-generated/
 .yml
-.properties
+email.properties
+application.yml
 
 ### NetBeans ###
 /nbproject/private/
@@ -39,3 +39,6 @@ generated/
 
 ### VS Code ###
 .vscode/
+
+### querydsl ###
+/src/main/generated
