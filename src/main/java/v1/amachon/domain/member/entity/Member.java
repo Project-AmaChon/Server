@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -36,7 +37,6 @@ public class Member extends BaseEntity {
     private NotificationOption notificationOption;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @Builder.Default
     private Set<Authority> authorities = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
@@ -75,6 +75,12 @@ public class Member extends BaseEntity {
                 .build();
         member.addAuthority(Authority.ofMember(member));
         return member;
+    }
+
+    public List<String> getRoles() {
+        return authorities.stream()
+                .map(Authority::getRole)
+                .collect(Collectors.toList());
     }
 
     private void addAuthority(Authority authority) {
