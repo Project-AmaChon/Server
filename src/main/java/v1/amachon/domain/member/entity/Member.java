@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.member.dto.JoinDto;
 import v1.amachon.domain.message.entity.MessageRoom;
 import v1.amachon.domain.notification.entity.Notification;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
@@ -12,7 +13,9 @@ import v1.amachon.domain.tags.entity.techtag.MemberTechTag;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -31,6 +34,10 @@ public class Member extends BaseEntity {
     private String password;
     @Enumerated(value = EnumType.STRING)
     private NotificationOption notificationOption;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Builder.Default
+    private Set<Authority> authorities = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "profile_id")
@@ -58,6 +65,20 @@ public class Member extends BaseEntity {
         this.notificationOption = NotificationOption.ON;
         this.profile = new Profile();
         this.profile.init();
+    }
+
+    public static Member ofMember(JoinDto joinDto) {
+        Member member = Member.builder()
+                .nickname(joinDto.getNickname())
+                .email(joinDto.getEmail())
+                .password(joinDto.getPassword())
+                .build();
+        member.addAuthority(Authority.ofMember(member));
+        return member;
+    }
+
+    private void addAuthority(Authority authority) {
+        authorities.add(authority);
     }
 
     public void addTechTag(MemberTechTag memberTechTag) {
