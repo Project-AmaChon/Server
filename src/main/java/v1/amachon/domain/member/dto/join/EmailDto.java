@@ -5,8 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class JoinDto {
+public class EmailDto {
     private String email;
-    private String nickname;
-    private String password;
 }

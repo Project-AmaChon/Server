@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import v1.amachon.domain.base.BaseEntity;
-import v1.amachon.domain.member.dto.JoinDto;
+import v1.amachon.domain.member.dto.join.JoinDto;
 import v1.amachon.domain.message.entity.MessageRoom;
 import v1.amachon.domain.notification.entity.Notification;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
