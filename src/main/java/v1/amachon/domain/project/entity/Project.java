@@ -44,8 +44,7 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "region_tag_id")
     private RegionTag regionTag;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JoinColumn(name = "project_image_id")
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<ProjectImage> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, orphanRemoval = true)
@@ -53,7 +52,7 @@ public class Project extends BaseEntity {
 
     @Builder
     public Project(String title, String description, LocalDate recruitDeadline, int recruitNumber,
-                   LocalDate developPeriod, Member leader, RegionTag regionTag) {
+        LocalDate developPeriod, Member leader, RegionTag regionTag) {
         this.title = title;
         this.description = description;
         this.recruitDeadline = recruitDeadline;
@@ -71,5 +70,10 @@ public class Project extends BaseEntity {
     }
     public void addTechTag(ProjectTechTag projectTechTag) {
         techTags.add(projectTechTag);
+    }
+    // 추가: 이미지 목록을 설정하는 메서드
+    public void setImages(List<ProjectImage> images) {
+        this.images.clear();
+        this.images.addAll(images);
     }
 }
