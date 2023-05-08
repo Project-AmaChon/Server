@@ -42,11 +42,13 @@ public enum BaseResponseStatus {
 
 
     // mail
-    INVALID_EMAIL(false, 2070, "존재하지 않는 이메일입니다."),
-    INVALID_CHAR_SET(false, 2080, "character set 형식이 잘못되었습니다."),
-    FAIL_SEND(false, 2090, "이메일 전송에 실패했습니다."),
-    EXPIRED_CODE(false, 2100, "만료된 인증 코드입니다."),
+    INVALID_EMAIL(false, 2030, "존재하지 않는 이메일입니다."),
+    INVALID_CHAR_SET(false, 2031, "character set 형식이 잘못되었습니다."),
+    FAIL_SEND(false, 2032, "이메일 전송에 실패했습니다."),
+    EXPIRED_CODE(false, 2033, "만료된 인증 코드입니다."),
 
+    // tags
+    INVALID_TAG(false, 2040, "올바르지 않은 태그명입니다."),
     /**
      * 3000 : Response 오류
      */
