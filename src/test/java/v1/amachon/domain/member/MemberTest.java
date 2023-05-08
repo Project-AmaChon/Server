@@ -1,8 +1,9 @@
-package v1.amachon.domain.member.entity;
+package v1.amachon.domain.member;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
 
 @SpringBootTest

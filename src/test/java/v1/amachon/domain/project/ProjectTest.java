@@ -1,10 +1,11 @@
-package v1.amachon.domain.project.entity;
+package v1.amachon.domain.project;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;

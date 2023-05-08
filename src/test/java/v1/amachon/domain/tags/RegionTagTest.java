@@ -1,4 +1,4 @@
-package v1.amachon.domain.tags.entity;
+package v1.amachon.domain.tags;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
