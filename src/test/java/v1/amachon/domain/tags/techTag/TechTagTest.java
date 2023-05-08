@@ -1,6 +1,6 @@
-package v1.amachon.domain.tags;
+package v1.amachon.domain.tags.techTag;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import v1.amachon.domain.member.entity.Member;
@@ -37,6 +37,7 @@ class TechTagTest {
     private ProjectTechTagRepository projectTechTagRepository;
 
     @Test
+    @DisplayName("태그 생성")
     public void createTechTag() {
         TechTag backend = TechTag.builder().depth(0).name("Backend").build();
         TechTag frontend = TechTag.builder().depth(0).name("Frontend").build();
@@ -49,9 +50,11 @@ class TechTagTest {
     }
 
     @Test
+    @DisplayName("멤버에 기술 태그 저장")
     public void insertTagToMember() {
         Member member = Member.builder().email("acg6138").password("acg").nickname("이정우").build();
         TechTag spring = TechTag.builder().depth(1).name("spring").build();
+
         techTagRepository.save(spring);
         memberRepository.save(member);
         memberTechTagRepository.save(new MemberTechTag(member, spring));
@@ -60,10 +63,12 @@ class TechTagTest {
     }
 
     @Test
+    @DisplayName("프로젝트에 기술 태그 저장")
     public void insertTagToProject() {
         Project project = Project.builder().title("Amachon").description("아마추어를 위한 프로젝트 매칭 서비스").recruitDeadline(LocalDate.now())
                 .recruitNumber(4).developPeriod(LocalDate.now()).build();
         TechTag spring = TechTag.builder().depth(1).name("spring").build();
+
         techTagRepository.save(spring);
         projectRepository.save(project);
         projectTechTagRepository.save(new ProjectTechTag(project, spring));

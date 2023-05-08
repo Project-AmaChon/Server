@@ -1,5 +1,6 @@
 package v1.amachon.domain.message;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,7 @@ class MessageRoomTest {
     private MessageRepository messageRepository;
 
     @Test
+    @DisplayName("메시지방 매칭")
     public void messageRoomMatchTest() {
         Member from = Member.builder().email("from").build();
         Member to = Member.builder().email("to").build();
