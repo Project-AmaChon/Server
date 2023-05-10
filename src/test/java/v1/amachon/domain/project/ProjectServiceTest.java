@@ -1,5 +1,6 @@
 package v1.amachon.domain.project;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.project.dto.ProjectCreateRequestDto;
@@ -95,7 +97,7 @@ public class ProjectServiceTest {
 
     @Test
     @DisplayName("정상적으로 프로젝트 생성")
-    public void createProjectTest() {
+    public void createProjectTest() throws BaseException {
       // Given
       long projectCountBeforeCreate = projectRepository.count();
 
@@ -103,7 +105,8 @@ public class ProjectServiceTest {
       projectService.createProject(projectCreateDto);
 
       // Then
-      assertEquals(projectCountBeforeCreate + 1, projectRepository.count(), "프로젝트 생성 실패");
+      Assertions.assertThat(projectRepository.count()).isEqualTo(projectCountBeforeCreate + 1);
+//      assertEquals(projectCountBeforeCreate + 1, projectRepository.count(), "프로젝트 생성 실패");
     }
   }
 
@@ -113,32 +116,32 @@ public class ProjectServiceTest {
 
     @Test
     @DisplayName("리더 정보가 잘못된 경우")
-    public void createProjectFail_invalidLeader() {
+    public void createProjectFail_invalidLeader() throws BaseException {
       // Given
       projectCreateDto.setLeaderId(9999L);
 
       // When & Then
-      assertThrows(IllegalArgumentException.class, () -> projectService.createProject(projectCreateDto), "예외가 발생하지 않음");
+      assertThrows(BaseException.class, () -> projectService.createProject(projectCreateDto), "예외가 발생하지 않음");
     }
 
     @Test
     @DisplayName("지역 태그 정보가 잘못된 경우")
-    public void createProjectFail_invalidRegionTag() {
+    public void createProjectFail_invalidRegionTag() throws BaseException {
       // Given
       projectCreateDto.setRegionTagId(9999L);
 
       // When & Then
-      assertThrows(IllegalArgumentException.class, () -> projectService.createProject(projectCreateDto), "예외가 발생하지 않음");
+      assertThrows(BaseException.class, () -> projectService.createProject(projectCreateDto), "예외가 발생하지 않음");
     }
 
     @Test
     @DisplayName("기술 태그 정보가 잘못된 경우")
-    public void createProjectFail_invalidTechTags() {
+    public void createProjectFail_invalidTechTags() throws BaseException {
       // Given
       projectCreateDto.setTechTagIds(Arrays.asList(9999L, 10000L));
 
       // When & Then
-      assertThrows(IllegalArgumentException.class, () -> projectService.createProject(projectCreateDto), "예외가 발생하지 않음");
+      assertThrows(BaseException.class, () -> projectService.createProject(projectCreateDto), "예외가 발생하지 않음");
     }
   }
 }

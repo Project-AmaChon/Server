@@ -4,6 +4,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import v1.amachon.domain.base.BaseException;
+import v1.amachon.domain.base.BaseResponseStatus;
 import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.project.dto.ProjectCreateRequestDto;
 import v1.amachon.domain.project.dto.ProjectCreateResponseDto;
@@ -17,9 +19,9 @@ import v1.amachon.domain.tags.repository.TechTagRepository;
 
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
 @Transactional
+@Service
 public class ProjectService {
 
   private final ProjectRepository projectRepository;
@@ -28,7 +30,7 @@ public class ProjectService {
   private final RegionTagRepository regionTagRepository;
 
   @Transactional
-  public ProjectCreateResponseDto createProject(ProjectCreateRequestDto projectCreateDto) {
+  public ProjectCreateResponseDto createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
     Project project = Project.builder()
         .title(projectCreateDto.getTitle())
         .description(projectCreateDto.getDescription())
@@ -36,17 +38,17 @@ public class ProjectService {
         .recruitNumber(projectCreateDto.getRecruitNumber())
         .developPeriod(projectCreateDto.getDevelopPeriod())
         .leader(memberRepository.findById(projectCreateDto.getLeaderId())
-            .orElseThrow(() -> new IllegalArgumentException("해당 리더가 없습니다. id=" + projectCreateDto.getLeaderId())))
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.POST_PROJECT_EMPTY_LEADER)))
         .regionTag(regionTagRepository.findById(projectCreateDto.getRegionTagId())
-            .orElseThrow(() -> new IllegalArgumentException("해당 지역 태그가 없습니다. id=" + projectCreateDto.getRegionTagId())))
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.POST_PROJECT_EMPTY_REGIONTAG)))
         .build();
 
-    projectCreateDto.getTechTagIds().forEach(tagId -> {
+    for (Long tagId : projectCreateDto.getTechTagIds()) {
       TechTag techTag = techTagRepository.findById(tagId)
-          .orElseThrow(() -> new IllegalArgumentException("해당 기술 태그가 없습니다. id=" + tagId));
+          .orElseThrow(() -> new BaseException(BaseResponseStatus.POST_PROJECT_EMPTY_TECHTAG));
       ProjectTechTag projectTechTag = new ProjectTechTag(project, techTag);
       project.addTechTag(projectTechTag);
-    });
+    }
 
     // 프로젝트를 먼저 저장
     Project savedProject = projectRepository.save(project);

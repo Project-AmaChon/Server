@@ -47,6 +47,12 @@ public enum BaseResponseStatus {
     FAIL_SEND(false, 2090, "이메일 전송에 실패했습니다."),
     EXPIRED_CODE(false, 2100, "만료된 인증 코드입니다."),
 
+    // [POST] /project
+    POST_PROJECT_EMPTY_LEADER(false, 2200, "해당 ID의 리더가 없습니다."),
+    POST_PROJECT_EMPTY_REGIONTAG(false, 2210, "해당 ID의 지역태그가 없습니다."),
+    POST_PROJECT_EMPTY_TECHTAG(false, 2220, "해당 ID의 기술태그가 없습니다."),
+
+
     /**
      * 3000 : Response 오류
      */
