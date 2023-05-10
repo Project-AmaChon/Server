@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponseStatus;
+import v1.amachon.domain.member.entity.Member;
+import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.tags.dto.RegionTagDto;
+import v1.amachon.domain.tags.dto.SetRegionTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.repository.RegionTagRepository;
+import v1.amachon.global.config.security.util.SecurityUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 public class RegionTagService {
 
     private final RegionTagRepository regionTagRepository;
+    private final MemberRepository memberRepository;
 
     @Cacheable(value = "regionTags")
     public List<RegionTagDto> getAllRegionTags() {
@@ -33,5 +38,15 @@ public class RegionTagService {
                 () -> new BaseException(BaseResponseStatus.INVALID_TAG)
         );
         return new RegionTagDto(tag);
+    }
+
+    public void changeRegionTag(SetRegionTagDto setRegionTagDto) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.UNAUTHORIZED)
+        );
+        RegionTag regionTag = regionTagRepository.findByName(setRegionTagDto.getRegionName()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.INVALID_TAG)
+        );
+        member.changeRegion(regionTag);
     }
 }
