@@ -1,5 +1,6 @@
 package v1.amachon.domain.member;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,7 @@ class BaseEntityTest {
     private TeamMemberRepository teamMemberRepository;
 
     @Test
+    @DisplayName("베이스 엔티티 상태 체크")
     public void statusTest() {
         Member member = Member.builder().email("1").build();
         memberRepository.save(member);
@@ -49,6 +51,7 @@ class BaseEntityTest {
     }
 
     @Test
+    @DisplayName("날짜 체크")
     public void dateTest() {
         Member member = Member.builder()
                 .email("test")

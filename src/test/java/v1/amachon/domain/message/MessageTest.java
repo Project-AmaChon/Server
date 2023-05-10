@@ -1,11 +1,14 @@
-package v1.amachon.domain.message.entity;
+package v1.amachon.domain.message;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.message.entity.Message;
+import v1.amachon.domain.message.entity.MessageRoom;
 import v1.amachon.domain.message.repository.MessageRepository;
 import v1.amachon.domain.message.repository.MessageRoomRepository;
 
@@ -43,12 +46,14 @@ class MessageTest {
     }
 
     @Test
+    @DisplayName("메시지 생성")
     public void messageCreateTest() {
         Message message1 = Message.builder().messageRoom(from).sender(sender).receiver(receiver).content("안녕").build();
         messageRepository.save(message1);
     }
 
     @Test
+    @DisplayName("메시지 보내기")
     public void messageSendTest() {
         Message message1 = Message.builder().messageRoom(from).sender(sender).receiver(receiver).content("안녕").build();
         Message message2 = Message.builder().messageRoom(from.getToSend()).sender(sender).receiver(receiver).content("안녕").build();

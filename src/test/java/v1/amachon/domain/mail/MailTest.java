@@ -1,5 +1,6 @@
 package v1.amachon.domain.mail;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,7 @@ public class MailTest {
     private EmailService emailService;
 
     @Test
+    @DisplayName("이메일 인증 정보 생성")
     public void createEmailVerification() {
         EmailVerification emailVerification = new EmailVerification("acg6138@naver.com", "acg6138");
         emailVerificationRepository.save(emailVerification);
@@ -27,6 +29,7 @@ public class MailTest {
     }
 
     @Test
+    @DisplayName("이메일 인증 코드 전송")
     public void sendVerificationCode() throws MessagingException, UnsupportedEncodingException {
         String email = "acg6138@naver.com";
         emailService.sendVerificationCode(email);

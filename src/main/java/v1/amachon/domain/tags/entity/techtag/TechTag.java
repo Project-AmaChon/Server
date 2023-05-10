@@ -37,5 +37,6 @@ public class TechTag {
             parent.children.add(this);
         }
         this.parent = parent;
+        this.children = new ArrayList<>();
     }
 }

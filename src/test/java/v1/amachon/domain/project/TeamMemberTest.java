@@ -1,11 +1,14 @@
-package v1.amachon.domain.project.entity;
+package v1.amachon.domain.project;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.project.entity.Project;
+import v1.amachon.domain.project.entity.TeamMember;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.project.repository.TeamMemberRepository;
 
@@ -50,12 +53,15 @@ class TeamMemberTest {
     }
 
     @Test
+    @DisplayName("팀 멤버 생성")
     public void createTeamMemberTest() {
         project.addTeamMember(new TeamMember(project, follower1));
         project.addTeamMember(new TeamMember(project, follower2));
         project.addTeamMember(new TeamMember(project, follower3));
         project.addTeamMember(new TeamMember(project, follower4));
+
         projectRepository.save(project);
+
         assertThat(project.getTeamMembers().size()).isEqualTo(4);
     }
 }
