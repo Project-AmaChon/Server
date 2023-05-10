@@ -8,15 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.transaction.annotation.Transactional;
 import v1.amachon.domain.base.BaseException;
+import v1.amachon.domain.member.entity.Member;
+import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.tags.dto.RegionTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.repository.RegionTagRepository;
 import v1.amachon.domain.tags.service.RegionTagService;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
+@Transactional
 public class RegionTagServiceTest {
 
     @Autowired
@@ -26,11 +31,16 @@ public class RegionTagServiceTest {
     private RegionTagRepository regionTagRepository;
 
     @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
     private CacheManager cacheManager;
+
+    public static RegionTag 경기;
 
     @BeforeEach
     public void init() {
-        RegionTag 경기 = RegionTag.builder().depth(0).name("경기").build();
+        경기 = RegionTag.builder().depth(0).name("경기").build();
         RegionTag 서울 = RegionTag.builder().depth(0).name("서울").build();
         RegionTag 인천 = RegionTag.builder().depth(0).name("인천").build();
 
@@ -65,5 +75,18 @@ public class RegionTagServiceTest {
         Cache cache = cacheManager.getCache("regionTag");
         RegionTagDto cached = cache.get("용산구", RegionTagDto.class);
         Assertions.assertThat(용산구).isEqualTo(cached);
+    }
+
+    @Test
+    @DisplayName("지역 태그 변경")
+    public void changeRegionTag() {
+        Member member = memberRepository.save(new Member("1", "1", "1"));
+        Member member2 = memberRepository.save(new Member("2", "1", "1"));
+        member.changeRegion(경기);
+        member2.changeRegion(경기);
+        Optional<Member> save = memberRepository.findByEmail("1");
+        Optional<Member> save2 = memberRepository.findByEmail("2");
+        Assertions.assertThat(member.getRegionTag()).isEqualTo(경기);
+        Assertions.assertThat(member2.getRegionTag()).isEqualTo(경기);
     }
 }
