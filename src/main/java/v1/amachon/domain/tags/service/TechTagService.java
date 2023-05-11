@@ -9,7 +9,7 @@ import v1.amachon.domain.base.BaseResponseStatus;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.project.repository.ProjectRepository;
-import v1.amachon.domain.tags.dto.SetTechTagDto;
+import v1.amachon.domain.tags.dto.change.ChangeTechTagDto;
 import v1.amachon.domain.tags.dto.TechTagDto;
 import v1.amachon.domain.tags.entity.techtag.MemberTechTag;
 import v1.amachon.domain.tags.entity.techtag.TechTag;
@@ -18,7 +18,6 @@ import v1.amachon.domain.tags.repository.ProjectTechTagRepository;
 import v1.amachon.domain.tags.repository.TechTagRepository;
 import v1.amachon.global.config.security.util.SecurityUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,12 +63,12 @@ public class TechTagService {
         return new TechTagDto(tag);
     }
 
-    public void changeTechTags(SetTechTagDto setTechTagDto) throws BaseException {
+    public void changeTechTags(ChangeTechTagDto changeTechTagDto) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.UNAUTHORIZED)
         );
 
-        for (String tagName : setTechTagDto.getTechTagName()) {
+        for (String tagName : changeTechTagDto.getTechTagName()) {
             TechTag tag = techTagRepository.findByName(tagName).orElseThrow(
                     () -> new BaseException(BaseResponseStatus.INVALID_TAG)
             );

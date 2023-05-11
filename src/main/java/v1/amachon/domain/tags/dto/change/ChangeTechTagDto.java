@@ -1,4 +1,4 @@
-package v1.amachon.domain.tags.dto;
+package v1.amachon.domain.tags.dto.change;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SetTechTagDto {
+public class ChangeTechTagDto {
     private List<String> techTagName;
 }

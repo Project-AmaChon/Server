@@ -9,7 +9,7 @@ import v1.amachon.domain.base.BaseResponseStatus;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.tags.dto.RegionTagDto;
-import v1.amachon.domain.tags.dto.SetRegionTagDto;
+import v1.amachon.domain.tags.dto.change.ChangeRegionTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.repository.RegionTagRepository;
 import v1.amachon.global.config.security.util.SecurityUtils;
@@ -40,11 +40,11 @@ public class RegionTagService {
         return new RegionTagDto(tag);
     }
 
-    public void changeRegionTag(SetRegionTagDto setRegionTagDto) throws BaseException {
+    public void changeRegionTag(ChangeRegionTagDto changeRegionTagDto) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.UNAUTHORIZED)
         );
-        RegionTag regionTag = regionTagRepository.findByName(setRegionTagDto.getRegionName()).orElseThrow(
+        RegionTag regionTag = regionTagRepository.findByName(changeRegionTagDto.getRegionName()).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.INVALID_TAG)
         );
         member.changeRegion(regionTag);
