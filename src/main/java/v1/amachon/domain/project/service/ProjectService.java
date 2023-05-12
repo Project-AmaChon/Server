@@ -8,6 +8,7 @@ import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponseStatus;
 import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.project.dto.ProjectCreateRequestDto;
+import v1.amachon.domain.project.dto.ProjectDetailDto;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.repository.ProjectRepository;
@@ -60,6 +61,28 @@ public class ProjectService {
 
     // 변경사항을 저장
     projectRepository.save(savedProject);
+  }
+
+  @Transactional
+  public ProjectDetailDto getProjectDetailDto(Long id) throws BaseException {
+    Project project = projectRepository.findById(id)
+        .orElseThrow(() -> new BaseException(BaseResponseStatus.PROJECT_NOT_FOUND));
+    return ProjectDetailDto.builder()
+        .id(project.getId())
+        .title(project.getTitle())
+        .description(project.getDescription())
+        .recruitDeadline(project.getRecruitDeadline())
+        .recruitNumber(project.getRecruitNumber())
+        .developPeriod(project.getDevelopPeriod())
+        .leaderId(project.getLeader().getId())
+        .regionTagId(project.getRegionTag().getId())
+        .techTagIds(project.getTechTags().stream()
+            .map(ProjectTechTag::getId)
+            .collect(Collectors.toList()))
+        .imageUrls(project.getImages().stream()
+            .map(ProjectImage::getImageUrl)
+            .collect(Collectors.toList()))
+        .build();
   }
 
   @Transactional

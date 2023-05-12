@@ -52,6 +52,10 @@ public enum BaseResponseStatus {
     POST_PROJECT_EMPTY_REGIONTAG(false, 2210, "해당 ID의 지역태그가 없습니다."),
     POST_PROJECT_EMPTY_TECHTAG(false, 2220, "해당 ID의 기술태그가 없습니다."),
 
+    // [GET] /project/{id}
+    // 프로젝트가 존재하지 않는 경우
+    PROJECT_NOT_FOUND(false, 2230, "해당 프로젝트가 존재하지 않습니다."),
+
 
     /**
      * 3000 : Response 오류
