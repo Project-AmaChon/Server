@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Api("태그 API")
+@Api(tags = "태그 API")
 public class TagsController {
 
     private final TechTagService techTagService;
