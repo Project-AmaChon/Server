@@ -13,6 +13,7 @@ import v1.amachon.domain.base.BaseResponse;
 import v1.amachon.domain.mail.dto.CertificationDto;
 import v1.amachon.domain.mail.service.EmailService;
 import v1.amachon.domain.member.dto.join.EmailDto;
+import v1.amachon.domain.member.dto.join.NicknameDto;
 import v1.amachon.domain.member.service.AuthService;
 import v1.amachon.domain.member.service.MemberService;
 
@@ -33,9 +34,7 @@ public class AuthController {
             value = "이메일 중복 체크, 이메일 인증 코드 발송",
             notes = "이메일 중복 시에 DUPLICATED_EMAIL(3011)에러를 리턴하고 중복된 이메일이 아니라면 인증 코드 발송"
     )
-    @ApiResponses({
-            @ApiResponse(code = 3011, message = "중복된 이메일 입니다.")
-    })
+    @ApiResponse(code = 3011, message = "중복된 이메일 입니다.")
     @PostMapping("/join/send-verification-code")
     public BaseResponse<String> sendVerificationCode(@RequestBody EmailDto emailDto) throws MessagingException, UnsupportedEncodingException {
         try{
@@ -60,6 +59,21 @@ public class AuthController {
         try {
             authService.certify(certificationDto);
             return new BaseResponse<>("이메일 인증 완료!");
+        } catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ApiOperation(
+            value = "닉네임 중복 확인",
+            notes = "닉네임이 중복되면 DUPLICATE_NICKNAME(3012) 에러를 리턴"
+    )
+    @ApiResponse(code = 3012, message = "이미 존재하는 닉네임 입니다.")
+    @PostMapping("/join/check-nickname")
+    public BaseResponse<String> checkNickname(@RequestBody NicknameDto nicknameDto) {
+        try {
+            memberService.isDuplicateNickname(nicknameDto);
+            return new BaseResponse<>("닉네임 중복 확인 완료!");
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
