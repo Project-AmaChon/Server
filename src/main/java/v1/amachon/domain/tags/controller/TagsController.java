@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponse;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Api("태그 API")
+@Api(tags = "태그 API")
 public class TagsController {
 
     private final TechTagService techTagService;
@@ -45,7 +46,7 @@ public class TagsController {
             @ApiResponse(code = 2040, message = "올바르지 않은 태그명입니다."),
     })
     @PostMapping("/change-tags")
-    public BaseResponse<String> changeTags(ChangeTagsDto changeTagsDto) throws BaseException {
+    public BaseResponse<String> changeTags(@RequestBody ChangeTagsDto changeTagsDto) throws BaseException {
         try {
             techTagService.changeTechTags(changeTagsDto.getChangeTechTagDto());
             regionTagService.changeRegionTag(changeTagsDto.getChangeRegionTagDto());

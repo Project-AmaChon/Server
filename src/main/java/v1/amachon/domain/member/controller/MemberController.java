@@ -1,5 +1,6 @@
 package v1.amachon.domain.member.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import v1.amachon.domain.member.service.MemberService;
 
 @RestController
 @RequiredArgsConstructor
+@Api(tags = "회원 정보 API")
 public class MemberController {
 
     private final MemberService memberService;
