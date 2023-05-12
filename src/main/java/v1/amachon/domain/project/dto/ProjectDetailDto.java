@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import v1.amachon.domain.member.entity.Member;
 
 @Data
 @NoArgsConstructor
@@ -22,4 +23,6 @@ public class ProjectDetailDto {
   private Long regionTagId;
   private List<Long> techTagIds;
   private List<String> imageUrls;
+  // 추가: 프로젝트 팀에 참가 중인 인원들의 목록
+  private List<Member> teamMembers;
 }
