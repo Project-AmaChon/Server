@@ -8,7 +8,6 @@ import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponseStatus;
 import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.project.dto.ProjectCreateRequestDto;
-import v1.amachon.domain.project.dto.ProjectCreateResponseDto;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.repository.ProjectRepository;
@@ -30,7 +29,7 @@ public class ProjectService {
   private final RegionTagRepository regionTagRepository;
 
   @Transactional
-  public ProjectCreateResponseDto createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
+  public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
     Project project = Project.builder()
         .title(projectCreateDto.getTitle())
         .description(projectCreateDto.getDescription())
@@ -61,19 +60,6 @@ public class ProjectService {
 
     // 변경사항을 저장
     projectRepository.save(savedProject);
-
-    return ProjectCreateResponseDto.builder()
-        .id(savedProject.getId())
-        .title(savedProject.getTitle())
-        .description(savedProject.getDescription())
-        .recruitDeadline(savedProject.getRecruitDeadline())
-        .recruitNumber(savedProject.getRecruitNumber())
-        .developPeriod(savedProject.getDevelopPeriod())
-        .leaderId(savedProject.getLeader().getId())
-        .regionTagId(savedProject.getRegionTag().getId())
-        .techTags(savedProject.getTechTags().stream().map(ProjectTechTag::getTechTag).collect(Collectors.toList()))
-        .imageUrls(savedProject.getImages().stream().map(ProjectImage::getImageUrl).collect(Collectors.toList()))
-        .build();
   }
 
   @Transactional
