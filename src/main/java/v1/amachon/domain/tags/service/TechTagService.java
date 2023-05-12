@@ -6,11 +6,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponseStatus;
+import v1.amachon.domain.member.entity.Member;
+import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.project.repository.ProjectRepository;
+import v1.amachon.domain.tags.dto.change.ChangeTechTagDto;
 import v1.amachon.domain.tags.dto.TechTagDto;
+import v1.amachon.domain.tags.entity.techtag.MemberTechTag;
 import v1.amachon.domain.tags.entity.techtag.TechTag;
+import v1.amachon.domain.tags.repository.MemberTechTagRepository;
+import v1.amachon.domain.tags.repository.ProjectTechTagRepository;
 import v1.amachon.domain.tags.repository.TechTagRepository;
+import v1.amachon.global.config.security.util.SecurityUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +27,26 @@ import java.util.stream.Collectors;
 public class TechTagService {
 
     private final TechTagRepository techTagRepository;
+    private final ProjectRepository projectRepository;
+    private final ProjectTechTagRepository projectTechTagRepository;
+    private final MemberRepository memberRepository;
+    private final MemberTechTagRepository memberTechTagRepository;
+
+    public void init() {
+        // parent
+        TechTag backend = TechTag.builder().depth(0).name("Backend").build();
+        TechTag frontend = TechTag.builder().depth(0).name("Frontend").build();
+        techTagRepository.save(backend);
+        techTagRepository.save(frontend);
+
+        // child
+        TechTag spring = TechTag.builder().depth(1).name("Spring").parent(backend).build();
+        TechTag nodeJS = TechTag.builder().depth(1).name("NodeJS").parent(backend).build();
+        TechTag reactJS = TechTag.builder().depth(1).name("ReactJS").parent(frontend).build();
+        techTagRepository.save(spring);
+        techTagRepository.save(nodeJS);
+        techTagRepository.save(reactJS);
+    }
 
     @Cacheable(value = "techTags")
     public List<TechTagDto> getAllTechTags() {
@@ -34,5 +61,18 @@ public class TechTagService {
                 () -> new BaseException(BaseResponseStatus.INVALID_TAG)
         );
         return new TechTagDto(tag);
+    }
+
+    public void changeTechTags(ChangeTechTagDto changeTechTagDto) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.UNAUTHORIZED)
+        );
+
+        for (String tagName : changeTechTagDto.getTechTagName()) {
+            TechTag tag = techTagRepository.findByName(tagName).orElseThrow(
+                    () -> new BaseException(BaseResponseStatus.INVALID_TAG)
+            );
+            memberTechTagRepository.save(new MemberTechTag(member, tag));
+        }
     }
 }

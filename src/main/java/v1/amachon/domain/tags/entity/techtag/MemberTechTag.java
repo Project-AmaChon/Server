@@ -27,6 +27,5 @@ public class MemberTechTag {
     public MemberTechTag(Member member, TechTag techTag) {
         this.member = member;
         this.techTag = techTag;
-        member.addTechTag(this);
     }
 }

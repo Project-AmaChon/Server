@@ -87,8 +87,8 @@ public class Member extends BaseEntity {
         authorities.add(authority);
     }
 
-    public void addTechTag(MemberTechTag memberTechTag) {
-        this.techTags.add(memberTechTag);
+    public void changeTechTag(List<MemberTechTag> techTags) {
+        this.techTags = techTags;
     }
 
     public void changeRegion(RegionTag regionTag) {
