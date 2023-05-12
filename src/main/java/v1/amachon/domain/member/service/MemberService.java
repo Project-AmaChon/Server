@@ -25,10 +25,11 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public TokenDto join(JoinDto joinDto) throws BaseException {
+        String rawPassword = joinDto.getPassword();
         joinDto.setPassword(passwordEncoder.encode(joinDto.getPassword()));
         memberRepository.save(Member.ofMember(joinDto));
         return authService.login(LoginDto.builder().email(joinDto.getEmail())
-                .password(joinDto.getPassword()).build());
+                .password(rawPassword).build());
     }
 
     public void isDuplicateEmail(String email) throws BaseException {
