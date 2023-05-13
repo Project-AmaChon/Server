@@ -40,15 +40,25 @@ public enum BaseResponseStatus {
     PATCH_USERS_EMPTY_CURRENT_PASSWORD(false, 2020, "현재 비밀번호를 입력해주세요."),
     PATCH_USERS_EMPTY_CHANGED_PASSWORD(false, 2021, "변경할 비밀번호를 입력해주세요."),
 
-
     // mail
     INVALID_EMAIL(false, 2030, "존재하지 않는 이메일입니다."),
     INVALID_CHAR_SET(false, 2031, "character set 형식이 잘못되었습니다."),
     FAIL_SEND(false, 2032, "이메일 전송에 실패했습니다."),
     EXPIRED_CODE(false, 2033, "만료된 인증 코드입니다."),
 
+    // [POST] /project
+    POST_PROJECT_EMPTY_LEADER(false, 2200, "해당 ID의 리더가 없습니다."),
+    POST_PROJECT_EMPTY_REGIONTAG(false, 2210, "해당 ID의 지역태그가 없습니다."),
+    POST_PROJECT_EMPTY_TECHTAG(false, 2220, "해당 ID의 기술태그가 없습니다."),
+
+    // [GET] /project/{id}
+    // 프로젝트가 존재하지 않는 경우
+    PROJECT_NOT_FOUND(false, 2230, "해당 프로젝트가 존재하지 않습니다."),
+
     // tags
     INVALID_TAG(false, 2040, "올바르지 않은 태그명입니다."),
+  
+  
     /**
      * 3000 : Response 오류
      */
@@ -62,6 +72,7 @@ public enum BaseResponseStatus {
     INVALID_PASSWORD(false, 3015, "비밀번호가 다릅니다."),
     EXPIRED_USERS(false, 3016, "탈퇴한 회원입니다."),
 
+  
     /**
      * 4000 : Database, Server 오류
      */
