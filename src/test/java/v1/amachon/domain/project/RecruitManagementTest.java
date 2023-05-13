@@ -1,12 +1,15 @@
-package v1.amachon.domain.project.entity;
+package v1.amachon.domain.project;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.project.entity.Project;
+import v1.amachon.domain.project.entity.RecruitManagement;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.project.repository.RecruitManagementRepository;
 import v1.amachon.domain.project.repository.TeamMemberRepository;
@@ -51,8 +54,8 @@ public class RecruitManagementTest {
     }
 
     @Test
+    @DisplayName("참가자 관리 생성")
     public void createRecruitManagement() {
-
         recruitManagementRepository.save(new RecruitManagement(participant1, project));
         recruitManagementRepository.save(new RecruitManagement(participant2, project));
         recruitManagementRepository.save(new RecruitManagement(participant3, project));

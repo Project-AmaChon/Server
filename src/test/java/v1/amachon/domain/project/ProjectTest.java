@@ -1,10 +1,12 @@
-package v1.amachon.domain.project.entity;
+package v1.amachon.domain.project;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;
@@ -35,6 +37,7 @@ class ProjectTest {
     private RegionTagRepository regionTagRepository;
 
     @Test
+    @DisplayName("기술 태그가 많이 겹치는 순으로 프로젝트 조회")
     public void searchProjectTest() {
         // Member 생성(지역 태그 삽입)
         Member member = Member.builder().email("a").nickname("ac").build();

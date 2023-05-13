@@ -1,4 +1,4 @@
-package v1.amachon.domain.member.dto.join;
+package v1.amachon.domain.member.dto.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JoinDto {
-    private String email;
-    private String nickname;
-    private String password;
+public class TokenDto {
+    private String grantType;
+    private String accessToken;
+    private String refreshToken;
 }

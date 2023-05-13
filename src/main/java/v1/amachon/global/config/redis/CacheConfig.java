@@ -14,6 +14,10 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.fromSerializer;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,22 +26,27 @@ public class CacheConfig {
 
     @Bean
     public CacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory){
-        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
-                .disableCachingNullValues()
-                .entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC))
-                .computePrefixWith(CacheKeyPrefix.simple())
-                .serializeKeysWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext
-                        .SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
-
-
-        return RedisCacheManager.RedisCacheManagerBuilder
-                .fromConnectionFactory(redisConnectionFactory)
-                .cacheDefaults(configuration)
+        return RedisCacheManager.builder(redisConnectionFactory)
+                .cacheDefaults(defaultConf())
+                .withInitialCacheConfigurations(confMap())
                 .build();
 
+    }
+
+    private RedisCacheConfiguration defaultConf() {
+        return RedisCacheConfiguration.defaultCacheConfig()
+                .disableCachingNullValues()
+                .entryTtl(Duration.ofSeconds(CacheKey.DEFAULT_EXPIRE_SEC))
+                .serializeKeysWith(fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer()));
+    }
+
+    private Map<String, RedisCacheConfiguration> confMap() {
+        Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+        cacheConfigurations.put("regionTags", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+        cacheConfigurations.put("regionTag", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+        cacheConfigurations.put("techTags", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+        cacheConfigurations.put("techTag", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+        return cacheConfigurations;
     }
 }
