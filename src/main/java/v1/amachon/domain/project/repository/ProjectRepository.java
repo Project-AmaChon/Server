@@ -1,5 +1,7 @@
 package v1.amachon.domain.project.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +20,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             "ORDER BY tag_count DESC"
     )
     List<Project> searchProjectByTags(@Param("tagNames") List<String> tagNames, @Param("regionId")Long regionId);
+
+    @Query("SELECT p FROM Project p WHERE p.status = 'NORMAL' ORDER BY p.createdDate DESC")
+    Page<Project> searchRecentProjects(Pageable pageable);
 }
