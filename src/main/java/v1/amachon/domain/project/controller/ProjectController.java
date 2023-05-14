@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +67,7 @@ public class ProjectController {
       @ApiResponse(code = 2240, message = "해당 팀원이 존재하지 않습니다."),
       @ApiResponse(code = 2250, message = "해당 팀원은 프로젝트의 멤버가 아닙니다.")
   })
-  @PostMapping
+  @DeleteMapping("/projects/{projectId}/team-members/{teamMemberId}")
   public BaseResponse<String> removeTeamMember(@PathVariable Long projectId, @PathVariable Long teamMemberId) {
     try {
       projectService.removeTeamMember(projectId, teamMemberId);
