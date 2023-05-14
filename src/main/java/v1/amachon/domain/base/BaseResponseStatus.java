@@ -52,8 +52,12 @@ public enum BaseResponseStatus {
     POST_PROJECT_EMPTY_TECHTAG(false, 2220, "해당 ID의 기술태그가 없습니다."),
 
     // [GET] /project/{id}
-    // 프로젝트가 존재하지 않는 경우
     PROJECT_NOT_FOUND(false, 2230, "해당 프로젝트가 존재하지 않습니다."),
+
+    // [POST] /projects/{projectId}/team-members/{teamMemberId}/remove
+    TEAMMEMBER_NOT_FOUND(false, 2240, "해당 팀원이 존재하지 않습니다."),
+    WRONG_TEAMMEMBER(false, 2250, "해당 팀원은 프로젝트의 멤버가 아닙니다."),
+    RECRUIT_MANAGEMENT_NOT_FOUND(false, 2260, "모집관리에 대한 정보를 찾을 수 없습니다."),
 
     // tags
     INVALID_TAG(false, 2040, "올바르지 않은 태그명입니다."),

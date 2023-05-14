@@ -14,8 +14,10 @@ import v1.amachon.domain.project.dto.ProjectDetailDto;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.entity.RecruitManagement;
+import v1.amachon.domain.project.entity.TeamMember;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.project.repository.RecruitManagementRepository;
+import v1.amachon.domain.project.repository.TeamMemberRepository;
 import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;
 import v1.amachon.domain.tags.entity.techtag.TechTag;
 import v1.amachon.domain.tags.repository.RegionTagRepository;
@@ -33,6 +35,7 @@ public class ProjectService {
   private final TechTagRepository techTagRepository;
   private final RegionTagRepository regionTagRepository;
   private final RecruitManagementRepository recruitManagementRepository;
+  private final TeamMemberRepository teamMemberRepository;
 
   @Transactional
   public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
@@ -68,6 +71,7 @@ public class ProjectService {
     projectRepository.save(savedProject);
   }
 
+  // 프로젝트 상세 페이지 - 프로젝트 조회
   @Transactional
   public ProjectDetailDto getProjectDetailDto(Long id) throws BaseException {
     Project project = projectRepository.findById(id)
@@ -91,6 +95,35 @@ public class ProjectService {
         .build();
   }
 
+  // 프로젝트 상세 페이지 - 프로젝트 팀멤버 삭제
+  @Transactional
+  public void removeTeamMember(Long projectId, Long teamMemberId) throws BaseException {
+    Project project = projectRepository.findById(projectId)
+        .orElseThrow(() -> new BaseException(BaseResponseStatus.PROJECT_NOT_FOUND));
+    TeamMember teamMember = teamMemberRepository.findById(teamMemberId)
+        .orElseThrow(() -> new BaseException(BaseResponseStatus.TEAMMEMBER_NOT_FOUND));
+
+    if (!project.getTeamMembers().contains(teamMember)) {
+      throw new BaseException(BaseResponseStatus.WRONG_TEAMMEMBER);
+    }
+
+    // 프로젝트 팀 멤버에서 제거하는 대신 상태를 EXPIRED로 변경
+    teamMember.expired();
+    teamMemberRepository.save(teamMember);
+
+    // 프로젝트에 속한 팀 멤버의 상태를 업데이트
+    project.getTeamMembers().stream()
+        .filter(member -> member.getId().equals(teamMemberId))
+        .findFirst()
+        .ifPresent(member -> member.expired());
+    projectRepository.save(project);
+
+    // 모집 관리 저장소에서 해당 프로젝트와 팀 멤버를 찾아 상태를 EXPIRED로 변경
+    RecruitManagement recruitManagement = recruitManagementRepository.findByProjectIdAndTeamMemberId(projectId, teamMemberId)
+        .orElseThrow(() -> new BaseException(BaseResponseStatus.PROJECT_NOT_FOUND));
+  }
+
+  // 서비스 테스트를 위한 프로젝트 데이터 삭제
   @Transactional
   public void deleteAllProjects() {
     projectRepository.deleteAll();

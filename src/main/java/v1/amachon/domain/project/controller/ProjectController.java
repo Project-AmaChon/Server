@@ -57,4 +57,23 @@ public class ProjectController {
     }
   }
 
+  @ApiOperation(
+      value = "팀원 제거",
+      notes = "프로젝트 ID와 팀원 ID를 입력받아 해당 팀원을 프로젝트에서 제거합니다."
+  )
+  @ApiResponses({
+      @ApiResponse(code = 2230, message = "해당 프로젝트가 존재하지 않습니다."),
+      @ApiResponse(code = 2240, message = "해당 팀원이 존재하지 않습니다."),
+      @ApiResponse(code = 2250, message = "해당 팀원은 프로젝트의 멤버가 아닙니다.")
+  })
+  @PostMapping
+  public BaseResponse<String> removeTeamMember(@PathVariable Long projectId, @PathVariable Long teamMemberId) {
+    try {
+      projectService.removeTeamMember(projectId, teamMemberId);
+      return new BaseResponse<>("프로젝트에서 해당 팀원 삭제 완료!");
+    } catch (BaseException exception) {
+      return new BaseResponse<>(exception.getStatus());
+    }
+  }
+
 }
