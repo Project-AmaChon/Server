@@ -1,6 +1,9 @@
 package v1.amachon.domain.member.repository;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,7 +15,9 @@ import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
 
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static v1.amachon.domain.member.entity.QMember.member;
@@ -29,35 +34,34 @@ public class MemberRecommendRepo {
     }
 
     private BooleanExpression regionTagIn(List<String> regionTagNames) {
-        return techTagIn(Collections.emptyList()).and(regionTagIn(regionTagNames));
+        return regionTagNames.isEmpty() ? null : member.regionTag.name.in(regionTagNames);
     }
 
     public BooleanExpression techTagIn(List<String> techTagNames) {
-        return techTagIn(techTagNames).and(regionTagIn(Collections.emptyList()));
+        return techTagNames.isEmpty() ? null : techTag.name.in(techTagNames);
     }
 
-    private NumberTemplate<Long> techTagAndRegionTagIn(RecommendCond cond) {
-        return Expressions.numberTemplate(Long.class,
-                "CASE WHEN {0} AND {1} THEN 2 WHEN {0} OR {1} THEN 1 ELSE 0 END",
-                techTagIn(cond.getTechTagNames()), regionTagIn(cond.getRegionTagNames()));
+    private OrderSpecifier<Integer> techTagAndRegionTagCond(RecommendCond cond) {
+        return Expressions.asNumber(
+                        Expressions.cases()
+                                .when(techTagIn(cond.getTechTagNames()).and(regionTagIn(cond.getRegionTagNames()))).then(2)
+                                .when(techTagIn(cond.getTechTagNames())).then(1)
+                                .otherwise(0))
+                                .desc();
     }
 
     public List<RecruitManagementDto> getRecommendMemberByCond(RecommendCond cond) {
         Pageable pageable = PageRequest.of(0, 10);
-        List<Member> members = queryFactory.select(member)
+        List<Member> result = queryFactory.select(member)
                 .from(member)
                 .innerJoin(member.techTags, memberTechTag)
                 .innerJoin(memberTechTag.techTag, techTag)
-                .where(techTagAndRegionTagIn(cond).gt(0),
-                        techTagIn(cond.getTechTagNames()),
-                        regionTagIn(cond.getRegionTagNames()))
-                .groupBy(member.id)
-                .orderBy(techTagAndRegionTagIn(cond).desc(),
-                        techTagIn(cond.getTechTagNames()).desc(),
-                        regionTagIn(cond.getRegionTagNames()).desc())
+                .where(techTagIn(cond.getTechTagNames()))
+                .orderBy(techTagAndRegionTagCond(cond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+        Set<Member> members = new LinkedHashSet<>(result);
         return members.stream().map(RecruitManagementDto::new).collect(Collectors.toList());
     }
 }
