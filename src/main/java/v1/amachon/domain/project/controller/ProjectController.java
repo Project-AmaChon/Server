@@ -1,9 +1,6 @@
 package v1.amachon.domain.project.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import v1.amachon.domain.base.BaseException;
@@ -20,6 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Api(tags = {"프로젝트 API"})
+@ApiImplicitParams({
+        @ApiImplicitParam(name = "Authorization", value = "accessToken", required = true, example = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImZvb3RzdGVwQG5hdmVyLmNvbSIsImlhdCI6MTY3NjAwOTY1OSwiZXhwIjoxNjc2MzEyMDU5fQ.VBt8rfM3W7JdH5jMQ7A19-tuZ3OGLBqzmRC8GF2DzGQ")
+})
+@ApiResponses({
+        @ApiResponse(code = 500, message = "Internal Server Error"),
+        @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
+})
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -32,7 +36,8 @@ public class ProjectController {
             @ApiResponse(code = 2000, message = "Request error, 입력값을 확인해주세요."),
     })
     @PostMapping("/project")
-    public BaseResponse<String> createProject(@RequestBody ProjectCreateRequestDto projectCreateDto) {
+    public BaseResponse<String> createProject(@RequestBody ProjectCreateRequestDto projectCreateDto,
+                                              @RequestHeader("Authorization")String accessToken) {
         try {
             projectService.createProject(projectCreateDto);
             return new BaseResponse<>("프로젝트 생성 완료!");
@@ -50,7 +55,8 @@ public class ProjectController {
             @ApiResponse(code = 2230, message = "해당 프로젝트가 존재하지 않습니다.")
     })
     @GetMapping("/project/{id}")
-    public BaseResponse<ProjectDetailDto> getProjectDto(@PathVariable("id") Long projectId) {
+    public BaseResponse<ProjectDetailDto> getProjectDto(@PathVariable("id") Long projectId,
+                                                        @RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getProjectDetailDto(projectId));
         } catch (BaseException exception) {
@@ -64,7 +70,8 @@ public class ProjectController {
     )
     @ApiResponse(code = 2040, message = "태그 정보가 올바르지 않습니다")
     @PostMapping("/project/search")
-    public BaseResponse<List<ProjectDto>> getSearchProjects(@RequestBody ProjectSearchCond cond, @RequestParam("page") int page) {
+    public BaseResponse<List<ProjectDto>> getSearchProjects(@RequestBody ProjectSearchCond cond, @RequestParam("page") int page,
+                                                            @RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getSearchProjects(cond, page));
         } catch (BaseException exception) {
@@ -78,7 +85,7 @@ public class ProjectController {
             notes = "Home 페이지로 최신 프로젝트 순으로 10개 반환"
     )
     @GetMapping("/home")
-    public BaseResponse<List<ProjectDto>> getRecentProjects() throws BaseException {
+    public BaseResponse<List<ProjectDto>> getRecentProjects(@RequestHeader("Authorization")String accessToken) throws BaseException {
         List<ProjectDto> projects = projectService.getRecentProjects();
         return new BaseResponse<>(projects);
     }
@@ -93,7 +100,8 @@ public class ProjectController {
 
     })
     @PostMapping("/project/{id}/apply")
-    public BaseResponse<String> projectApply(@PathVariable("id") Long projectId) {
+    public BaseResponse<String> projectApply(@PathVariable("id") Long projectId,
+                                             @RequestHeader("Authorization")String accessToken) {
         try {
             projectService.projectApply(projectId);
             return new BaseResponse<>("참가 신청 완료!");
@@ -111,7 +119,8 @@ public class ProjectController {
             @ApiResponse(code = 2003, message = "권한이 없는 유저입니다.")
     })
     @GetMapping("/project/{id}/recruit-list")
-    public BaseResponse<List<RecruitManagementDto>> getRecruitList(@PathVariable("id") Long projectId) {
+    public BaseResponse<List<RecruitManagementDto>> getRecruitList(@PathVariable("id") Long projectId,
+                                                                   @RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getRecruitList(projectId));
         } catch (BaseException exception) {
@@ -129,7 +138,8 @@ public class ProjectController {
 
     })
     @GetMapping("/project/{id}/recommend-teamMember")
-    public BaseResponse<List<RecruitManagementDto>> getRecommendMembers(@PathVariable("id") Long projectId) {
+    public BaseResponse<List<RecruitManagementDto>> getRecommendMembers(@PathVariable("id") Long projectId,
+                                                                        @RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getRecommendMember(projectId));
         } catch (BaseException exception) {
