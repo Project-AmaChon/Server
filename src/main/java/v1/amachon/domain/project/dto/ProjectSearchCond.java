@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class ProjectSearchCond {
 
-    private String keyword;
-    private List<String> regionTagNames;
-    private List<String> techTagNames;
+    public String keyword;
+    public List<String> regionTagNames;
+    public List<String> techTagNames;
 }
