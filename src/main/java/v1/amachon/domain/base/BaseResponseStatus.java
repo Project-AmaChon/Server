@@ -20,7 +20,7 @@ public enum BaseResponseStatus {
     REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
-    INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
+    INVALID_USER(false,2003,"권한이 없는 유저의 접근입니다."),
     INVALID_REFRESH_TOKEN(false, 2004, "토큰이 일치하지 않습니다"),
     UNAUTHORIZED(false, 2005, "로그인이 필요합니다."),
     BAD_REQUEST(false, 2006, "잘못된 접근입니다."),
@@ -50,10 +50,11 @@ public enum BaseResponseStatus {
     POST_PROJECT_EMPTY_LEADER(false, 2200, "해당 ID의 리더가 없습니다."),
     POST_PROJECT_EMPTY_REGIONTAG(false, 2210, "해당 ID의 지역태그가 없습니다."),
     POST_PROJECT_EMPTY_TECHTAG(false, 2220, "해당 ID의 기술태그가 없습니다."),
+    PROJECT_APPLY_DENIED(false, 2230, "이미 참여중인 프로젝트입니다."),
 
     // [GET] /project/{id}
     // 프로젝트가 존재하지 않는 경우
-    PROJECT_NOT_FOUND(false, 2230, "해당 프로젝트가 존재하지 않습니다."),
+    PROJECT_NOT_FOUND(false, 2240, "해당 프로젝트가 존재하지 않습니다."),
 
     // tags
     INVALID_TAG(false, 2040, "올바르지 않은 태그명입니다."),
