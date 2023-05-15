@@ -32,22 +32,6 @@ public class TechTagService {
     private final MemberRepository memberRepository;
     private final MemberTechTagRepository memberTechTagRepository;
 
-    public void init() {
-        // parent
-        TechTag backend = TechTag.builder().depth(0).name("Backend").build();
-        TechTag frontend = TechTag.builder().depth(0).name("Frontend").build();
-        techTagRepository.save(backend);
-        techTagRepository.save(frontend);
-
-        // child
-        TechTag spring = TechTag.builder().depth(1).name("Spring").parent(backend).build();
-        TechTag nodeJS = TechTag.builder().depth(1).name("NodeJS").parent(backend).build();
-        TechTag reactJS = TechTag.builder().depth(1).name("ReactJS").parent(frontend).build();
-        techTagRepository.save(spring);
-        techTagRepository.save(nodeJS);
-        techTagRepository.save(reactJS);
-    }
-
     @Cacheable(value = "techTags")
     public List<TechTagDto> getAllTechTags() {
         List<TechTag> tags = techTagRepository.findByDepth(0);

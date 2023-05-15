@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponse;
+import v1.amachon.domain.tags.dto.RegionTagDto;
 import v1.amachon.domain.tags.dto.TechTagDto;
 import v1.amachon.domain.tags.dto.change.ChangeTagsDto;
 import v1.amachon.domain.tags.service.RegionTagService;
@@ -27,14 +28,22 @@ public class TagsController {
     private final RegionTagService regionTagService;
 
     @ApiOperation(
-            value = "전체 태그 반환(임시)",
-            notes = "태그 선택을 위한 전체 태그를 반환"
+            value = "전체 기술 태그 반환(임시)",
+            notes = "기술 태그 선택을 위한 전체 태그를 반환"
     )
-    @GetMapping("/tags")
-    public BaseResponse<List<TechTagDto>> getTags() {
-        techTagService.init();
+    @GetMapping("/tech-tags")
+    public BaseResponse<List<TechTagDto>> getTechTags() {
         List<TechTagDto> tags = techTagService.getAllTechTags();
         return new BaseResponse<>(tags);
+    }
+
+    @ApiOperation(
+            value = "전체 지역 태그 반환(임시)",
+            notes = "지역 태그 선택을 위한 전체 태그를 반환"
+    )
+    @GetMapping("/region-tags")
+    public BaseResponse<List<RegionTagDto>> getRegionTags() {
+        return new BaseResponse<>(regionTagService.getAllRegionTags());
     }
 
     @ApiOperation(
