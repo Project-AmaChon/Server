@@ -22,9 +22,11 @@ import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.entity.RecruitManagement;
+import v1.amachon.domain.project.entity.TeamMember;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.project.repository.ProjectSearchRepository;
 import v1.amachon.domain.project.repository.RecruitManagementRepository;
+import v1.amachon.domain.project.repository.TeamMemberRepository;
 import v1.amachon.domain.tags.dto.RegionTagDto;
 import v1.amachon.domain.tags.dto.TechTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
@@ -57,6 +59,7 @@ public class ProjectService {
     private final RegionTagService regionTagService;
     private final TechTagService techTagService;
     private final MemberRecommendRepo memberRecommendRepo;
+    private final TeamMemberRepository teamMemberRepository;
 
     public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
         Project project = Project.builder()
@@ -187,5 +190,28 @@ public class ProjectService {
             }
         }
         return memberRecommendRepo.getRecommendMemberByCond(cond);
+    }
+
+    public void recruitAccept(Long recruitManagementId) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+        RecruitManagement recruitManagement = recruitManagementRepository.findById(recruitManagementId).orElseThrow(
+                () -> new BaseException(NOT_FOUND_RECRUIT_MANAGEMENT));
+        if (recruitManagement.getProject().getLeader().getId() != member.getId()) {
+            throw new BaseException(INVALID_USER);
+        }
+        teamMemberRepository.save(new TeamMember(recruitManagement.getProject(), recruitManagement.getMember()));
+        recruitManagement.expired();
+    }
+
+    public void recruitReject(Long recruitManagementId) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+        RecruitManagement recruitManagement = recruitManagementRepository.findById(recruitManagementId).orElseThrow(
+                () -> new BaseException(NOT_FOUND_RECRUIT_MANAGEMENT));
+        if (recruitManagement.getProject().getLeader().getId() != member.getId()) {
+            throw new BaseException(INVALID_USER);
+        }
+        recruitManagement.expired();
     }
 }
