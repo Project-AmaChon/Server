@@ -39,4 +39,12 @@ public class Profile {
         this.profileImageUrl = "";
         this.introduction = "";
     }
+
+    public void changeProfile(ProfileDto profileDto) {
+        this.introduction = profileDto.getIntroduction();
+        this.profileImageUrl = profileDto.getProfileImageUrl();
+        this.description = profileDto.getDescription();
+        this.githubUrl = profileDto.getGithubUrl();
+        this.blogUrl = profileDto.getBlogUrl();
+    }
 }

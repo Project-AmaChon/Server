@@ -54,8 +54,8 @@ public class ProjectController {
     @ApiResponses({
             @ApiResponse(code = 2230, message = "해당 프로젝트가 존재하지 않습니다.")
     })
-    @GetMapping("/project/{id}")
-    public BaseResponse<ProjectDetailDto> getProjectDto(@PathVariable("id") Long projectId,
+    @GetMapping("/project/{projectId}")
+    public BaseResponse<ProjectDetailDto> getProjectDto(@PathVariable("projectId") Long projectId,
                                                         @RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getProjectDetailDto(projectId));
@@ -70,10 +70,10 @@ public class ProjectController {
     )
     @ApiResponse(code = 2040, message = "태그 정보가 올바르지 않습니다")
     @PostMapping("/project/search")
-    public BaseResponse<List<ProjectDto>> getSearchProjects(@RequestBody ProjectSearchCond cond, @RequestParam("page") int page,
+    public BaseResponse<List<ProjectDto>> getSearchProjects(@RequestBody ProjectSearchCond cond,
                                                             @RequestHeader("Authorization")String accessToken) {
         try {
-            return new BaseResponse<>(projectService.getSearchProjects(cond, page));
+            return new BaseResponse<>(projectService.getSearchProjects(cond));
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
@@ -99,8 +99,8 @@ public class ProjectController {
             @ApiResponse(code = 2230, message = "이미 참여 중인 프로젝트입니다"),
 
     })
-    @PostMapping("/project/{id}/apply")
-    public BaseResponse<String> projectApply(@PathVariable("id") Long projectId,
+    @PostMapping("/project/{projectId}/apply")
+    public BaseResponse<String> projectApply(@PathVariable("projectId") Long projectId,
                                              @RequestHeader("Authorization")String accessToken) {
         try {
             projectService.projectApply(projectId);
@@ -118,8 +118,8 @@ public class ProjectController {
             @ApiResponse(code = 2240, message = "해당 프로젝트가 존재하지 않습니다."),
             @ApiResponse(code = 2003, message = "권한이 없는 유저입니다.")
     })
-    @GetMapping("/project/{id}/recruit-list")
-    public BaseResponse<List<RecruitManagementDto>> getRecruitList(@PathVariable("id") Long projectId,
+    @GetMapping("/project/{projectId}/recruit-list")
+    public BaseResponse<List<RecruitManagementDto>> getRecruitList(@PathVariable("projectId") Long projectId,
                                                                    @RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getRecruitList(projectId));
@@ -137,8 +137,8 @@ public class ProjectController {
             @ApiResponse(code = 2003, message = "권한이 없는 유저입니다.")
 
     })
-    @GetMapping("/project/{id}/recommend-teamMember")
-    public BaseResponse<List<RecruitManagementDto>> getRecommendMembers(@PathVariable("id") Long projectId,
+    @GetMapping("/project/{projectId}/recommend-teamMember")
+    public BaseResponse<List<RecruitManagementDto>> getRecommendMembers(@PathVariable("projectId") Long projectId,
                                                                         @RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getRecommendMember(projectId));

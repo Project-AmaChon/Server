@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import v1.amachon.domain.member.entity.Profile;
 
 @Data
 @NoArgsConstructor
@@ -15,4 +16,12 @@ public class ProfileDto {
     private String description;
     private String githubUrl;
     private String blogUrl;
+
+    public ProfileDto(Profile profile) {
+        this.introduction = profile.getIntroduction();
+        this.profileImageUrl = profile.getProfileImageUrl();
+        this.description = profile.getDescription();
+        this.githubUrl = profile.getGithubUrl();
+        this.blogUrl = profile.getBlogUrl();
+    }
 }

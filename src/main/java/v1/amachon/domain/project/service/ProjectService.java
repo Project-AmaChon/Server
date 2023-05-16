@@ -22,9 +22,11 @@ import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.entity.RecruitManagement;
+import v1.amachon.domain.project.entity.TeamMember;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.project.repository.ProjectSearchRepository;
 import v1.amachon.domain.project.repository.RecruitManagementRepository;
+import v1.amachon.domain.project.repository.TeamMemberRepository;
 import v1.amachon.domain.tags.dto.RegionTagDto;
 import v1.amachon.domain.tags.dto.TechTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
@@ -57,48 +59,46 @@ public class ProjectService {
     private final RegionTagService regionTagService;
     private final TechTagService techTagService;
     private final MemberRecommendRepo memberRecommendRepo;
+    private final TeamMemberRepository teamMemberRepository;
 
     public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+
         Project project = Project.builder()
                 .title(projectCreateDto.getTitle())
                 .description(projectCreateDto.getDescription())
                 .recruitDeadline(projectCreateDto.getRecruitDeadline())
                 .recruitNumber(projectCreateDto.getRecruitNumber())
                 .developPeriod(projectCreateDto.getDevelopPeriod())
-                .leader(memberRepository.findById(projectCreateDto.getLeaderId())
-                        .orElseThrow(() -> new BaseException(POST_PROJECT_EMPTY_LEADER)))
-                .regionTag(regionTagRepository.findById(projectCreateDto.getRegionTagId())
-                        .orElseThrow(() -> new BaseException(POST_PROJECT_EMPTY_REGIONTAG)))
+                .leader(member)
+                .regionTag(member.getRegionTag())
                 .build();
 
-        for (Long tagId : projectCreateDto.getTechTagIds()) {
-            TechTag techTag = techTagRepository.findById(tagId)
+        for (String tagName : projectCreateDto.getTechTagNames()) {
+            TechTag techTag = techTagRepository.findByName(tagName)
                     .orElseThrow(() -> new BaseException(POST_PROJECT_EMPTY_TECHTAG));
             ProjectTechTag projectTechTag = new ProjectTechTag(project, techTag);
             project.addTechTag(projectTechTag);
         }
 
-        // 프로젝트를 먼저 저장
-        Project savedProject = projectRepository.save(project);
-
-        // 이미지 정보를 저장
-        List<ProjectImage> images = projectCreateDto.getImageUrls().stream()
-                .map(url -> new ProjectImage(url, savedProject))
-                .collect(Collectors.toList());
-        savedProject.setImages(images);
+//        // 이미지 정보를 저장
+//        List<ProjectImage> images = projectCreateDto.getImageUrls().stream()
+//                .map(url -> new ProjectImage(url, project))
+//                .collect(Collectors.toList());
+//        project.setImages(images);
 
         // 변경사항을 저장
-        projectRepository.save(savedProject);
+        projectRepository.save(project);
     }
 
     public ProjectDetailDto getProjectDetailDto(Long id) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new BaseException(PROJECT_NOT_FOUND));
         return new ProjectDetailDto(project);
-    }
-
-    public void deleteAllProjects() {
-        projectRepository.deleteAll();
     }
 
     // 프로젝트 팀의 구성원 목록을 가져옴
@@ -120,9 +120,9 @@ public class ProjectService {
         return converted;
     }
 
-    public List<ProjectDto> getSearchProjects(ProjectSearchCond cond, int page) throws BaseException {
+    public List<ProjectDto> getSearchProjects(ProjectSearchCond cond) throws BaseException {
         addChildren(cond);
-        return projectSearchRepository.searchProjectByAllCond(cond, page);
+        return projectSearchRepository.searchProjectByAllCond(cond);
     }
 
     public void addChildren(ProjectSearchCond cond) throws BaseException {
@@ -187,5 +187,28 @@ public class ProjectService {
             }
         }
         return memberRecommendRepo.getRecommendMemberByCond(cond);
+    }
+
+    public void recruitAccept(Long recruitManagementId) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+        RecruitManagement recruitManagement = recruitManagementRepository.findById(recruitManagementId).orElseThrow(
+                () -> new BaseException(NOT_FOUND_RECRUIT_MANAGEMENT));
+        if (recruitManagement.getProject().getLeader().getId() != member.getId()) {
+            throw new BaseException(INVALID_USER);
+        }
+        teamMemberRepository.save(new TeamMember(recruitManagement.getProject(), recruitManagement.getMember()));
+        recruitManagement.expired();
+    }
+
+    public void recruitReject(Long recruitManagementId) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+        RecruitManagement recruitManagement = recruitManagementRepository.findById(recruitManagementId).orElseThrow(
+                () -> new BaseException(NOT_FOUND_RECRUIT_MANAGEMENT));
+        if (recruitManagement.getProject().getLeader().getId() != member.getId()) {
+            throw new BaseException(INVALID_USER);
+        }
+        recruitManagement.expired();
     }
 }

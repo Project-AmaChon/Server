@@ -28,7 +28,7 @@ public class ProjectSearchRepository {
     }
 
     private BooleanExpression keywordLike(String keyword) {
-        return (keyword == null || keyword.length() == 0) ? null : project.title.like(keyword);
+        return (keyword == null || keyword.length() == 0) ? null : project.title.like("%" + keyword + "%");
     }
 
     private BooleanExpression regionTagIn(List<String> regionTagNames) {
@@ -39,8 +39,8 @@ public class ProjectSearchRepository {
         return techTagNames.isEmpty() ? null : techTag.name.in(techTagNames);
     }
 
-    public List<ProjectDto> searchProjectByAllCond(ProjectSearchCond cond, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+    public List<ProjectDto> searchProjectByAllCond(ProjectSearchCond cond) {
+        Pageable pageable = PageRequest.of(0, 40);
         List<Tuple> result = queryFactory.select(project, Expressions.asNumber(projectTechTag.id.count()).as("tag_count"))
                 .from(project)
                 .innerJoin(project.techTags, projectTechTag)

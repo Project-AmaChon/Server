@@ -19,8 +19,6 @@ public class ProjectCreateRequestDto {
     private LocalDate recruitDeadline;
     private int recruitNumber;
     private LocalDate developPeriod;
-    private Long leaderId;
-    private Long regionTagId;
-    private List<Long> techTagIds;
-    private List<String> imageUrls;
+    private List<String> techTagNames;
+//    private List<String> imageUrls;
 }

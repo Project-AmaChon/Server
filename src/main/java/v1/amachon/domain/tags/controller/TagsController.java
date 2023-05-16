@@ -43,7 +43,8 @@ public class TagsController {
     )
     @GetMapping("/region-tags")
     public BaseResponse<List<RegionTagDto>> getRegionTags() {
-        return new BaseResponse<>(regionTagService.getAllRegionTags());
+        List<RegionTagDto> tags = regionTagService.getAllRegionTags();
+        return new BaseResponse<>(tags);
     }
 
     @ApiOperation(

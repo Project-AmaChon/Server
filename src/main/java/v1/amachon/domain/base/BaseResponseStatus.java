@@ -58,6 +58,9 @@ public enum BaseResponseStatus {
 
     // tags
     INVALID_TAG(false, 2040, "올바르지 않은 태그명입니다."),
+
+    // recruitManagement
+    NOT_FOUND_RECRUIT_MANAGEMENT(false, 2050, "신청 정보를 찾을 수 없습니다."),
   
   
     /**
