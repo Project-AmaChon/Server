@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Builder
 public class RecruitManagementDto {
     private Long memberId;
+    private Long recruitManagementId;
     private String name;
     private String profileImageUrl;
     private List<String> techTagNames;
