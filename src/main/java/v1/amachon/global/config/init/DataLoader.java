@@ -654,231 +654,231 @@ public class DataLoader implements ApplicationRunner {
         memberRepository.save(로제);
         // 프로젝트
         Project project1 = Project.builder().title("이정우의 스프링 프로젝트").description("스프링 프로젝트")
-                .leader(이정우).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(이정우).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(7L)).build();
         projectRepository.save(project1);
         projectTechTagRepository.save(new ProjectTechTag(project1, flutter));
         projectTechTagRepository.save(new ProjectTechTag(project1, spring));
         projectTechTagRepository.save(new ProjectTechTag(project1, android));
 
         Project project2 = Project.builder().title("박종범의 리액트 프로젝트").description("리액트 프로젝트")
-                .leader(박종범).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(박종범).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(14L)).build();
         projectRepository.save(project2);
         projectTechTagRepository.save(new ProjectTechTag(project2, react));
         projectTechTagRepository.save(new ProjectTechTag(project2, spring));
         projectTechTagRepository.save(new ProjectTechTag(project2, reactNative));
 
         Project project3 = Project.builder().title("전재욱의 안드로이드 프로젝트").description("안드로이드 프로젝트")
-                .leader(전재욱).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(전재욱).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(27L)).build();
         projectRepository.save(project3);
         projectTechTagRepository.save(new ProjectTechTag(project3, android));
         projectTechTagRepository.save(new ProjectTechTag(project3, spring));
         projectTechTagRepository.save(new ProjectTechTag(project3, aws));
 
         Project project4 = Project.builder().title("전승현의 장고 프로젝트").description("장고 프로젝트")
-                .leader(전승현).regionTag(성남시_분당구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(전승현).regionTag(성남시_분당구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(15L)).build();
         projectRepository.save(project4);
         projectTechTagRepository.save(new ProjectTechTag(project4, django));
         projectTechTagRepository.save(new ProjectTechTag(project4, flutter));
         projectTechTagRepository.save(new ProjectTechTag(project4, mongoDB));
 
         Project project5 = Project.builder().title("허규범의 유니티 프로젝트").description("유니티 프로젝트")
-                .leader(허규범).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(허규범).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(1L)).build();
         projectRepository.save(project5);
         projectTechTagRepository.save(new ProjectTechTag(project5, unity));
         projectTechTagRepository.save(new ProjectTechTag(project5, reactNative));
         projectTechTagRepository.save(new ProjectTechTag(project5, kubernetes));
 
         Project project6 = Project.builder().title("이정우의 안드로이드 프로젝트").description("안드로이드 프로젝트")
-                .leader(이정우).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(이정우).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(4L)).build();
         projectRepository.save(project6);
         projectTechTagRepository.save(new ProjectTechTag(project6, android));
         projectTechTagRepository.save(new ProjectTechTag(project6, nestjs));
         projectTechTagRepository.save(new ProjectTechTag(project6, aws));
 
         Project project7 = Project.builder().title("박종범의 안드로이드 프로젝트").description("안드로이드 프로젝트")
-                .leader(박종범).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(박종범).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(22L)).build();
         projectRepository.save(project7);
         projectTechTagRepository.save(new ProjectTechTag(project7, nodejs));
         projectTechTagRepository.save(new ProjectTechTag(project7, android));
         projectTechTagRepository.save(new ProjectTechTag(project7, docker));
 
         Project project8 = Project.builder().title("전재욱의 플러터 프로젝트").description("플러터 프로젝트")
-                .leader(전재욱).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(전재욱).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(10L)).build();
         projectRepository.save(project8);
         projectTechTagRepository.save(new ProjectTechTag(project8, flutter));
         projectTechTagRepository.save(new ProjectTechTag(project8, spring));
         projectTechTagRepository.save(new ProjectTechTag(project8, mySQL));
 
         Project project9 = Project.builder().title("전승현의 리액트 프로젝트").description("리액트 프로젝트")
-                .leader(전승현).regionTag(성남시_분당구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(전승현).regionTag(성남시_분당구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(11L)).build();
         projectRepository.save(project9);
         projectTechTagRepository.save(new ProjectTechTag(project9, react));
         projectTechTagRepository.save(new ProjectTechTag(project9, express));
         projectTechTagRepository.save(new ProjectTechTag(project9, figma));
 
         Project project10 = Project.builder().title("허규범의 안드로이드 프로젝트").description("안드로이드 프로젝트")
-                .leader(허규범).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(허규범).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(19L)).build();
         projectRepository.save(project10);
         projectTechTagRepository.save(new ProjectTechTag(project10, android));
         projectTechTagRepository.save(new ProjectTechTag(project10, spring));
         projectTechTagRepository.save(new ProjectTechTag(project10, figma));
 
         Project project11 = Project.builder().title("공모전 나갈사람 구합니다").description("공모전")
-                .leader(카리나).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(카리나).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(17L)).build();
         projectRepository.save(project11);
         projectTechTagRepository.save(new ProjectTechTag(project11, figma));
         projectTechTagRepository.save(new ProjectTechTag(project11, nodejs));
         projectTechTagRepository.save(new ProjectTechTag(project11, go));
 
         Project project12 = Project.builder().title("해커톤 나갈사람 구해요").description("해커톤")
-                .leader(윈터).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(윈터).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(17L)).build();
         projectRepository.save(project12);
         projectTechTagRepository.save(new ProjectTechTag(project12, flutter));
         projectTechTagRepository.save(new ProjectTechTag(project12, nodejs));
         projectTechTagRepository.save(new ProjectTechTag(project12, mongoDB));
 
         Project project13 = Project.builder().title("쇼핑몰 같이 만드실분").description("쇼핑몰")
-                .leader(닝닝).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(닝닝).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(13L)).build();
         projectRepository.save(project13);
         projectTechTagRepository.save(new ProjectTechTag(project13, react));
         projectTechTagRepository.save(new ProjectTechTag(project13, spring));
         projectTechTagRepository.save(new ProjectTechTag(project13, aws));
 
         Project project14 = Project.builder().title("당근마켓 클론 코딩").description("당근마켓")
-                .leader(지젤).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(지젤).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(6L)).build();
         projectRepository.save(project14);
         projectTechTagRepository.save(new ProjectTechTag(project14, react));
         projectTechTagRepository.save(new ProjectTechTag(project14, spring));
         projectTechTagRepository.save(new ProjectTechTag(project14, reactNative));
 
         Project project15 = Project.builder().title("게임 만들사람 손").description("게임")
-                .leader(카즈하).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(카즈하).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(30L)).build();
         projectRepository.save(project15);
         projectTechTagRepository.save(new ProjectTechTag(project15, unity));
         projectTechTagRepository.save(new ProjectTechTag(project15, spring));
         projectTechTagRepository.save(new ProjectTechTag(project15, docker));
 
         Project project16 = Project.builder().title("포트폴리오 만들사람 구해요").description("포트폴리오")
-                .leader(김채원).regionTag(강동구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(김채원).regionTag(강동구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(37L)).build();
         projectRepository.save(project16);
         projectTechTagRepository.save(new ProjectTechTag(project16, flutter));
         projectTechTagRepository.save(new ProjectTechTag(project16, spring));
         projectTechTagRepository.save(new ProjectTechTag(project16, figma));
 
         Project project17 = Project.builder().title("백엔드 포트폴리오 같이할사람").description("백엔드")
-                .leader(허윤진).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(허윤진).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(8L)).build();
         projectRepository.save(project17);
         projectTechTagRepository.save(new ProjectTechTag(project17, swift));
         projectTechTagRepository.save(new ProjectTechTag(project17, spring));
         projectTechTagRepository.save(new ProjectTechTag(project17, aws));
 
         Project project18 = Project.builder().title("프론트엔드 포트폴리오 만들사람").description("프론트엔드")
-                .leader(사쿠라).regionTag(서대문구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(사쿠라).regionTag(서대문구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(9L)).build();
         projectRepository.save(project18);
         projectTechTagRepository.save(new ProjectTechTag(project18, react));
         projectTechTagRepository.save(new ProjectTechTag(project18, firebase));
         projectTechTagRepository.save(new ProjectTechTag(project18, figma));
 
         Project project19 = Project.builder().title("심심한 사람끼리").description("심심한")
-                .leader(홍은채).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(홍은채).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(11L)).build();
         projectRepository.save(project19);
         projectTechTagRepository.save(new ProjectTechTag(project19, svelte));
         projectTechTagRepository.save(new ProjectTechTag(project19, go));
         projectTechTagRepository.save(new ProjectTechTag(project19, mongoDB));
 
         Project project20 = Project.builder().title("사이드 프로젝트 백엔드 모집해요").description("백엔드 모집")
-                .leader(장원영).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(장원영).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(15L)).build();
         projectRepository.save(project20);
         projectTechTagRepository.save(new ProjectTechTag(project20, react));
         projectTechTagRepository.save(new ProjectTechTag(project20, spring));
         projectTechTagRepository.save(new ProjectTechTag(project20, mySQL));
 
         Project project21 = Project.builder().title("사이드 프로젝트 프론트엔트 모집해요").description("프론트엔드 모집")
-                .leader(레이).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(레이).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(3L)).build();
         projectRepository.save(project21);
         projectTechTagRepository.save(new ProjectTechTag(project21, react));
         projectTechTagRepository.save(new ProjectTechTag(project21, figma));
         projectTechTagRepository.save(new ProjectTechTag(project21, firebase));
 
         Project project22 = Project.builder().title("운동 플랫폼 만들사람 구해요").description("운동 플랫폼")
-                .leader(안유진).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(안유진).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(7L)).build();
         projectRepository.save(project22);
         projectTechTagRepository.save(new ProjectTechTag(project22, android));
         projectTechTagRepository.save(new ProjectTechTag(project22, django));
         projectTechTagRepository.save(new ProjectTechTag(project22, mySQL));
 
         Project project23 = Project.builder().title("iOS 앱 개발 프로젝트에서 디자이너 모셔요").description("디자이너 모집")
-                .leader(가을).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(가을).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(7L)).build();
         projectRepository.save(project23);
         projectTechTagRepository.save(new ProjectTechTag(project23, figma));
         projectTechTagRepository.save(new ProjectTechTag(project23, aws));
         projectTechTagRepository.save(new ProjectTechTag(project23, git));
 
         Project project24 = Project.builder().title("새싹톤 나가실 프론트엔드분 구합니다").description("프론트엔드 모집")
-                .leader(리즈).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(리즈).regionTag(용인시_처인구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(3L)).build();
         projectRepository.save(project24);
         projectTechTagRepository.save(new ProjectTechTag(project24, react));
         projectTechTagRepository.save(new ProjectTechTag(project24, spring));
         projectTechTagRepository.save(new ProjectTechTag(project24, mongoDB));
 
         Project project25 = Project.builder().title("랜덤 음악 추천 플랫폼 프로젝트").description("디자이너, 프론트엔드 모집")
-                .leader(하니).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(하니).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(21L)).build();
         projectRepository.save(project25);
         projectTechTagRepository.save(new ProjectTechTag(project25, react));
         projectTechTagRepository.save(new ProjectTechTag(project25, figma));
         projectTechTagRepository.save(new ProjectTechTag(project25, aws));
 
         Project project26 = Project.builder().title("교육 서비스 프로젝트 백엔드 모집합니다").description("백엔드 모집")
-                .leader(민지).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(민지).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(70L)).build();
         projectRepository.save(project26);
         projectTechTagRepository.save(new ProjectTechTag(project26, nodejs));
         projectTechTagRepository.save(new ProjectTechTag(project26, spring));
         projectTechTagRepository.save(new ProjectTechTag(project26, aws));
 
         Project project27 = Project.builder().title("새싹톤 팀 꾸려요").description("백엔드, 디자이너 모집")
-                .leader(해린).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(해린).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(31L)).build();
         projectRepository.save(project27);
         projectTechTagRepository.save(new ProjectTechTag(project27, figma));
         projectTechTagRepository.save(new ProjectTechTag(project27, spring));
         projectTechTagRepository.save(new ProjectTechTag(project27, kubernetes));
 
         Project project28 = Project.builder().title("패션정보 공유 커뮤니티에서 프론트엔드 분 모셔요").description("프론트엔드 모집")
-                .leader(다니엘).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(다니엘).regionTag(의정부시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(18L)).build();
         projectRepository.save(project28);
         projectTechTagRepository.save(new ProjectTechTag(project28, react));
         projectTechTagRepository.save(new ProjectTechTag(project28, reactNative));
         projectTechTagRepository.save(new ProjectTechTag(project28, flutter));
 
         Project project29 = Project.builder().title("토이 앱 개발 프로젝트 합류하실 디자이너 구합니다").description("디자이너 모집")
-                .leader(혜인).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(혜인).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(13L)).build();
         projectRepository.save(project29);
         projectTechTagRepository.save(new ProjectTechTag(project29, figma));
         projectTechTagRepository.save(new ProjectTechTag(project29, aws));
         projectTechTagRepository.save(new ProjectTechTag(project29, docker));
 
         Project project30 = Project.builder().title("서비스 개발 크루").description("크루 모집")
-                .leader(제니).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(제니).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(2L)).build();
         projectRepository.save(project30);
         projectTechTagRepository.save(new ProjectTechTag(project30, go));
         projectTechTagRepository.save(new ProjectTechTag(project30, express));
         projectTechTagRepository.save(new ProjectTechTag(project30, javaScript));
 
         Project project31 = Project.builder().title("신입 취업용 프로젝트 백엔드 구해요").description("백엔드 모집")
-                .leader(리사).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(리사).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(4L)).build();
         projectRepository.save(project31);
         projectTechTagRepository.save(new ProjectTechTag(project31, aws));
         projectTechTagRepository.save(new ProjectTechTag(project31, spring));
         projectTechTagRepository.save(new ProjectTechTag(project31, mySQL));
 
         Project project32 = Project.builder().title("새싹톤 나가실 프론트엔드 구합니다").description("프론트엔드 모집")
-                .leader(지수).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(지수).regionTag(수원시_영통구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(7L)).build();
         projectRepository.save(project32);
         projectTechTagRepository.save(new ProjectTechTag(project32, swift));
         projectTechTagRepository.save(new ProjectTechTag(project32, figma));
         projectTechTagRepository.save(new ProjectTechTag(project32, firebase));
 
         Project project33 = Project.builder().title("새싹톤 나가실 백엔드 구해요").description("백엔드 모집")
-                .leader(로제).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).build();
+                .leader(로제).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(3L)).build();
         projectRepository.save(project33);
         projectTechTagRepository.save(new ProjectTechTag(project33, aws));
         projectTechTagRepository.save(new ProjectTechTag(project33, nestjs));
