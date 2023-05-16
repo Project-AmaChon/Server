@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponseStatus;
+import v1.amachon.domain.member.dto.ProfileDto;
 import v1.amachon.domain.member.dto.join.JoinDto;
 import v1.amachon.domain.member.dto.join.NicknameDto;
 import v1.amachon.domain.member.dto.login.LoginDto;
 import v1.amachon.domain.member.dto.login.TokenDto;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.global.config.security.util.SecurityUtils;
 
 import java.util.Optional;
 
@@ -44,5 +46,11 @@ public class MemberService {
         if (!member.isEmpty()) {
             throw new BaseException(BaseResponseStatus.DUPLICATED_NICKNAME);
         }
+    }
+
+    public ProfileDto getProfile() throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.UNAUTHORIZED));
+        return new ProfileDto(member.getProfile());
     }
 }

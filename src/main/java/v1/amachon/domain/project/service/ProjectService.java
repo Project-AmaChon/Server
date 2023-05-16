@@ -62,46 +62,43 @@ public class ProjectService {
     private final TeamMemberRepository teamMemberRepository;
 
     public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+
         Project project = Project.builder()
                 .title(projectCreateDto.getTitle())
                 .description(projectCreateDto.getDescription())
                 .recruitDeadline(projectCreateDto.getRecruitDeadline())
                 .recruitNumber(projectCreateDto.getRecruitNumber())
                 .developPeriod(projectCreateDto.getDevelopPeriod())
-                .leader(memberRepository.findById(projectCreateDto.getLeaderId())
-                        .orElseThrow(() -> new BaseException(POST_PROJECT_EMPTY_LEADER)))
-                .regionTag(regionTagRepository.findById(projectCreateDto.getRegionTagId())
-                        .orElseThrow(() -> new BaseException(POST_PROJECT_EMPTY_REGIONTAG)))
+                .leader(member)
+                .regionTag(member.getRegionTag())
                 .build();
 
-        for (Long tagId : projectCreateDto.getTechTagIds()) {
-            TechTag techTag = techTagRepository.findById(tagId)
+        for (String tagName : projectCreateDto.getTechTagNames()) {
+            TechTag techTag = techTagRepository.findByName(tagName)
                     .orElseThrow(() -> new BaseException(POST_PROJECT_EMPTY_TECHTAG));
             ProjectTechTag projectTechTag = new ProjectTechTag(project, techTag);
             project.addTechTag(projectTechTag);
         }
 
-        // 프로젝트를 먼저 저장
-        Project savedProject = projectRepository.save(project);
-
-        // 이미지 정보를 저장
-        List<ProjectImage> images = projectCreateDto.getImageUrls().stream()
-                .map(url -> new ProjectImage(url, savedProject))
-                .collect(Collectors.toList());
-        savedProject.setImages(images);
+//        // 이미지 정보를 저장
+//        List<ProjectImage> images = projectCreateDto.getImageUrls().stream()
+//                .map(url -> new ProjectImage(url, project))
+//                .collect(Collectors.toList());
+//        project.setImages(images);
 
         // 변경사항을 저장
-        projectRepository.save(savedProject);
+        projectRepository.save(project);
     }
 
     public ProjectDetailDto getProjectDetailDto(Long id) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new BaseException(PROJECT_NOT_FOUND));
         return new ProjectDetailDto(project);
-    }
-
-    public void deleteAllProjects() {
-        projectRepository.deleteAll();
     }
 
     // 프로젝트 팀의 구성원 목록을 가져옴
@@ -123,9 +120,9 @@ public class ProjectService {
         return converted;
     }
 
-    public List<ProjectDto> getSearchProjects(ProjectSearchCond cond, int page) throws BaseException {
+    public List<ProjectDto> getSearchProjects(ProjectSearchCond cond) throws BaseException {
         addChildren(cond);
-        return projectSearchRepository.searchProjectByAllCond(cond, page);
+        return projectSearchRepository.searchProjectByAllCond(cond);
     }
 
     public void addChildren(ProjectSearchCond cond) throws BaseException {
