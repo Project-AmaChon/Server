@@ -28,7 +28,7 @@ public class ProjectSearchRepository {
     }
 
     private BooleanExpression keywordLike(String keyword) {
-        return (keyword == null || keyword.length() == 0) ? null : project.title.like(keyword);
+        return (keyword == null || keyword.length() == 0) ? null : project.title.like("%" + keyword + "%");
     }
 
     private BooleanExpression regionTagIn(List<String> regionTagNames) {
