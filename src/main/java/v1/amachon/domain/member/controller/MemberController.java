@@ -3,15 +3,17 @@ package v1.amachon.domain.member.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponse;
+import v1.amachon.domain.member.dto.ProfileDto;
 import v1.amachon.domain.member.dto.join.JoinDto;
 import v1.amachon.domain.member.dto.login.TokenDto;
+import v1.amachon.domain.member.entity.Profile;
 import v1.amachon.domain.member.service.MemberService;
+import v1.amachon.domain.project.dto.ProjectDetailDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +30,21 @@ public class MemberController {
     public BaseResponse<TokenDto> join(@RequestBody JoinDto joinDto) throws BaseException {
         TokenDto tokenDto = memberService.join(joinDto);
         return new BaseResponse<>(tokenDto);
+    }
+
+    @ApiOperation(
+            value = "마이페이지 조회",
+            notes = "로그인 되어있는 유저의 마이페이지를 조회합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 2230, message = "해당 프로젝트가 존재하지 않습니다.")
+    })
+    @GetMapping("/my-page")
+    public BaseResponse<ProfileDto> getProfile(@RequestHeader("Authorization")String accessToken) {
+        try {
+            return new BaseResponse<>(memberService.getProfile());
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 }
