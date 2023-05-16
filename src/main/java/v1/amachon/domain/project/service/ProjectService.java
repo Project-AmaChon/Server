@@ -64,7 +64,8 @@ public class ProjectService {
     public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
-
+        RegionTag regionTag = regionTagRepository.findByName(projectCreateDto.getRegionTagName()).orElseThrow(
+                () -> new BaseException(POST_PROJECT_EMPTY_REGIONTAG));
         Project project = Project.builder()
                 .title(projectCreateDto.getTitle())
                 .description(projectCreateDto.getDescription())
@@ -72,7 +73,7 @@ public class ProjectService {
                 .recruitNumber(projectCreateDto.getRecruitNumber())
                 .developPeriod(projectCreateDto.getDevelopPeriod())
                 .leader(member)
-                .regionTag(member.getRegionTag())
+                .regionTag(regionTag)
                 .build();
 
         for (String tagName : projectCreateDto.getTechTagNames()) {
