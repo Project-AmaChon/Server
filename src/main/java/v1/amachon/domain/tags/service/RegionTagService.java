@@ -26,14 +26,14 @@ public class RegionTagService {
     private final RegionTagRepository regionTagRepository;
     private final MemberRepository memberRepository;
 
-    @Cacheable(value = "regionTags")
+//    @Cacheable(value = "regionTags")
     public List<RegionTagDto> getAllRegionTags() {
         List<RegionTag> tags = regionTagRepository.findByDepth(0);
         List<RegionTagDto> tagListDto = tags.stream().map(RegionTagDto::new).collect(Collectors.toList());
         return tagListDto;
     }
 
-    @Cacheable(value = "regionTag", key = "#tagName")
+//    @Cacheable(value = "regionTag", key = "#tagName")
     public RegionTagDto getRegionTag(String tagName) throws BaseException {
         RegionTag tag = regionTagRepository.findByName(tagName).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.INVALID_TAG)
