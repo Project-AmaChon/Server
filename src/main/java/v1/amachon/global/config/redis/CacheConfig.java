@@ -43,10 +43,10 @@ public class CacheConfig {
 
     private Map<String, RedisCacheConfiguration> confMap() {
         Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
-        cacheConfigurations.put("regionTags", defaultConf().entryTtl(Duration.ofMinutes(600L)));
-        cacheConfigurations.put("regionTag", defaultConf().entryTtl(Duration.ofMinutes(600L)));
-        cacheConfigurations.put("techTags", defaultConf().entryTtl(Duration.ofMinutes(600L)));
-        cacheConfigurations.put("techTag", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+//        cacheConfigurations.put("regionTags", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+//        cacheConfigurations.put("regionTag", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+//        cacheConfigurations.put("techTags", defaultConf().entryTtl(Duration.ofMinutes(600L)));
+//        cacheConfigurations.put("techTag", defaultConf().entryTtl(Duration.ofMinutes(600L)));
         return cacheConfigurations;
     }
 }
