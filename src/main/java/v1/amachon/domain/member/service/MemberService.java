@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponseStatus;
 import v1.amachon.domain.member.dto.ProfileDto;
@@ -13,9 +14,13 @@ import v1.amachon.domain.member.dto.login.LoginDto;
 import v1.amachon.domain.member.dto.login.TokenDto;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.global.config.s3.S3UploadUtil;
 import v1.amachon.global.config.security.util.SecurityUtils;
 
+import java.io.IOException;
 import java.util.Optional;
+
+import static v1.amachon.domain.base.BaseResponseStatus.UNAUTHORIZED;
 
 @RequiredArgsConstructor
 @Transactional
@@ -25,6 +30,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthService authService;
     private final PasswordEncoder passwordEncoder;
+    private final S3UploadUtil s3UploadUtil;
 
     public TokenDto join(JoinDto joinDto) throws BaseException {
         String rawPassword = joinDto.getPassword();
@@ -50,7 +56,14 @@ public class MemberService {
 
     public ProfileDto getProfile() throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.UNAUTHORIZED));
+                () -> new BaseException(UNAUTHORIZED));
         return new ProfileDto(member.getProfile());
+    }
+
+    public void changeProfileImage(MultipartFile profileImage) throws BaseException, IOException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(() -> new BaseException(UNAUTHORIZED));
+        String profileImageUrl = s3UploadUtil.upload(profileImage);
+        member.getProfile().changeProfileImage(profileImageUrl);
+        memberRepository.save(member);
     }
 }

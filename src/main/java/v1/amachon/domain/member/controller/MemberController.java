@@ -1,19 +1,17 @@
 package v1.amachon.domain.member.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponse;
 import v1.amachon.domain.member.dto.ProfileDto;
 import v1.amachon.domain.member.dto.join.JoinDto;
 import v1.amachon.domain.member.dto.login.TokenDto;
-import v1.amachon.domain.member.entity.Profile;
 import v1.amachon.domain.member.service.MemberService;
-import v1.amachon.domain.project.dto.ProjectDetailDto;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +41,18 @@ public class MemberController {
     public BaseResponse<ProfileDto> getProfile(@RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(memberService.getProfile());
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ApiOperation(value = "프로필 이미지 변경")
+    @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
+    @PatchMapping("/my-page/profile")
+    public BaseResponse<String> changeProfileImage(@RequestHeader("Authorization")String accessToken, @RequestPart MultipartFile profile) throws IOException {
+        try {
+            memberService.changeProfileImage(profile);
+            return new BaseResponse<>("프로필 이미지가 변경되었습니다.");
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

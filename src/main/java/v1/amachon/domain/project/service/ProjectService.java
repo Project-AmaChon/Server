@@ -145,10 +145,14 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId).orElseThrow(
                 () -> new BaseException(BAD_REQUEST));
         List<Long> teamMemberIds = project.getTeamMembers().stream().map(t -> t.getMember().getId()).collect(Collectors.toList());
+        List<Long> recruitMemberIds = recruitManagementRepository.findByProjectId(projectId)
+                .stream().map(r -> r.getMember().getId()).collect(Collectors.toList());
         if (project.getLeader().getId() == member.getId()) {
             throw new BaseException(BAD_REQUEST);
         } else if (teamMemberIds.contains(member.getId())) {
             throw new BaseException(PROJECT_APPLY_DENIED);
+        } else if (recruitMemberIds.contains(member.getId())) {
+            throw new BaseException(ALREADY_APPLY);
         }
         recruitManagementRepository.save(new RecruitManagement(member, project));
     }

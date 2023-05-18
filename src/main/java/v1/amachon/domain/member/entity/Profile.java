@@ -42,9 +42,12 @@ public class Profile {
 
     public void changeProfile(ProfileDto profileDto) {
         this.introduction = profileDto.getIntroduction();
-        this.profileImageUrl = profileDto.getProfileImageUrl();
         this.description = profileDto.getDescription();
         this.githubUrl = profileDto.getGithubUrl();
         this.blogUrl = profileDto.getBlogUrl();
+    }
+
+    public void changeProfileImage(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

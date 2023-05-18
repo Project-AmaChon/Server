@@ -61,6 +61,7 @@ public enum BaseResponseStatus {
 
     // recruitManagement
     NOT_FOUND_RECRUIT_MANAGEMENT(false, 2050, "신청 정보를 찾을 수 없습니다."),
+    ALREADY_APPLY(false, 2051, "이미 참가 신청된 프로젝트입니다."),
   
   
     /**

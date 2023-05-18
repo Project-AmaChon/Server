@@ -146,4 +146,44 @@ public class ProjectController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ApiOperation(
+            value = "참가 신청 수락",
+            notes = "프로젝트 참가 신청에 대한 수락 요청"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 2240, message = "해당 프로젝트가 존재하지 않습니다."),
+            @ApiResponse(code = 2003, message = "권한이 없는 유저입니다."),
+            @ApiResponse(code = 2050, message = "신청 정보를 찾을 수 없습니다.")
+    })
+    @GetMapping("/project/apply/accept/{recruitId}")
+    public BaseResponse<String> acceptRecruitApply(@PathVariable("recruitId") Long recruitId,
+                                                   @RequestHeader("Authorization")String accessToken) {
+        try {
+            projectService.recruitAccept(recruitId);
+            return new BaseResponse<>("참가 신청 수락 완료!");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ApiOperation(
+            value = "참가 신청 거절",
+            notes = "프로젝트 참가 신청에 대한 거절 요청"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 2240, message = "해당 프로젝트가 존재하지 않습니다."),
+            @ApiResponse(code = 2003, message = "권한이 없는 유저입니다."),
+            @ApiResponse(code = 2050, message = "신청 정보를 찾을 수 없습니다.")
+    })
+    @GetMapping("/project/apply/reject/{recruitId}")
+    public BaseResponse<String> rejectRecruitApply(@PathVariable("recruitId") Long recruitId,
+                                                   @RequestHeader("Authorization")String accessToken) {
+        try {
+            projectService.recruitReject(recruitId);
+            return new BaseResponse<>("참가 신청 거절 완료!");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
