@@ -1,11 +1,7 @@
 package v1.amachon.domain.member.repository;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberTemplate;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +10,6 @@ import v1.amachon.domain.member.dto.RecommendCond;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
 
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,30 +33,28 @@ public class MemberRecommendRepo {
     }
 
     public BooleanExpression techTagIn(List<String> techTagNames) {
-        return techTagNames.isEmpty() ? null : techTag.name.in(techTagNames);
-    }
-
-    private OrderSpecifier<Integer> techTagAndRegionTagCond(RecommendCond cond) {
-        return Expressions.asNumber(
-                        Expressions.cases()
-                                .when(techTagIn(cond.getTechTagNames()).and(regionTagIn(cond.getRegionTagNames()))).then(2)
-                                .when(techTagIn(cond.getTechTagNames())).then(1)
-                                .otherwise(0))
-                                .desc();
+        return techTagNames.isEmpty() ? null : memberTechTag.techTag.name.in(techTagNames);
     }
 
     public List<RecruitManagementDto> getRecommendMemberByCond(RecommendCond cond) {
+        NumberExpression<Long> tagCountExpression = Expressions.asNumber(memberTechTag.id.count().add(
+                Expressions.cases()
+                        .when(member.regionTag.name.in(cond.getRegionTagNames())).then(5)
+                        .otherwise(0)));
+
         Pageable pageable = PageRequest.of(0, 10);
-        List<Member> result = queryFactory.select(member)
+        List<Tuple> result = queryFactory.select(member, Expressions.asNumber(tagCountExpression.as("tag_count")))
                 .from(member)
                 .innerJoin(member.techTags, memberTechTag)
                 .innerJoin(memberTechTag.techTag, techTag)
                 .where(techTagIn(cond.getTechTagNames()))
-                .orderBy(techTagAndRegionTagCond(cond))
+                .groupBy(member.id)
+                .orderBy(tagCountExpression.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        Set<Member> members = new LinkedHashSet<>(result);
+        List<Member> converted = result.stream().map(r -> r.get(member)).collect(Collectors.toList());
+        Set<Member> members = new LinkedHashSet<>(converted);
         return members.stream().map(RecruitManagementDto::new).collect(Collectors.toList());
     }
 }
