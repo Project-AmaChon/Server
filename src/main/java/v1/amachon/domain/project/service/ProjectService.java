@@ -83,12 +83,6 @@ public class ProjectService {
             project.addTechTag(projectTechTag);
         }
 
-//        // 이미지 정보를 저장
-//        List<ProjectImage> images = projectCreateDto.getImageUrls().stream()
-//                .map(url -> new ProjectImage(url, project))
-//                .collect(Collectors.toList());
-//        project.setImages(images);
-
         // 변경사항을 저장
         projectRepository.save(project);
     }

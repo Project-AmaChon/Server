@@ -11,7 +11,6 @@ import v1.amachon.domain.member.repository.MemberRepository;
 import v1.amachon.domain.tags.dto.RegionTagDto;
 import v1.amachon.domain.tags.dto.change.ChangeRegionTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
-import v1.amachon.domain.tags.entity.techtag.TechTag;
 import v1.amachon.domain.tags.repository.RegionTagRepository;
 import v1.amachon.global.config.security.util.SecurityUtils;
 
@@ -26,14 +25,14 @@ public class RegionTagService {
     private final RegionTagRepository regionTagRepository;
     private final MemberRepository memberRepository;
 
-//    @Cacheable(value = "regionTags")
+    @Cacheable(value = "regionTags")
     public List<RegionTagDto> getAllRegionTags() {
         List<RegionTag> tags = regionTagRepository.findByDepth(0);
         List<RegionTagDto> tagListDto = tags.stream().map(RegionTagDto::new).collect(Collectors.toList());
         return tagListDto;
     }
 
-//    @Cacheable(value = "regionTag", key = "#tagName")
+    @Cacheable(value = "regionTag", key = "#tagName")
     public RegionTagDto getRegionTag(String tagName) throws BaseException {
         RegionTag tag = regionTagRepository.findByName(tagName).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.INVALID_TAG)

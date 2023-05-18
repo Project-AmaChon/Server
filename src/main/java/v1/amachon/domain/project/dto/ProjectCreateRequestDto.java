@@ -21,5 +21,4 @@ public class ProjectCreateRequestDto {
     private LocalDate developPeriod;
     private String regionTagName;
     private List<String> techTagNames;
-//    private List<String> imageUrls;
 }
