@@ -8,10 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.entity.ProjectImage;
-import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;
+import v1.amachon.domain.project.entity.TeamMember;
 
 @Data
 @NoArgsConstructor
@@ -25,8 +24,8 @@ public class ProjectDetailDto {
     private int recruitNumber;
     private LocalDate developPeriod;
     private Long leaderId;
-    private Long regionTagId;
-    private List<Long> techTagIds;
+    private String regionTagName;
+    private List<String> techTagNames;
     private List<String> imageUrls;
     // 추가: 프로젝트 팀에 참가 중인 인원들의 목록
     private List<TeamMemberDto> teamMembers;
@@ -39,9 +38,23 @@ public class ProjectDetailDto {
         this.recruitNumber = project.getRecruitNumber();
         this.developPeriod = project.getDevelopPeriod();
         this.leaderId = project.getLeader().getId();
-        this.regionTagId = project.getRegionTag().getId();
-        this.techTagIds = project.getTechTags().stream().map(ProjectTechTag::getId).collect(Collectors.toList());
+        this.regionTagName = project.getRegionTag().getName();
+        this.techTagNames = project.getTechTags().stream().map(t -> t.getTechTag().getName()).collect(Collectors.toList());
         this.imageUrls = project.getImages().stream().map(ProjectImage::getImageUrl).collect(Collectors.toList());
         this.teamMembers = project.getTeamMembers().stream().map(t -> new TeamMemberDto(t.getMember())).collect(Collectors.toList());
+    }
+
+    public ProjectDetailDto(Project project, List<TeamMember> teamMember) {
+        this.projectId = project.getId();
+        this.title = project.getTitle();
+        this.description = project.getDescription();
+        this.recruitDeadline = project.getRecruitDeadline();
+        this.recruitNumber = project.getRecruitNumber();
+        this.developPeriod = project.getDevelopPeriod();
+        this.leaderId = project.getLeader().getId();
+        this.regionTagName = project.getRegionTag().getName();
+        this.techTagNames = project.getTechTags().stream().map(t -> t.getTechTag().getName()).collect(Collectors.toList());
+        this.imageUrls = project.getImages().stream().map(ProjectImage::getImageUrl).collect(Collectors.toList());
+        this.teamMembers = teamMember.stream().map(t -> new TeamMemberDto(t.getMember())).collect(Collectors.toList());
     }
 }

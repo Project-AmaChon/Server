@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import v1.amachon.domain.base.BaseEntity;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
@@ -13,7 +14,9 @@ import v1.amachon.domain.tags.entity.techtag.TechTag;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -38,7 +41,7 @@ public class Project extends BaseEntity {
     private List<TeamMember> teamMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ProjectTechTag> techTags = new ArrayList<>();
+    private Set<ProjectTechTag> techTags = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_tag_id")
