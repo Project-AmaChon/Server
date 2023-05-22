@@ -11,6 +11,7 @@ import v1.amachon.domain.project.entity.RecruitManagement;
 public interface RecruitManagementRepository extends JpaRepository<RecruitManagement, Long> {
     List<RecruitManagement> findByProjectId(Long projectId);
 
-    @Query("SELECT r FROM RecruitManagement r WHERE r.status = 'NORMAL' AND r.id = :id")
-    Optional<RecruitManagement> findById(@Param("id") Long id);
+    @Query("SELECT r FROM RecruitManagement r JOIN FETCH r.member JOIN FETCH r.project rp " +
+            "JOIN FETCH rp.leader WHERE r.status = 'NORMAL' AND r.id = :id")
+    Optional<RecruitManagement> findByIdFetch(@Param("id") Long id);
 }

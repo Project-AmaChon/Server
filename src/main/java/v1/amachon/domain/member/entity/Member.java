@@ -36,7 +36,7 @@ public class Member extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private NotificationOption notificationOption;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Authority> authorities = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
@@ -55,7 +55,7 @@ public class Member extends BaseEntity {
     private List<MessageRoom> messageRooms = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<MemberTechTag> techTags = new ArrayList<>();
+    private Set<MemberTechTag> techTags = new HashSet<>();
 
     @Builder
     public Member(String email, String nickname, String password) {

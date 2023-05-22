@@ -20,7 +20,6 @@ import v1.amachon.domain.project.dto.ProjectDto;
 import v1.amachon.domain.project.dto.ProjectSearchCond;
 import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
 import v1.amachon.domain.project.entity.Project;
-import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.entity.RecruitManagement;
 import v1.amachon.domain.project.entity.TeamMember;
 import v1.amachon.domain.project.repository.ProjectRepository;
@@ -90,22 +89,11 @@ public class ProjectService {
     public ProjectDetailDto getProjectDetailDto(Long id) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
-
-        Project project = projectRepository.findById(id)
+        Project project = projectRepository.findByIdFetch(id)
                 .orElseThrow(() -> new BaseException(PROJECT_NOT_FOUND));
-        return new ProjectDetailDto(project);
-    }
+        List<TeamMember> team = teamMemberRepository.findByProjectId(id);
 
-    // 프로젝트 팀의 구성원 목록을 가져옴
-    public List<Member> getProjectTeamMembers(Long projectId) {
-        List<Member> teamMembers = new ArrayList<>();
-        // 프로젝트 ID에 해당하는 RecruitManagement 엔티티 목록 가져오기
-        List<RecruitManagement> recruitManagements = recruitManagementRepository.findByProjectId(projectId);
-        // RecruitManagement 엔티티에 있는 회원 엔티티를 순회하며 가져와서 팀원 목록에 추가
-        for (RecruitManagement recruitManagement : recruitManagements) {
-            teamMembers.add(recruitManagement.getMember());
-        }
-        return teamMembers;
+        return new ProjectDetailDto(project, team);
     }
 
     public List<ProjectDto> getRecentProjects() {
@@ -160,18 +148,20 @@ public class ProjectService {
     public List<RecruitManagementDto> getRecruitList(Long projectId) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
-        Project project = projectRepository.findById(projectId).orElseThrow(
+        Project project = projectRepository.getRecruitListFetch(projectId).orElseThrow(
                 () -> new BaseException(PROJECT_NOT_FOUND));
         if (project.getLeader().getId() != member.getId()) {
             throw new BaseException(INVALID_USER);
         }
-        return project.getRecruitManagements().stream().map(r -> new RecruitManagementDto(r.getMember())).collect(Collectors.toList());
+        return project.getRecruitManagements().stream()
+                .map(r -> new RecruitManagementDto(r.getMember(), r.getId()))
+                .collect(Collectors.toList());
     }
 
     public List<RecruitManagementDto> getRecommendMember(Long projectId) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
-        Project project = projectRepository.findById(projectId).orElseThrow(
+        Project project = projectRepository.findByIdFetch(projectId).orElseThrow(
                 () -> new BaseException(PROJECT_NOT_FOUND));
         if (project.getLeader().getId() != member.getId()) {
             throw new BaseException(INVALID_USER);
@@ -191,7 +181,7 @@ public class ProjectService {
     public void recruitAccept(Long recruitManagementId) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
-        RecruitManagement recruitManagement = recruitManagementRepository.findById(recruitManagementId).orElseThrow(
+        RecruitManagement recruitManagement = recruitManagementRepository.findByIdFetch(recruitManagementId).orElseThrow(
                 () -> new BaseException(NOT_FOUND_RECRUIT_MANAGEMENT));
         if (recruitManagement.getProject().getLeader().getId() != member.getId()) {
             throw new BaseException(INVALID_USER);
@@ -203,7 +193,7 @@ public class ProjectService {
     public void recruitReject(Long recruitManagementId) throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
-        RecruitManagement recruitManagement = recruitManagementRepository.findById(recruitManagementId).orElseThrow(
+        RecruitManagement recruitManagement = recruitManagementRepository.findByIdFetch(recruitManagementId).orElseThrow(
                 () -> new BaseException(NOT_FOUND_RECRUIT_MANAGEMENT));
         if (recruitManagement.getProject().getLeader().getId() != member.getId()) {
             throw new BaseException(INVALID_USER);

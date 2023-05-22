@@ -7,20 +7,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import v1.amachon.domain.project.entity.Project;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    @Query("SELECT p, COUNT(t.id) AS tag_count " +
-            "FROM Project p\n" +
-            "INNER JOIN ProjectTechTag pt ON p.id = pt.project.id\n" +
-            "INNER JOIN TechTag t ON pt.techTag.id = t.id\n" +
-            "WHERE t.name IN (:tagNames)\n" +
-            "  AND p.regionTag.id = :regionId\n" +
-            "GROUP BY p.id\n" +
-            "ORDER BY tag_count DESC"
-    )
-    List<Project> searchProjectByTags(@Param("tagNames") List<String> tagNames, @Param("regionId")Long regionId);
-
     @Query("SELECT p FROM Project p WHERE p.status = 'NORMAL' ORDER BY p.createdDate DESC")
     Page<Project> searchRecentProjects(Pageable pageable);
+
+    @Query("SELECT p FROM Project p JOIN FETCH p.leader l JOIN FETCH p.recruitManagements rm JOIN FETCH rm.member rmm " +
+            "JOIN FETCH rmm.profile WHERE p.id = :projectId")
+    Optional<Project> getRecruitListFetch(@Param("projectId") Long projectId);
+
+    @Query("SELECT p FROM Project p JOIN FETCH p.leader l JOIN FETCH p.techTags t JOIN FETCH t.techTag JOIN FETCH p.regionTag WHERE p.id = :projectId")
+    Optional<Project> findByIdFetch(@Param("projectId") Long projectId);
 }
+

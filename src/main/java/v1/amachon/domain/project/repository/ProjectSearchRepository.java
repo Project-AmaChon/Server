@@ -40,10 +40,10 @@ public class ProjectSearchRepository {
     }
 
     public List<ProjectDto> searchProjectByAllCond(ProjectSearchCond cond) {
-        Pageable pageable = PageRequest.of(0, 40);
+        Pageable pageable = PageRequest.of(0, 10);
         List<Tuple> result = queryFactory.select(project, Expressions.asNumber(projectTechTag.id.count()).as("tag_count"))
                 .from(project)
-                .innerJoin(project.techTags, projectTechTag)
+                .innerJoin(project.techTags, projectTechTag).on()
                 .innerJoin(projectTechTag.techTag, techTag)
                 .where(keywordLike(cond.getKeyword()),
                         techTagIn(cond.getTechTagNames()),
