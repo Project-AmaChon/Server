@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.springframework.format.annotation.DateTimeFormat;
 import v1.amachon.domain.base.BaseEntity;
 import v1.amachon.domain.member.entity.Member;
+import v1.amachon.domain.project.dto.project.ProjectModifyDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;
 import v1.amachon.domain.tags.entity.techtag.TechTag;
@@ -29,8 +31,10 @@ public class Project extends BaseEntity {
     private Long id;
     private String title;
     private String description;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate recruitDeadline;
     private int recruitNumber;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate developPeriod;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -74,9 +78,28 @@ public class Project extends BaseEntity {
     public void addTechTag(ProjectTechTag projectTechTag) {
         techTags.add(projectTechTag);
     }
+    public void addImage(ProjectImage projectImage) {
+        this.images.add(projectImage);
+    }
+    public void changeTechTag(List<ProjectTechTag> projectTechTags) {
+        techTags.clear();
+        techTags.addAll(projectTechTags);
+    }
     // 추가: 이미지 목록을 설정하는 메서드
-    public void setImages(List<ProjectImage> images) {
+    public void changeImages(List<ProjectImage> images) {
         this.images.clear();
         this.images.addAll(images);
+    }
+
+    public void modifyProject(ProjectModifyDto projectModifyDto, List<ProjectTechTag> techTags,
+                              List<ProjectImage> images, RegionTag regionTag) {
+        changeTechTag(techTags);
+        changeImages(images);
+        this.title = projectModifyDto.getTitle();
+        this.description = projectModifyDto.getDescription();
+        this.recruitDeadline = projectModifyDto.getRecruitDeadline();
+        this.developPeriod = projectModifyDto.getDevelopPeriod();
+        this.recruitNumber = projectModifyDto.getRecruitNumber();
+        this.regionTag = regionTag;
     }
 }

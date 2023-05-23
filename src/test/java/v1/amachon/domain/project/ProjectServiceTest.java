@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.project.dto.ProjectCreateRequestDto;
+import v1.amachon.domain.project.dto.project.ProjectCreateRequestDto;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.project.service.ProjectService;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
