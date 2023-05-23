@@ -6,6 +6,7 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import v1.amachon.domain.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProjectImage {
+public class ProjectImage extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -31,5 +32,6 @@ public class ProjectImage {
     public ProjectImage(String imageUrl, Project project) {
         this.imageUrl = imageUrl;
         this.project = project;
+        project.addImage(this);
     }
 }

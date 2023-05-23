@@ -7,8 +7,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import v1.amachon.domain.project.dto.ProjectDto;
-import v1.amachon.domain.project.dto.ProjectSearchCond;
+import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.project.dto.project.ProjectDto;
+import v1.amachon.domain.project.dto.project.ProjectSearchCond;
 import v1.amachon.domain.project.entity.Project;
 
 import java.util.List;
@@ -40,14 +41,15 @@ public class ProjectSearchRepository {
     }
 
     public List<ProjectDto> searchProjectByAllCond(ProjectSearchCond cond) {
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, 40);
         List<Tuple> result = queryFactory.select(project, Expressions.asNumber(projectTechTag.id.count()).as("tag_count"))
                 .from(project)
                 .innerJoin(project.techTags, projectTechTag).on()
                 .innerJoin(projectTechTag.techTag, techTag)
                 .where(keywordLike(cond.getKeyword()),
                         techTagIn(cond.getTechTagNames()),
-                        regionTagIn(cond.getRegionTagNames()))
+                        regionTagIn(cond.getRegionTagNames()),
+                        project.status.eq(BaseEntity.Status.NORMAL))
                 .groupBy(project.id)
                 .orderBy(Expressions.asNumber(projectTechTag.id.count()).desc())
                 .offset(pageable.getOffset())

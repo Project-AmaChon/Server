@@ -1,4 +1,4 @@
-package v1.amachon.domain.project.dto;
+package v1.amachon.domain.project.dto.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @NoArgsConstructor
@@ -16,8 +17,10 @@ import lombok.NoArgsConstructor;
 public class ProjectCreateRequestDto {
     private String title;
     private String description;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate recruitDeadline;
     private int recruitNumber;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate developPeriod;
     private String regionTagName;
     private List<String> techTagNames;

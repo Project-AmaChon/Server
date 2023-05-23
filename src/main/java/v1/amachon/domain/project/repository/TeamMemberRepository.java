@@ -10,6 +10,6 @@ import java.util.List;
 public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
 
     @Query("SELECT t FROM TeamMember t JOIN FETCH t.member tm " +
-            "JOIN FETCH tm.profile WHERE t.project.id = :projectId")
+            "JOIN FETCH tm.profile WHERE t.project.id = :projectId AND t.status = 'NORMAL'")
     List<TeamMember> findByProjectId(@Param("projectId") Long projectId);
 }

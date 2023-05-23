@@ -3,15 +3,14 @@ package v1.amachon.domain.project.controller;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.base.BaseResponse;
-import v1.amachon.domain.project.dto.ProjectCreateRequestDto;
-import v1.amachon.domain.project.dto.ProjectDetailDto;
-import v1.amachon.domain.project.dto.ProjectDto;
-import v1.amachon.domain.project.dto.ProjectSearchCond;
+import v1.amachon.domain.project.dto.project.*;
 import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
 import v1.amachon.domain.project.service.ProjectService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -36,16 +35,73 @@ public class ProjectController {
             @ApiResponse(code = 2000, message = "Request error, 입력값을 확인해주세요."),
     })
     @PostMapping("/project")
-    public BaseResponse<String> createProject(@RequestBody ProjectCreateRequestDto projectCreateDto,
-                                              @RequestHeader("Authorization")String accessToken) {
+    public BaseResponse<String> createProject(@RequestHeader("Authorization")String accessToken, @RequestPart(value = "images", required = false) List<MultipartFile> images,
+                                              @ModelAttribute ProjectCreateRequestDto projectCreateDto) {
         try {
-            projectService.createProject(projectCreateDto);
+            projectService.createProject(projectCreateDto, images);
             return new BaseResponse<>("프로젝트 생성 완료!");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @ApiOperation(
+            value = "프로젝트 수정",
+            notes = "프로젝트 수정 페이지 정보 받아오기"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 2000, message = "Request error, 입력값을 확인해주세요."),
+    })
+    @GetMapping("/project/{projectId}/modify")
+    public BaseResponse<ProjectModifyDto> getModifyProject(@RequestHeader("Authorization")String accessToken,
+                                                           @PathVariable("projectId") Long projectId) {
+        try {
+            return new BaseResponse<>(projectService.getModifyProject(projectId));
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
     }
 
+    @ApiOperation(
+            value = "프로젝트 수정",
+            notes = "프로젝트 수정하기"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 2000, message = "Request error, 입력값을 확인해주세요."),
+    })
+    @PatchMapping("/project/{projectId}/modify")
+    public BaseResponse<String> modifyProject(@RequestHeader("Authorization")String accessToken,
+                                                        @PathVariable("projectId") Long projectId,
+                                                        @ModelAttribute ProjectModifyDto projectModifyDto,
+                                                        @RequestPart(value = "images") List<MultipartFile> images) {
+        try {
+            projectService.modifyProject(projectId, projectModifyDto, images);
+            return new BaseResponse<>("프로젝트 수정 성공!");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @ApiOperation(
+            value = "프로젝트 삭제",
+            notes = "프로젝트 삭제하기(상태 값 변경(EXPIRED))"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 2000, message = "Request error, 입력값을 확인해주세요."),
+    })
+    @PostMapping("/project/{projectId}/delete")
+    public BaseResponse<String> deleteProject(@RequestHeader("Authorization")String accessToken, @PathVariable("projectId") Long projectId) {
+        try {
+            projectService.deleteProject(projectId);
+            return new BaseResponse<>("프로젝트 삭제 성공!");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
     @ApiOperation(
             value = "프로젝트 상세 조회",
@@ -77,7 +133,6 @@ public class ProjectController {
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
-
     }
 
     @ApiOperation(

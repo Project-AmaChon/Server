@@ -1,6 +1,6 @@
 package v1.amachon.domain.project.service;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,23 +9,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.member.dto.RecommendCond;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRecommendRepo;
 import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.project.dto.ProjectCreateRequestDto;
-import v1.amachon.domain.project.dto.ProjectDetailDto;
-import v1.amachon.domain.project.dto.ProjectDto;
-import v1.amachon.domain.project.dto.ProjectSearchCond;
+import v1.amachon.domain.project.dto.project.*;
 import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
 import v1.amachon.domain.project.entity.Project;
+import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.entity.RecruitManagement;
 import v1.amachon.domain.project.entity.TeamMember;
-import v1.amachon.domain.project.repository.ProjectRepository;
-import v1.amachon.domain.project.repository.ProjectSearchRepository;
-import v1.amachon.domain.project.repository.RecruitManagementRepository;
-import v1.amachon.domain.project.repository.TeamMemberRepository;
+import v1.amachon.domain.project.repository.*;
 import v1.amachon.domain.tags.dto.RegionTagDto;
 import v1.amachon.domain.tags.dto.TechTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
@@ -36,6 +32,7 @@ import v1.amachon.domain.tags.repository.RegionTagRepository;
 import v1.amachon.domain.tags.repository.TechTagRepository;
 import v1.amachon.domain.tags.service.RegionTagService;
 import v1.amachon.domain.tags.service.TechTagService;
+import v1.amachon.global.config.s3.S3UploadUtil;
 import v1.amachon.global.config.security.util.SecurityUtils;
 
 import java.util.stream.Collectors;
@@ -59,8 +56,10 @@ public class ProjectService {
     private final TechTagService techTagService;
     private final MemberRecommendRepo memberRecommendRepo;
     private final TeamMemberRepository teamMemberRepository;
+    private final S3UploadUtil s3UploadUtil;
+    private final ProjectImageRepository projectImageRepository;
 
-    public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException {
+    public void createProject(ProjectCreateRequestDto projectCreateDto, List<MultipartFile> images) throws BaseException, IOException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
         RegionTag regionTag = regionTagRepository.findByName(projectCreateDto.getRegionTagName()).orElseThrow(
@@ -74,15 +73,79 @@ public class ProjectService {
                 .leader(member)
                 .regionTag(regionTag)
                 .build();
+        projectRepository.save(project);
+        List<ProjectTechTag> projectTechTags = new ArrayList<>();
 
         for (String tagName : projectCreateDto.getTechTagNames()) {
             TechTag techTag = techTagRepository.findByName(tagName)
                     .orElseThrow(() -> new BaseException(POST_PROJECT_EMPTY_TECHTAG));
-            ProjectTechTag projectTechTag = new ProjectTechTag(project, techTag);
-            project.addTechTag(projectTechTag);
+            ProjectTechTag projectTechTag = projectTechTagRepository.save(new ProjectTechTag(project, techTag));
+            projectTechTags.add(projectTechTag);
+        }
+        project.changeTechTag(projectTechTags);
+
+        for(MultipartFile image : images) {
+            String imageUrl = s3UploadUtil.upload(image);
+            projectImageRepository.save(new ProjectImage(imageUrl, project));
+        }
+        projectRepository.save(project);
+    }
+
+    public ProjectModifyDto getModifyProject(Long projectId) throws BaseException {
+        memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(INVALID_USER));
+        Project project = projectRepository.findByIdFetch(projectId).orElseThrow(
+                () -> new BaseException(PROJECT_NOT_FOUND));
+        return new ProjectModifyDto(project);
+    }
+
+    public void modifyProject(Long projectId, ProjectModifyDto projectModifyDto, List<MultipartFile> images) throws BaseException, IOException {
+        memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(INVALID_USER));
+        Project project = projectRepository.findByIdFetch(projectId).orElseThrow(
+                () -> new BaseException(PROJECT_NOT_FOUND));
+
+        List<ProjectTechTag> projectTechTags = new ArrayList<>();
+        for (String t : projectModifyDto.getTechTagNames()) {
+            ProjectTechTag projectTechTag = new ProjectTechTag(project, techTagRepository.findByName(t).orElseThrow(
+                    () -> new BaseException(INVALID_TAG)));
+            projectTechTags.add(projectTechTag);
+        }
+        RegionTag regionTag = regionTagRepository.findByName(projectModifyDto.getRegionTagName()).orElseThrow(
+                () -> new BaseException(INVALID_TAG));
+
+        // 기존 이미지를 s3에서 삭제
+        if (!project.getImages().isEmpty()) {
+            for(ProjectImage image : project.getImages()) {
+                s3UploadUtil.fileDelete(image.getImageUrl());
+            }
         }
 
-        // 변경사항을 저장
+        List<ProjectImage> projectImages = new ArrayList<>();
+        for(MultipartFile image : images) {
+            String imageUrl = s3UploadUtil.upload(image);
+            projectImages.add(projectImageRepository.save(new ProjectImage(imageUrl, project)));
+        }
+        project.modifyProject(projectModifyDto, projectTechTags, projectImages, regionTag);
+        projectRepository.save(project);
+    }
+
+    public void deleteProject(Long projectId) throws BaseException {
+        Project project = projectRepository.findByIdFetch(projectId).orElseThrow(
+                () -> new BaseException(PROJECT_NOT_FOUND));
+        for (RecruitManagement recruitManagement : project.getRecruitManagements()) {
+            recruitManagement.expired();
+        }
+        for (TeamMember teamMember : project.getTeamMembers()) {
+            teamMember.expired();
+        }
+        for (ProjectTechTag techTag : project.getTechTags()) {
+            techTag.expired();
+        }
+        for (ProjectImage image : project.getImages()) {
+            image.expired();
+        }
+        project.expired();
         projectRepository.save(project);
     }
 

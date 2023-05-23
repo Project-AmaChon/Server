@@ -63,7 +63,17 @@ public class MemberService {
     public void changeProfileImage(MultipartFile profileImage) throws BaseException, IOException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(() -> new BaseException(UNAUTHORIZED));
         String profileImageUrl = s3UploadUtil.upload(profileImage);
+
+        if (!member.getProfile().getProfileImageUrl().isEmpty()) {
+            s3UploadUtil.fileDelete(member.getProfile().getProfileImageUrl());
+        }
         member.getProfile().changeProfileImage(profileImageUrl);
+        memberRepository.save(member);
+    }
+
+    public void changeProfile(ProfileDto profileDto) throws BaseException, IOException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(() -> new BaseException(UNAUTHORIZED));
+        member.changeProfile(profileDto);
         memberRepository.save(member);
     }
 }

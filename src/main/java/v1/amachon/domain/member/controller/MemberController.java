@@ -48,7 +48,7 @@ public class MemberController {
 
     @ApiOperation(value = "프로필 이미지 변경")
     @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
-    @PatchMapping("/my-page/profile")
+    @PatchMapping("/my-page/profile-image")
     public BaseResponse<String> changeProfileImage(@RequestHeader("Authorization")String accessToken, @RequestPart MultipartFile profile) throws IOException {
         try {
             memberService.changeProfileImage(profile);
@@ -57,4 +57,29 @@ public class MemberController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ApiOperation(value = "프로필 정보 변경")
+    @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
+    @GetMapping("/my-page/profile")
+    public BaseResponse<ProfileDto> getProfile(@RequestHeader("Authorization")String accessToken, @RequestBody ProfileDto profileDto) throws IOException {
+        try {
+            ProfileDto profile = memberService.getProfile();
+            return new BaseResponse<>(profile);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ApiOperation(value = "프로필 정보 변경")
+    @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
+    @PatchMapping("/my-page/profile")
+    public BaseResponse<String> changeProfile(@RequestHeader("Authorization")String accessToken, @RequestBody ProfileDto profileDto) throws IOException {
+        try {
+            memberService.changeProfile(profileDto);
+            return new BaseResponse<>("프로필 정보가 변경되었습니다.");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }

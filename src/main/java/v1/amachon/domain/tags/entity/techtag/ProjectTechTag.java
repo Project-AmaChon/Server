@@ -3,6 +3,7 @@ package v1.amachon.domain.tags.entity.techtag;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import v1.amachon.domain.base.BaseEntity;
 import v1.amachon.domain.project.entity.Project;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProjectTechTag {
+public class ProjectTechTag extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "project_tech_tag_id")
