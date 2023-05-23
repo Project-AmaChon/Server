@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import v1.amachon.domain.base.BaseEntity;
 import v1.amachon.domain.member.entity.Member;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Message {
+public class Message extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -37,6 +38,6 @@ public class Message {
         this.messageRoom = messageRoom;
         this.sender = sender;
         this.receiver = receiver;
-        messageRoom.addMessage(this);
+
     }
 }

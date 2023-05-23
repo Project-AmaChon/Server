@@ -49,7 +49,7 @@ public class MemberController {
     @ApiOperation(value = "프로필 이미지 변경")
     @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
     @PatchMapping("/my-page/profile-image")
-    public BaseResponse<String> changeProfileImage(@RequestHeader("Authorization")String accessToken, @RequestPart MultipartFile profile) throws IOException {
+    public BaseResponse<String> changeProfileImage(@RequestHeader("Authorization")String accessToken, @RequestPart(value = "image", required = false) MultipartFile profile) throws IOException {
         try {
             memberService.changeProfileImage(profile);
             return new BaseResponse<>("프로필 이미지가 변경되었습니다.");

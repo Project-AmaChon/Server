@@ -75,7 +75,7 @@ public class ProjectController {
     public BaseResponse<String> modifyProject(@RequestHeader("Authorization")String accessToken,
                                                         @PathVariable("projectId") Long projectId,
                                                         @ModelAttribute ProjectModifyDto projectModifyDto,
-                                                        @RequestPart(value = "images") List<MultipartFile> images) {
+                                                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         try {
             projectService.modifyProject(projectId, projectModifyDto, images);
             return new BaseResponse<>("프로젝트 수정 성공!");

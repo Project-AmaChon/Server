@@ -62,8 +62,10 @@ public enum BaseResponseStatus {
     // recruitManagement
     NOT_FOUND_RECRUIT_MANAGEMENT(false, 2050, "신청 정보를 찾을 수 없습니다."),
     ALREADY_APPLY(false, 2051, "이미 참가 신청된 프로젝트입니다."),
-  
-  
+
+    // message
+    NOT_FOUND_MESSAGE_ROOM(false, 2060, "대화방을 찾을 수 없습니다."),
+    NOT_FOUND_MESSAGE(false, 2061, "메시지를 찾을 수 없습니다."),
     /**
      * 3000 : Response 오류
      */

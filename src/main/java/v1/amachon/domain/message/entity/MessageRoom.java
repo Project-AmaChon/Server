@@ -20,7 +20,8 @@ public class MessageRoom extends BaseEntity {
     @Column(name = "message_room_id")
     private Long id;
 
-    private Boolean readCheck;
+    private String lastMessage;
+    private int unReadMessageCount;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private MessageRoom toSend;
@@ -38,18 +39,25 @@ public class MessageRoom extends BaseEntity {
 
     @Builder
     public MessageRoom(Member from, Member to) {
-        this.readCheck = true;
         this.from = from;
         this.to = to;
     }
 
-    public void addMessage(Message message) {
-        this.messages.add(message);
-        this.toSend.readCheck = false;
+    public void sendMessage(Message fromMessage, Message toMessage) {
+        this.unReadMessageCount = 0;
+        this.lastMessage = fromMessage.getContent();
+        this.messages.add(fromMessage);
+        this.toSend.messages.add(toMessage);
+        this.toSend.unReadMessageCount += 1;
+        this.toSend.lastMessage = toMessage.getContent();
     }
 
     public void match(MessageRoom toSend) {
         this.toSend = toSend;
         toSend.toSend = this;
+    }
+
+    public void initUnReadMessageCount() {
+        this.unReadMessageCount = 0;
     }
 }
