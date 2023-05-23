@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import v1.amachon.domain.project.entity.Project;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -20,5 +21,13 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p JOIN FETCH p.leader l JOIN FETCH p.techTags t JOIN FETCH t.techTag " +
             "JOIN FETCH p.regionTag WHERE p.id = :projectId AND p.status = 'NORMAL'")
     Optional<Project> findByIdFetch(@Param("projectId") Long projectId);
+
+    @Query("SELECT p FROM Project p LEFT JOIN FETCH p.teamMembers pt JOIN FETCH p.leader pl " +
+            "WHERE pl.id = :leaderId")
+    List<Project> findByLeaderId(@Param("leaderId") Long leaderId);
+
+    @Query("SELECT p FROM Project p JOIN FETCH p.teamMembers pt " +
+            "WHERE :memberId IN pt.member.id")
+    List<Project> findByMemberId(@Param("memberId") Long memberId);
 }
 
