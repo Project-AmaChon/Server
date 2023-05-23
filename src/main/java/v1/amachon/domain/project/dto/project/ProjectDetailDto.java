@@ -1,4 +1,4 @@
-package v1.amachon.domain.project.dto;
+package v1.amachon.domain.project.dto.project;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import v1.amachon.domain.project.dto.TeamMemberDto;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.entity.ProjectImage;
 import v1.amachon.domain.project.entity.TeamMember;

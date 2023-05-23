@@ -1,4 +1,4 @@
-package v1.amachon.domain.project.dto;
+package v1.amachon.domain.project.dto.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
