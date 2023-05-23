@@ -266,4 +266,24 @@ public class ProjectService {
         }
         recruitManagement.expired();
     }
+
+    public ProjectManagementDto getProjectManagement() throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+        List<MyProjectDto> myProject = projectRepository.findByLeaderId(member.getId()).stream().map(MyProjectDto::new).collect(Collectors.toList());
+        List<ParticipatingProjectDto> participatingProject = projectRepository.findByMemberId(member.getId()).stream().map(ParticipatingProjectDto::new).collect(Collectors.toList());
+        return new ProjectManagementDto(participatingProject, myProject);
+    }
+
+    public void kickTeamMember(Long teamMemberId) throws BaseException {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
+        TeamMember teamMember = teamMemberRepository.findById(teamMemberId).orElseThrow(
+                () -> new BaseException(NOT_FOUNT_TEAM_MEMBER));
+        if (member.getId() != teamMember.getProject().getLeader().getId()) {
+            throw new BaseException(INVALID_USER);
+        }
+        teamMember.expired();
+        teamMemberRepository.save(teamMember);
+    }
 }

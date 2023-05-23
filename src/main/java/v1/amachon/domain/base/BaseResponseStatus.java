@@ -66,6 +66,9 @@ public enum BaseResponseStatus {
     // message
     NOT_FOUND_MESSAGE_ROOM(false, 2060, "대화방을 찾을 수 없습니다."),
     NOT_FOUND_MESSAGE(false, 2061, "메시지를 찾을 수 없습니다."),
+
+    // teamMember
+    NOT_FOUNT_TEAM_MEMBER(false, 2070, "팀원 정보를 찾을 수 없습니다."),
     /**
      * 3000 : Response 오류
      */

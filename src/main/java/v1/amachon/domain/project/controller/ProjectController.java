@@ -166,6 +166,21 @@ public class ProjectController {
     }
 
     @ApiOperation(
+            value = "팀원 내보내기",
+            notes = "팀원 추방 기능"
+    )
+    @PostMapping("/project/{projectId}/kick/{teamMemberId}")
+    public BaseResponse<String> kickTeamMember(@PathVariable("teamMemberId") Long teamMemberId,
+                                             @RequestHeader("Authorization")String accessToken) {
+        try {
+            projectService.kickTeamMember(teamMemberId);
+            return new BaseResponse<>("팀원 내보내기 완료!");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ApiOperation(
             value = "프로젝트 참가 신청 현황",
             notes = "프로젝트에 참기 신청을 한 사람들의 간단한 프로필 반환"
     )
@@ -237,6 +252,19 @@ public class ProjectController {
         try {
             projectService.recruitReject(recruitId);
             return new BaseResponse<>("참가 신청 거절 완료!");
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ApiOperation(
+            value = "프로젝트 관리",
+            notes = "참여중인 프로젝트, 생성한 프로젝트를 조회"
+    )
+    @GetMapping("/project/management}")
+    public BaseResponse<ProjectManagementDto> getProjectManagement(@RequestHeader("Authorization")String accessToken) {
+        try {
+            return new BaseResponse<>(projectService.getProjectManagement());
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
