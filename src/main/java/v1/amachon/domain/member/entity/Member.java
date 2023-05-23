@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.member.dto.ProfileDto;
 import v1.amachon.domain.member.dto.join.JoinDto;
 import v1.amachon.domain.message.entity.MessageRoom;
 import v1.amachon.domain.notification.entity.Notification;
@@ -94,5 +95,9 @@ public class Member extends BaseEntity {
 
     public void changeRegion(RegionTag regionTag) {
         this.regionTag = regionTag;
+    }
+
+    public void changeProfile(ProfileDto profileDto) {
+        this.profile.changeProfile(profileDto);
     }
 }
