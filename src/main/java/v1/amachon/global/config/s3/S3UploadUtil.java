@@ -1,7 +1,10 @@
 package v1.amachon.global.config.s3;
 
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import v1.amachon.domain.base.BaseException;
+import v1.amachon.domain.base.BaseResponseStatus;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,6 +65,25 @@ public class S3UploadUtil {
             log.info("파일이 삭제되었습니다.");
         } else {
             log.info("파일이 삭제되지 못했습니다.");
+        }
+    }
+
+    public void fileDelete(String fileUrl) throws BaseException {
+        try{
+            String fileKey = fileUrl.substring(48);
+            String key = fileKey; // 폴더/파일.확장자
+            final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion("ap-northeast-2").build();
+            try {
+                s3.deleteObject(bucket, key);
+            } catch (AmazonServiceException e) {
+                System.err.println(e.getErrorMessage());
+                System.exit(1);
+            }
+
+            System.out.println(String.format("[%s] deletion complete", key));
+
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.BAD_REQUEST);
         }
     }
 
