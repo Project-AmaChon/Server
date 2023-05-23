@@ -83,10 +83,11 @@ public class ProjectService {
             projectTechTags.add(projectTechTag);
         }
         project.changeTechTag(projectTechTags);
-
-        for(MultipartFile image : images) {
-            String imageUrl = s3UploadUtil.upload(image);
-            projectImageRepository.save(new ProjectImage(imageUrl, project));
+        if (images != null && !images.isEmpty()) {
+            for(MultipartFile image : images) {
+                String imageUrl = s3UploadUtil.upload(image);
+                projectImageRepository.save(new ProjectImage(imageUrl, project));
+            }
         }
         projectRepository.save(project);
     }
@@ -106,8 +107,8 @@ public class ProjectService {
                 () -> new BaseException(PROJECT_NOT_FOUND));
 
         List<ProjectTechTag> projectTechTags = new ArrayList<>();
-        for (String t : projectModifyDto.getTechTagNames()) {
-            ProjectTechTag projectTechTag = new ProjectTechTag(project, techTagRepository.findByName(t).orElseThrow(
+        for (String techTag : projectModifyDto.getTechTagNames()) {
+            ProjectTechTag projectTechTag = new ProjectTechTag(project, techTagRepository.findByName(techTag).orElseThrow(
                     () -> new BaseException(INVALID_TAG)));
             projectTechTags.add(projectTechTag);
         }
@@ -122,9 +123,11 @@ public class ProjectService {
         }
 
         List<ProjectImage> projectImages = new ArrayList<>();
-        for(MultipartFile image : images) {
-            String imageUrl = s3UploadUtil.upload(image);
-            projectImages.add(projectImageRepository.save(new ProjectImage(imageUrl, project)));
+        if (images != null && !images.isEmpty()) {
+            for(MultipartFile image : images) {
+                String imageUrl = s3UploadUtil.upload(image);
+                projectImages.add(projectImageRepository.save(new ProjectImage(imageUrl, project)));
+            }
         }
         project.modifyProject(projectModifyDto, projectTechTags, projectImages, regionTag);
         projectRepository.save(project);
