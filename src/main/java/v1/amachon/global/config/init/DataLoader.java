@@ -5,10 +5,17 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.base.BaseException;
 import v1.amachon.domain.member.dto.ProfileDto;
 import v1.amachon.domain.member.dto.join.JoinDto;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.message.dto.SendMessageDto;
+import v1.amachon.domain.message.entity.MessageRoom;
+import v1.amachon.domain.message.repository.MessageRoomRepository;
+import v1.amachon.domain.message.service.MessageService;
 import v1.amachon.domain.project.entity.Project;
 import v1.amachon.domain.project.repository.ProjectRepository;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
@@ -19,9 +26,14 @@ import v1.amachon.domain.tags.repository.MemberTechTagRepository;
 import v1.amachon.domain.tags.repository.ProjectTechTagRepository;
 import v1.amachon.domain.tags.repository.RegionTagRepository;
 import v1.amachon.domain.tags.repository.TechTagRepository;
+import v1.amachon.global.config.security.util.SecurityUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Optional;
+
+import static v1.amachon.domain.base.BaseResponseStatus.NOT_FOUND_USERS_ID;
+import static v1.amachon.domain.base.BaseResponseStatus.UNAUTHORIZED;
 
 @Component
 @RequiredArgsConstructor
@@ -34,8 +46,11 @@ public class DataLoader implements ApplicationRunner {
     private final MemberRepository memberRepository;
     private final MemberTechTagRepository memberTechTagRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MessageService messageService;
+    private final MessageRoomRepository messageRoomRepository;
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) throws Exception {
         // 기술 태그
         // 백엔드
@@ -416,34 +431,35 @@ public class DataLoader implements ApplicationRunner {
         Member 로제 = Member.ofMember(JoinDto.builder().email("member29@naver.com").nickname("로제").password(passwordEncoder.encode("wjddn6138!")).build());
 
         // 프로필
-        이정우.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        전재욱.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        박종범.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        전승현.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        허규범.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        카리나.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        윈터.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        닝닝.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        지젤.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        카즈하.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        김채원.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        허윤진.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        사쿠라.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        홍은채.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        장원영.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        레이.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        안유진.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        이서.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        가을.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        리즈.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        하니.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        민지.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        해린.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        다니엘.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        제니.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        리사.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        지수.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
-        로제.getProfile().changeProfile(new ProfileDto("소개", "", "설명", "깃허브", "블로그"));
+        이정우.getProfile().changeProfile(new ProfileDto("안녕하세요. 이정우입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/b8c337b1-5d9a-4671-9d63-34b139169aaf_%EC%9D%B4%EC%A0%95%EC%9A%B0.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        전재욱.getProfile().changeProfile(new ProfileDto("안녕하세요. 전재욱입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/3c40ce6e-4ea9-4471-9446-0c47017e5d0b_%EC%9E%AC%EC%9A%B1.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        박종범.getProfile().changeProfile(new ProfileDto("안녕하세요. 박종범입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/5fb6cad7-794f-4a6b-a694-0e1b8aca3197_%EC%A2%85%EB%B2%942.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        전승현.getProfile().changeProfile(new ProfileDto("안녕하세요. 전승현입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/4477492e-81dd-4a7f-ad17-63f9c257cdff_%EC%8A%B9%ED%98%84.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        허규범.getProfile().changeProfile(new ProfileDto("안녕하세요. 허규범입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/8c764d1e-b6b8-472e-be91-d6a01a75a429_%EA%B7%9C%EB%B2%94.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        카리나.getProfile().changeProfile(new ProfileDto("안녕하세요. 카리나입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/326ff989-e2a6-46da-9c1f-afdaefd06ce7_%EC%B9%B4%EB%A6%AC%EB%82%98.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        윈터.getProfile().changeProfile(new ProfileDto("안녕하세요. 윈터입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/b9b4c977-e73b-460d-941b-ecde85f260e7_%EC%9C%88%ED%84%B0.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        닝닝.getProfile().changeProfile(new ProfileDto("안녕하세요. 닝닝입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/b57cb12a-8096-4ed2-b279-a507f15f99f0_%EB%8B%9D%EB%8B%9D.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        지젤.getProfile().changeProfile(new ProfileDto("안녕하세요. 지젤입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/abeb7655-b0bb-467f-a5e4-de0a5ae9dbab_%EC%A7%80%EC%A0%A4.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        카즈하.getProfile().changeProfile(new ProfileDto("안녕하세요. 카즈하입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/e9720319-45b8-4197-81c1-b3dc34f11b91_%EC%B9%B4%EC%A6%88%ED%95%98.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        김채원.getProfile().changeProfile(new ProfileDto("안녕하세요. 김채원입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/ed39dbe8-cecd-4f87-be06-31fee4937050_%EA%B9%80%EC%B1%84%EC%9B%90.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        허윤진.getProfile().changeProfile(new ProfileDto("안녕하세요. 허윤진입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/1a120bd0-e5a7-436c-961c-f02eda810f45_%ED%97%88%EC%9C%A4%EC%A7%84.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        사쿠라.getProfile().changeProfile(new ProfileDto("안녕하세요. 사쿠라입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/33d59aa5-0996-4918-a2cd-27d0fb62f03a_%EC%82%AC%EC%BF%A0%EB%9D%BC.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        홍은채.getProfile().changeProfile(new ProfileDto("안녕하세요. 홍은채입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/5876b907-17aa-4d20-b71a-9491c6439ce5_%ED%99%8D%EC%9D%80%EC%B1%84.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        장원영.getProfile().changeProfile(new ProfileDto("안녕하세요. 장원영입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/933975b4-d273-479c-b99f-062fb9c4fa49_%EC%9E%A5%EC%9B%90%EC%98%81.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        레이.getProfile().changeProfile(new ProfileDto("안녕하세요. 레이입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/bd6bde35-4f79-4699-bfae-5e557bcfcc70_%EB%A0%88%EC%9D%B4.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        안유진.getProfile().changeProfile(new ProfileDto("안녕하세요. 안유진입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/ef3b7b1d-f5e0-4b08-bffe-ba3b855cfc67_%EC%95%88%EC%9C%A0%EC%A7%84.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        이서.getProfile().changeProfile(new ProfileDto("안녕하세요. 이서입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/0921bda2-9eff-40d8-a770-5306befe24c0_%EC%9D%B4%EC%84%9C.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        가을.getProfile().changeProfile(new ProfileDto("안녕하세요. 가을입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/a468dfda-7dce-447f-97c3-3e052d77e7ff_%EA%B0%80%EC%9D%84.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        리즈.getProfile().changeProfile(new ProfileDto("안녕하세요. 리즈입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/387e4f4b-a52b-411d-85d4-ea39d3ef2890_%EB%A6%AC%EC%A6%88.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        하니.getProfile().changeProfile(new ProfileDto("안녕하세요. 하니입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/67bd6685-e105-49f6-bc0a-da84130e454a_%ED%95%98%EB%8B%88.jpeg", "개발을 좋아합니다", "깃허브", "블로그"));
+        민지.getProfile().changeProfile(new ProfileDto("안녕하세요. 민지입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/1b9e04e2-b3b9-4967-ae86-2eea2dc8dcf0_%EB%AF%BC%EC%A7%80.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        해린.getProfile().changeProfile(new ProfileDto("안녕하세요. 해린입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/a41167fb-7050-425e-8723-7e89935c86c5_%ED%95%B4%EB%A6%B0.jpg", "개발을 좋아합니다", "깃허브", "블로그"));
+        다니엘.getProfile().changeProfile(new ProfileDto("안녕하세요. 다니엘입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/c1a3cbc5-b5d7-4a8c-90ba-a4575b0759f8_%EB%8B%A4%EB%8B%88%EC%97%98.jpg", "설명", "깃허브", "블로그"));
+        혜인.getProfile().changeProfile(new ProfileDto("안녕하세요. 혜인입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/bd38c4ed-cc4a-4ebe-8060-062de60f06fa_%ED%98%9C%EC%9D%B8.png", "개발을 좋아합니다", "깃허브", "블로그"));
+        제니.getProfile().changeProfile(new ProfileDto("안녕하세요. 제니입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/e5b69f38-c2f9-4f4d-9401-ef455fb59d84_%EC%A0%9C%EB%8B%88.png", "개발을 좋아합니다", "깃허브", "블로그"));
+        리사.getProfile().changeProfile(new ProfileDto("안녕하세요. 리사입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/3253f752-e4cb-44a6-ad1d-e4552d7243f5_%EB%A6%AC%EC%82%AC.png", "개발을 좋아합니다", "깃허브", "블로그"));
+        지수.getProfile().changeProfile(new ProfileDto("안녕하세요. 지수입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/00086608-3eab-4615-8efa-2435c5261d97_%EC%A7%80%EC%88%98.png", "개발을 좋아합니다", "깃허브", "블로그"));
+        로제.getProfile().changeProfile(new ProfileDto("안녕하세요. 로제입니다!", "https://amachon.s3.ap-northeast-2.amazonaws.com/amachon/bd5fc393-fa7a-4f5c-b5a2-e84ae4cc6dee_%EB%A1%9C%EC%A0%9C.png", "개발을 좋아합니다", "깃허브", "블로그"));
 
         memberRepository.save(이정우);
         memberRepository.save(박종범);
@@ -652,6 +668,62 @@ public class DataLoader implements ApplicationRunner {
         memberRepository.save(리사);
         memberRepository.save(지수);
         memberRepository.save(로제);
+
+        // 메시지
+        sendMessageByMember(이정우, 카리나, new SendMessageDto("카리나님 안녕하세요!"));
+        sendMessageByMember(카리나, 이정우, new SendMessageDto("이정우님 안녕하세요~"));
+        sendMessageByMember(이정우, 카리나, new SendMessageDto("프로젝트 같이 하실래요?"));
+        sendMessageByMember(카리나, 이정우, new SendMessageDto("어떤 스택 사용하나요?"));
+        sendMessageByMember(이정우, 카리나, new SendMessageDto("스프링이랑 리액트 사용해서 웹 만드려구요!"));
+        sendMessageByMember(허윤진, 이정우, new SendMessageDto("정우님 안녕하세요~ 혹시 프론트엔드 팀 구하셨나요?"));
+        sendMessageByMember(이정우, 허윤진, new SendMessageDto("한자리 남았어요! 같이 하실래요?"));
+        sendMessageByMember(허윤진, 이정우, new SendMessageDto("오 좋습니다! 참가 신청할게요!"));
+        sendMessageByMember(박종범, 이정우, new SendMessageDto("야 정우야 프론트엔드 팀원좀 구해줘"));
+        sendMessageByMember(이정우, 박종범, new SendMessageDto("지금 구하고있어ㅋㅋ 좀만 기달"));
+        sendMessageByMember(박종범, 이정우, new SendMessageDto("살려줘.."));
+        sendMessageByMember(이정우, 전재욱, new SendMessageDto("재욱아 디자인좀 부탁하자"));
+        sendMessageByMember(전재욱, 이정우, new SendMessageDto("ㅋㅋㅇㅋ 뭐하면 되는데"));
+        sendMessageByMember(박종범, 전승현, new SendMessageDto("승현아 깃 에러나는데 수정좀"));
+        sendMessageByMember(전승현, 박종범, new SendMessageDto("ㅇㅋㅇㅋ"));
+        sendMessageByMember(박종범, 허규범, new SendMessageDto("규범아 작업한거 깃에 푸시해주라"));
+        sendMessageByMember(전재욱, 카즈하, new SendMessageDto("카즈하님 혹시 프로젝트 같이 하실래요? 프론트엔드 한자리가 남아서요."));
+        sendMessageByMember(카즈하, 전재욱, new SendMessageDto("아 죄송합니다.. 이미 프로젝트 구해서요ㅠㅠ"));
+        sendMessageByMember(전재욱, 카즈하, new SendMessageDto("아.. 넵!!!"));
+        sendMessageByMember(전승현, 이서, new SendMessageDto("이서야 안녕"));
+        sendMessageByMember(이서, 전승현, new SendMessageDto("누구세요..?"));
+        sendMessageByMember(전승현, 이서, new SendMessageDto("아 잘못보냈네요. 죄송합니다."));
+        sendMessageByMember(윈터, 박종범, new SendMessageDto("종범님 안녕하세요!"));
+        sendMessageByMember(윈터, 박종범, new SendMessageDto("혹시 프론트엔드 자리있나요!?"));
+        sendMessageByMember(박종범, 윈터, new SendMessageDto("리액트 한자리 남았습니다! 참가 신청 바로 하시면 될거같아요!"));
+        sendMessageByMember(윈터, 박종범, new SendMessageDto("넹"));
+        sendMessageByMember(레이, 허규범, new SendMessageDto("규범님 안녕하세요. 혹시 게임 개발 같이하실래요?"));
+        sendMessageByMember(허규범, 레이, new SendMessageDto("안녕하세요! 무슨 게임 개발하시나요??"));
+        sendMessageByMember(레이, 허규범, new SendMessageDto("FPS 게임 만들고 싶은데 규범님은 무슨 게임 좋아하세요?"));
+        sendMessageByMember(허규범, 레이, new SendMessageDto("오 저도 FPS 게임 좋아하는데!! 간단한거라도 같이 해보실래요?"));
+        sendMessageByMember(레이, 허규범, new SendMessageDto("좋아요~"));
+        sendMessageByMember(장원영, 이정우, new SendMessageDto("안녕하세요 정우님~ 혹시 프론트엔드 플러터도 사용하실까요?"));
+        sendMessageByMember(이정우, 장원영, new SendMessageDto("아.. 아직 플러터는 사용 예정이 없습니다ㅠㅠ"));
+        sendMessageByMember(장원영, 이정우, new SendMessageDto("아 넵 알겠습니다ㅠㅠ"));
+        sendMessageByMember(이정우, 장원영, new SendMessageDto("플러터 사용하게 된다면 연락드릴게요!"));
+        sendMessageByMember(장원영, 이정우, new SendMessageDto("네~"));
+        sendMessageByMember(박종범, 레이, new SendMessageDto("레이님 안녕하세요~ 디자이너 구하고 있는데 혹시 하실 생각 있으세요!?"));
+        sendMessageByMember(레이, 박종범, new SendMessageDto("아 죄송해요.. 게임 개발 하기로해서ㅠㅠ 다음에 같이해요!"));
+        sendMessageByMember(박종범, 레이, new SendMessageDto("앗 넵!!"));
+        sendMessageByMember(박종범, 지수, new SendMessageDto("안녕하세요~ 저희가 디자이너가 구하고 있는데 혹시 참여 하실 생각 있으신가용?"));
+        sendMessageByMember(지수, 박종범, new SendMessageDto("오 좋아요!! 프로젝트 아이디어가 좋은거같아요 ㅎㅎ"));
+        sendMessageByMember(박종범, 지수, new SendMessageDto("감사합니다ㅎㅎ 참가 신청 해주시면 바로 수락해드릴게요!"));
+        sendMessageByMember(지수, 박종범, new SendMessageDto("앗 알겠습니다~"));
+        sendMessageByMember(전승현, 리즈, new SendMessageDto("리즈님 안녕하세요. 혹시 저희 프로젝트 참여 하실 생각있으신가요?"));
+        sendMessageByMember(리즈, 전승현, new SendMessageDto("혹시 장고로 프로젝트 하는거 맞나요?"));
+        sendMessageByMember(전승현, 리즈, new SendMessageDto("넵 맞습니다! 리즈님이 디자인 해주실 수 있을까요?"));
+        sendMessageByMember(리즈, 전승현, new SendMessageDto("디자인을 최근에 배워서.. 그래도 괜찮을까요?!"));
+        sendMessageByMember(전승현, 리즈, new SendMessageDto("괜찮습니다ㅎㅎ 같이 배우면서 해요~"));
+        sendMessageByMember(리즈, 전승현, new SendMessageDto("좋아요~~~"));
+        sendMessageByMember(해린, 전재욱, new SendMessageDto("재욱님 안녕하세요!! 백엔드 한 명이 부족해서 혹시 같이 프로젝트 하실래용?"));
+        sendMessageByMember(전재욱, 해린, new SendMessageDto("오 좋습니다! 프론트엔드는 어떤 프레임워크 사용하나요?"));
+        sendMessageByMember(해린, 전재욱, new SendMessageDto("Swift나 Android 사용할 것 같아요!"));
+        sendMessageByMember(전재욱, 해린, new SendMessageDto("네 알겠습니다~ 참가 신청 할게요!"));
+
         // 프로젝트
         Project project1 = Project.builder().title("이정우의 스프링 프로젝트").description("스프링 프로젝트")
                 .leader(이정우).regionTag(화성시).recruitDeadline(LocalDate.now()).recruitNumber(4).developPeriod(LocalDate.now().plusDays(7L)).build();
@@ -883,5 +955,20 @@ public class DataLoader implements ApplicationRunner {
         projectTechTagRepository.save(new ProjectTechTag(project33, aws));
         projectTechTagRepository.save(new ProjectTechTag(project33, nestjs));
         projectTechTagRepository.save(new ProjectTechTag(project33, mySQL));
+    }
+
+    public void sendMessageByMember(Member from, Member to, SendMessageDto sendMessageDto) throws BaseException {
+        Optional<MessageRoom> messageRoom = messageRoomRepository.findByFromAndTo(from.getId(), to.getId());
+        if (messageRoom.isEmpty()) {
+            MessageRoom fromMessageRoom = MessageRoom.builder().from(from).to(to).build();
+            MessageRoom toMessageRoom = MessageRoom.builder().from(to).to(from).build();
+            fromMessageRoom.match(toMessageRoom);
+            messageRoomRepository.save(fromMessageRoom);
+            messageRoomRepository.save(toMessageRoom);
+            messageRoom = Optional.of(fromMessageRoom);
+        } else if (messageRoom.get().getStatus() == BaseEntity.Status.EXPIRED) {
+            messageRoom.get().init();
+        }
+        messageService.send(messageRoom.get(), sendMessageDto);
     }
 }
