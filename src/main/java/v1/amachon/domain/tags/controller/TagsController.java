@@ -28,7 +28,7 @@ public class TagsController {
     private final RegionTagService regionTagService;
 
     @ApiOperation(
-            value = "전체 기술 태그 반환(임시)",
+            value = "전체 기술 태그 반환",
             notes = "기술 태그 선택을 위한 전체 태그를 반환"
     )
     @GetMapping("/tech-tags")
@@ -38,7 +38,7 @@ public class TagsController {
     }
 
     @ApiOperation(
-            value = "전체 지역 태그 반환(임시)",
+            value = "전체 지역 태그 반환",
             notes = "지역 태그 선택을 위한 전체 태그를 반환"
     )
     @GetMapping("/region-tags")
