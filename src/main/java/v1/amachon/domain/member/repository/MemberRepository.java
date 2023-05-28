@@ -16,6 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findById(@Param("memberId") Long memberId);
 
     @Query("SELECT m FROM Member m JOIN FETCH m.authorities JOIN FETCH m.messageRooms mr " +
-            "JOIN FETCH mr.to mrt JOIN FETCH mrt.profile WHERE m.email = :email")
+            "JOIN FETCH mr.to mrt JOIN FETCH mrt.profile WHERE m.email = :email " +
+            "ORDER BY mr.lastModifiedDate DESC")
     Optional<Member> findByEmailFetchMessageRoom(@Param("email") String email);
 }
