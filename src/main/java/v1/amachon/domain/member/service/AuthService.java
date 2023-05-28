@@ -55,7 +55,7 @@ public class AuthService {
         String accessToken = jwtTokenUtil.generateAccessToken(member.getEmail());
         RefreshToken refreshToken = saveRefreshToken(member.getEmail());
         return TokenDto.builder().accessToken(accessToken).refreshToken(refreshToken.getRefreshToken())
-                .grantType(JwtHeaderUtil.GRANT_TYPE.getValue()).build();
+                .grantType(JwtHeaderUtil.GRANT_TYPE.getValue()).memberId(member.getId()).build();
     }
 
     public void checkPassword(String rawPassword, String findMemberPassword) throws BaseException {
