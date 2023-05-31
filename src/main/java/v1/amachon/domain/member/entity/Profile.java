@@ -45,6 +45,7 @@ public class Profile {
         this.description = profileDto.getDescription();
         this.githubUrl = profileDto.getGithubUrl();
         this.blogUrl = profileDto.getBlogUrl();
+        this.profileImageUrl = profileDto.getProfileImageUrl();
     }
 
     public void changeProfileImage(String profileImageUrl) {
