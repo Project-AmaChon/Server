@@ -42,7 +42,7 @@ public class ProjectDetailDto {
         this.regionTagName = project.getRegionTag().getName();
         this.techTagNames = project.getTechTags().stream().map(t -> t.getTechTag().getName()).collect(Collectors.toList());
         this.imageUrls = project.getImages().stream().map(ProjectImage::getImageUrl).collect(Collectors.toList());
-        this.teamMembers = project.getTeamMembers().stream().map(t -> new TeamMemberDto(t.getMember())).collect(Collectors.toList());
+        this.teamMembers = project.getTeamMembers().stream().map(t -> new TeamMemberDto(t.getMember(), t.getId())).collect(Collectors.toList());
     }
 
     public ProjectDetailDto(Project project, List<TeamMember> teamMember) {
@@ -56,6 +56,6 @@ public class ProjectDetailDto {
         this.regionTagName = project.getRegionTag().getName();
         this.techTagNames = project.getTechTags().stream().map(t -> t.getTechTag().getName()).collect(Collectors.toList());
         this.imageUrls = project.getImages().stream().map(ProjectImage::getImageUrl).collect(Collectors.toList());
-        this.teamMembers = teamMember.stream().map(t -> new TeamMemberDto(t.getMember())).collect(Collectors.toList());
+        this.teamMembers = teamMember.stream().map(t -> new TeamMemberDto(t.getMember(), t.getId())).collect(Collectors.toList());
     }
 }
