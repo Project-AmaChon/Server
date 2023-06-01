@@ -959,6 +959,12 @@ public class DataLoader implements ApplicationRunner {
         projectTechTagRepository.save(new ProjectTechTag(project33, nestjs));
         projectTechTagRepository.save(new ProjectTechTag(project33, mySQL));
 
+        teamMemberRepository.save(new TeamMember(project1, 카리나));
+        teamMemberRepository.save(new TeamMember(project1, 허윤진));
+        teamMemberRepository.save(new TeamMember(project1, 장원영));
+        teamMemberRepository.save(new TeamMember(project2, 민지));
+        teamMemberRepository.save(new TeamMember(project2, 해린));
+        teamMemberRepository.save(new TeamMember(project2, 레이));
         teamMemberRepository.save(new TeamMember(project3, 지수));
         teamMemberRepository.save(new TeamMember(project3, 장원영));
         teamMemberRepository.save(new TeamMember(project3, 카리나));
