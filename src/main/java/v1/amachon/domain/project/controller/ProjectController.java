@@ -261,7 +261,7 @@ public class ProjectController {
             value = "프로젝트 관리",
             notes = "참여중인 프로젝트, 생성한 프로젝트를 조회"
     )
-    @GetMapping("/project/management}")
+    @GetMapping("/project/management")
     public BaseResponse<ProjectManagementDto> getProjectManagement(@RequestHeader("Authorization")String accessToken) {
         try {
             return new BaseResponse<>(projectService.getProjectManagement());

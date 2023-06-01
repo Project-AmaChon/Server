@@ -17,7 +17,9 @@ import v1.amachon.domain.message.entity.MessageRoom;
 import v1.amachon.domain.message.repository.MessageRoomRepository;
 import v1.amachon.domain.message.service.MessageService;
 import v1.amachon.domain.project.entity.Project;
+import v1.amachon.domain.project.entity.TeamMember;
 import v1.amachon.domain.project.repository.ProjectRepository;
+import v1.amachon.domain.project.repository.TeamMemberRepository;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.entity.techtag.MemberTechTag;
 import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;
@@ -48,6 +50,7 @@ public class DataLoader implements ApplicationRunner {
     private final PasswordEncoder passwordEncoder;
     private final MessageService messageService;
     private final MessageRoomRepository messageRoomRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     @Override
     @Transactional
@@ -955,6 +958,56 @@ public class DataLoader implements ApplicationRunner {
         projectTechTagRepository.save(new ProjectTechTag(project33, aws));
         projectTechTagRepository.save(new ProjectTechTag(project33, nestjs));
         projectTechTagRepository.save(new ProjectTechTag(project33, mySQL));
+
+        teamMemberRepository.save(new TeamMember(project3, 지수));
+        teamMemberRepository.save(new TeamMember(project3, 장원영));
+        teamMemberRepository.save(new TeamMember(project3, 카리나));
+        teamMemberRepository.save(new TeamMember(project4, 허윤진));
+        teamMemberRepository.save(new TeamMember(project4, 레이));
+        teamMemberRepository.save(new TeamMember(project5, 이서));
+        teamMemberRepository.save(new TeamMember(project5, 윈터));
+        teamMemberRepository.save(new TeamMember(project5, 지젤));
+        teamMemberRepository.save(new TeamMember(project6, 닝닝));
+        teamMemberRepository.save(new TeamMember(project6, 가을));
+        teamMemberRepository.save(new TeamMember(project7, 박종범));
+        teamMemberRepository.save(new TeamMember(project8, 허규범));
+        teamMemberRepository.save(new TeamMember(project8, 전재욱));
+        teamMemberRepository.save(new TeamMember(project8, 레이));
+        teamMemberRepository.save(new TeamMember(project9, 이정우));
+        teamMemberRepository.save(new TeamMember(project10, 이서));
+        teamMemberRepository.save(new TeamMember(project10, 전승현));
+        teamMemberRepository.save(new TeamMember(project11, 로제));
+        teamMemberRepository.save(new TeamMember(project11, 지수));
+        teamMemberRepository.save(new TeamMember(project12, 리사));
+        teamMemberRepository.save(new TeamMember(project13, 카리나));
+        teamMemberRepository.save(new TeamMember(project13, 윈터));
+        teamMemberRepository.save(new TeamMember(project14, 다니엘));
+        teamMemberRepository.save(new TeamMember(project15, 해린));
+        teamMemberRepository.save(new TeamMember(project15, 혜인));
+        teamMemberRepository.save(new TeamMember(project16, 닝닝));
+        teamMemberRepository.save(new TeamMember(project17, 지젤));
+        teamMemberRepository.save(new TeamMember(project17, 카리나));
+        teamMemberRepository.save(new TeamMember(project18, 카즈하));
+        teamMemberRepository.save(new TeamMember(project18, 허윤진));
+        teamMemberRepository.save(new TeamMember(project19, 김채원));
+        teamMemberRepository.save(new TeamMember(project20, 사쿠라));
+        teamMemberRepository.save(new TeamMember(project20, 윈터));
+        teamMemberRepository.save(new TeamMember(project21, 박종범));
+        teamMemberRepository.save(new TeamMember(project21, 허윤진));
+        teamMemberRepository.save(new TeamMember(project22, 장원영));
+        teamMemberRepository.save(new TeamMember(project22, 홍은채));
+        teamMemberRepository.save(new TeamMember(project23, 민지));
+        teamMemberRepository.save(new TeamMember(project24, 카리나));
+        teamMemberRepository.save(new TeamMember(project24, 윈터));
+        teamMemberRepository.save(new TeamMember(project25, 허규범));
+        teamMemberRepository.save(new TeamMember(project26, 전재욱));
+        teamMemberRepository.save(new TeamMember(project26, 전승현));
+        teamMemberRepository.save(new TeamMember(project27, 안유진));
+        teamMemberRepository.save(new TeamMember(project28, 이서));
+        teamMemberRepository.save(new TeamMember(project29, 리즈));
+        teamMemberRepository.save(new TeamMember(project30, 해린));
+        teamMemberRepository.save(new TeamMember(project31, 카즈하));
+
     }
 
     public void sendMessageByMember(Member from, Member to, SendMessageDto sendMessageDto) throws BaseException {
