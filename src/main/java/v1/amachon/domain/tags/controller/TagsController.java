@@ -53,7 +53,7 @@ public class TagsController {
     )
     @ApiResponses({
             @ApiResponse(code = 2005, message = "로그인이 필요합니다."),
-            @ApiResponse(code = 2040, message = "올바르지 않은 태그명입니다."),
+            @ApiResponse(code = 2040, message = "태그가 올바르지 않습니다."),
     })
     @PostMapping("/change-tags")
     public BaseResponse<String> changeTags(@RequestBody ChangeTagsDto changeTagsDto) throws BaseException {
