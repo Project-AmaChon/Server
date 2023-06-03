@@ -93,19 +93,24 @@ public class ProjectService {
     }
 
     public ProjectModifyDto getModifyProject(Long projectId) throws BaseException {
-        memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
-                () -> new BaseException(INVALID_USER));
+        Member leader = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
         Project project = projectRepository.findByIdFetch(projectId).orElseThrow(
                 () -> new BaseException(PROJECT_NOT_FOUND));
+        if (leader.getId() != project.getLeader().getId()) {
+            throw new BaseException(INVALID_USER);
+        }
         return new ProjectModifyDto(project);
     }
 
     public void modifyProject(Long projectId, ProjectModifyDto projectModifyDto, List<MultipartFile> images) throws BaseException, IOException {
-        memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
-                () -> new BaseException(INVALID_USER));
+        Member leader = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
         Project project = projectRepository.findByIdFetch(projectId).orElseThrow(
                 () -> new BaseException(PROJECT_NOT_FOUND));
-
+        if (leader.getId() != project.getLeader().getId()) {
+            throw new BaseException(INVALID_USER);
+        }
         List<ProjectTechTag> projectTechTags = new ArrayList<>();
         for (String techTag : projectModifyDto.getTechTagNames()) {
             ProjectTechTag projectTechTag = new ProjectTechTag(project, techTagRepository.findByName(techTag).orElseThrow(
@@ -134,8 +139,13 @@ public class ProjectService {
     }
 
     public void deleteProject(Long projectId) throws BaseException {
+        Member leader = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
         Project project = projectRepository.findByIdFetch(projectId).orElseThrow(
                 () -> new BaseException(PROJECT_NOT_FOUND));
+        if (leader.getId() != project.getLeader().getId()) {
+            throw new BaseException(INVALID_USER);
+        }
         for (RecruitManagement recruitManagement : project.getRecruitManagements()) {
             recruitManagement.expired();
         }
@@ -162,7 +172,9 @@ public class ProjectService {
         return new ProjectDetailDto(project, team);
     }
 
-    public List<ProjectDto> getRecentProjects() {
+    public List<ProjectDto> getRecentProjects() throws BaseException {
+        memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
         Page<Project> page = projectRepository.searchRecentProjects(PageRequest.of(0, 10));
         List<Project> projects = page.getContent();
         List<ProjectDto> converted = projects.stream().map(ProjectDto::new).collect(Collectors.toList());
@@ -170,6 +182,8 @@ public class ProjectService {
     }
 
     public List<ProjectDto> getSearchProjects(ProjectSearchCond cond) throws BaseException {
+        memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
+                () -> new BaseException(UNAUTHORIZED));
         addChildren(cond);
         return projectSearchRepository.searchProjectByAllCond(cond);
     }
@@ -197,7 +211,7 @@ public class ProjectService {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
         Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new BaseException(BAD_REQUEST));
+                () -> new BaseException(PROJECT_NOT_FOUND));
         List<Long> teamMemberIds = project.getTeamMembers().stream().map(t -> t.getMember().getId()).collect(Collectors.toList());
         List<Long> recruitMemberIds = recruitManagementRepository.findByProjectId(projectId)
                 .stream().map(r -> r.getMember().getId()).collect(Collectors.toList());

@@ -127,6 +127,9 @@ public class MessageService {
                 () -> new BaseException(UNAUTHORIZED));
         MessageRoom messageRoom = messageRoomRepository.findByIdFetchMessages(roomId).orElseThrow(
                 () -> new BaseException(NOT_FOUND_MESSAGE_ROOM));
+        if (member.getId() != messageRoom.getFrom().getId()) {
+            throw new BaseException(INVALID_USER);
+        }
         for (Message message : messageRoom.getMessages()) {
             message.expired();
             messageRepository.save(message);
