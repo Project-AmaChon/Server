@@ -18,8 +18,11 @@ import v1.amachon.global.config.s3.S3UploadUtil;
 import v1.amachon.global.config.security.util.SecurityUtils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static v1.amachon.domain.base.BaseResponseStatus.NOT_FOUND_USERS_ID;
 import static v1.amachon.domain.base.BaseResponseStatus.UNAUTHORIZED;
 
 @RequiredArgsConstructor
@@ -54,10 +57,18 @@ public class MemberService {
         }
     }
 
-    public ProfileDto getProfile() throws BaseException {
+    public ProfileDto getMyProfile() throws BaseException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
-        return new ProfileDto(member.getProfile());
+        List<String> techTags = member.getTechTags().stream().map(mt -> mt.getTechTag().getName()).collect(Collectors.toList());
+        return new ProfileDto(member.getProfile(), techTags, member.getRegionTag().getName());
+    }
+
+    public ProfileDto getProfile(Long id) throws BaseException {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new BaseException(NOT_FOUND_USERS_ID));
+        List<String> techTags = member.getTechTags().stream().map(mt -> mt.getTechTag().getName()).collect(Collectors.toList());
+        return new ProfileDto(member.getProfile(), techTags, member.getRegionTag().getName());
     }
 
     public void changeProfileImage(MultipartFile profileImage) throws BaseException, IOException {

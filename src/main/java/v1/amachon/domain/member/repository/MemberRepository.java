@@ -8,11 +8,13 @@ import v1.amachon.domain.member.entity.Member;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    @Query("SELECT m FROM Member m JOIN FETCH m.authorities a JOIN FETCH m.profile WHERE m.email = :email")
+    @Query("SELECT m FROM Member m JOIN FETCH m.authorities a JOIN FETCH m.profile JOIN FETCH m.techTags mt " +
+            "mt JOIN FETCH mt.techTag WHERE m.email = :email")
     Optional<Member> findByEmail(@Param("email") String email);
     Optional<Member> findByNickname(String nickname);
 
-    @Query("SELECT m FROM Member m JOIN FETCH m.authorities a JOIN FETCH m.profile WHERE m.id = :memberId")
+    @Query("SELECT m FROM Member m JOIN FETCH m.authorities a JOIN FETCH m.profile JOIN FETCH m.techTags mt " +
+            "mt JOIN FETCH mt.techTag WHERE m.id = :memberId")
     Optional<Member> findById(@Param("memberId") Long memberId);
 
     @Query("SELECT m FROM Member m JOIN FETCH m.authorities JOIN FETCH m.messageRooms mr " +

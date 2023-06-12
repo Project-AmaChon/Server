@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import v1.amachon.domain.member.entity.Profile;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,12 +18,17 @@ public class ProfileDto {
     private String description;
     private String githubUrl;
     private String blogUrl;
+    private String nickname;
+    private List<String> techTags;
+    private String regionTag;
 
-    public ProfileDto(Profile profile) {
+    public ProfileDto(Profile profile, List<String> techTags, String regionTag) {
         this.introduction = profile.getIntroduction();
         this.profileImageUrl = profile.getProfileImageUrl();
         this.description = profile.getDescription();
         this.githubUrl = profile.getGithubUrl();
         this.blogUrl = profile.getBlogUrl();
+        this.techTags = techTags;
+        this.regionTag = regionTag;
     }
 }

@@ -35,12 +35,28 @@ public class MemberController {
             notes = "로그인 되어있는 유저의 마이페이지를 조회합니다."
     )
     @ApiResponses({
-            @ApiResponse(code = 2230, message = "해당 프로젝트가 존재하지 않습니다.")
+            @ApiResponse(code = 2230, message = "로그인이 필요합니다.")
     })
     @GetMapping("/my-page")
-    public BaseResponse<ProfileDto> getProfile(@RequestHeader("Authorization")String accessToken) {
+    public BaseResponse<ProfileDto> getMyProfile(@RequestHeader("Authorization")String accessToken) {
         try {
-            return new BaseResponse<>(memberService.getProfile());
+            return new BaseResponse<>(memberService.getMyProfile());
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ApiOperation(
+            value = "타유저의 프로필 정보 조회",
+            notes = "타유저의 프로필 정보를 조회합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 2230, message = "로그인이 필요합니다.")
+    })
+    @GetMapping("/profile/{id}")
+    public BaseResponse<ProfileDto> getProfile(@PathVariable("id") Long id) {
+        try {
+            return new BaseResponse<>(memberService.getProfile(id));
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
@@ -63,7 +79,7 @@ public class MemberController {
     @GetMapping("/my-page/profile")
     public BaseResponse<ProfileDto> getProfile(@RequestHeader("Authorization")String accessToken, @RequestBody ProfileDto profileDto) throws IOException {
         try {
-            ProfileDto profile = memberService.getProfile();
+            ProfileDto profile = memberService.getMyProfile();
             return new BaseResponse<>(profile);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
