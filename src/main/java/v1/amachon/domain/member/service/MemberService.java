@@ -61,14 +61,14 @@ public class MemberService {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
         List<String> techTags = member.getTechTags().stream().map(mt -> mt.getTechTag().getName()).collect(Collectors.toList());
-        return new ProfileDto(member.getProfile(), techTags, member.getRegionTag().getName());
+        return new ProfileDto(member.getProfile(), member.getNickname(), techTags, member.getRegionTag().getName());
     }
 
     public ProfileDto getProfile(Long id) throws BaseException {
         Member member = memberRepository.findById(id).orElseThrow(
                 () -> new BaseException(NOT_FOUND_USERS_ID));
         List<String> techTags = member.getTechTags().stream().map(mt -> mt.getTechTag().getName()).collect(Collectors.toList());
-        return new ProfileDto(member.getProfile(), techTags, member.getRegionTag().getName());
+        return new ProfileDto(member.getProfile(), member.getNickname(), techTags, member.getRegionTag().getName());
     }
 
     public void changeProfileImage(MultipartFile profileImage) throws BaseException, IOException {

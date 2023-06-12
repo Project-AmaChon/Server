@@ -10,7 +10,6 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class ProfileDto {
     private String introduction;
@@ -22,12 +21,24 @@ public class ProfileDto {
     private List<String> techTags;
     private String regionTag;
 
-    public ProfileDto(Profile profile, List<String> techTags, String regionTag) {
+    public ProfileDto(Profile profile, String nickname, List<String> techTags, String regionTag) {
         this.introduction = profile.getIntroduction();
         this.profileImageUrl = profile.getProfileImageUrl();
         this.description = profile.getDescription();
         this.githubUrl = profile.getGithubUrl();
         this.blogUrl = profile.getBlogUrl();
+        this.nickname = nickname;
+        this.techTags = techTags;
+        this.regionTag = regionTag;
+    }
+
+    public ProfileDto(String introduction, String profileImageUrl, String description, String githubUrl, String blogUrl, String nickname, List<String> techTags, String regionTag) {
+        this.introduction = introduction;
+        this.profileImageUrl = profileImageUrl;
+        this.description = description;
+        this.githubUrl = githubUrl;
+        this.blogUrl = blogUrl;
+        this.nickname = nickname;
         this.techTags = techTags;
         this.regionTag = regionTag;
     }
