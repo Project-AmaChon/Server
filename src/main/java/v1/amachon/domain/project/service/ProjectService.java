@@ -59,7 +59,7 @@ public class ProjectService {
     private final S3UploadUtil s3UploadUtil;
     private final ProjectImageRepository projectImageRepository;
 
-    public void createProject(ProjectCreateRequestDto projectCreateDto, List<MultipartFile> images) throws BaseException, IOException {
+    public void createProject(ProjectCreateRequestDto projectCreateDto) throws BaseException, IOException {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
                 () -> new BaseException(UNAUTHORIZED));
         RegionTag regionTag = regionTagRepository.findByName(projectCreateDto.getRegionTagName()).orElseThrow(
@@ -83,12 +83,12 @@ public class ProjectService {
             projectTechTags.add(projectTechTag);
         }
         project.changeTechTag(projectTechTags);
-        if (images != null && !images.isEmpty()) {
-            for(MultipartFile image : images) {
-                String imageUrl = s3UploadUtil.upload(image);
-                projectImageRepository.save(new ProjectImage(imageUrl, project));
-            }
-        }
+//        if (images != null && !images.isEmpty()) {
+//            for(MultipartFile image : images) {
+//                String imageUrl = s3UploadUtil.upload(image);
+//                projectImageRepository.save(new ProjectImage(imageUrl, project));
+//            }
+//        }
         projectRepository.save(project);
     }
 
