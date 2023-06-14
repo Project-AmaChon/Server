@@ -36,7 +36,7 @@ public class ProjectController {
     @PostMapping("/project")
     public BaseResponse<String> createProject(@RequestHeader("Authorization")String accessToken, @RequestBody ProjectCreateRequestDto projectCreateDto) {
         try {
-   	        projectService.createProject(projectCreateDto, images);
+   	        projectService.createProject(projectCreateDto);
             return new BaseResponse<>("프로젝트 생성 완료!");
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
