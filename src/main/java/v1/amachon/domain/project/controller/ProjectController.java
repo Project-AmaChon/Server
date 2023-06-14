@@ -34,10 +34,9 @@ public class ProjectController {
             @ApiResponse(code = 4001, message = "서버 에러입니다.(S3)"),
     })
     @PostMapping("/project")
-    public BaseResponse<String> createProject(@RequestHeader("Authorization")String accessToken, @RequestPart(value = "images", required = false) List<MultipartFile> images,
-                                              @ModelAttribute ProjectCreateRequestDto projectCreateDto) {
+    public BaseResponse<String> createProject(@RequestHeader("Authorization")String accessToken, @RequestBody ProjectCreateRequestDto projectCreateDto) {
         try {
-   	     projectService.createProject(projectCreateDto, images);
+   	        projectService.createProject(projectCreateDto, images);
             return new BaseResponse<>("프로젝트 생성 완료!");
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
