@@ -37,7 +37,7 @@ public class ProjectController {
     public BaseResponse<String> createProject(@RequestHeader("Authorization")String accessToken, @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                               @ModelAttribute ProjectCreateRequestDto projectCreateDto) {
         try {
-            projectService.createProject(projectCreateDto, images);
+   	     projectService.createProject(projectCreateDto, images);
             return new BaseResponse<>("프로젝트 생성 완료!");
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
