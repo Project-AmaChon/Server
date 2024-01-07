@@ -5,10 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import v1.amachon.common.RepositoryTest;
-import v1.amachon.domain.member.service.dto.ProfileResponseDto;
-import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.member.entity.Profile;
-import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.member.service.dto.ProfileResponseDto;
+import v1.amachon.member.entity.Member;
+import v1.amachon.member.entity.Profile;
+import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.fixtures.MemberFixtures;
 
 import static org.assertj.core.api.Assertions.assertThat;

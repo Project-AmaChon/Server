@@ -5,7 +5,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import v1.amachon.common.WebMVCTest;
-import v1.amachon.domain.member.service.MemberService;
 import v1.amachon.fixtures.MemberFixtures;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

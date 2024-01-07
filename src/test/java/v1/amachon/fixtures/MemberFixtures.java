@@ -1,7 +1,7 @@
 package v1.amachon.fixtures;
 
 import v1.amachon.common.RepositoryTest;
-import v1.amachon.domain.member.entity.Member;
+import v1.amachon.member.entity.Member;
 
 @RepositoryTest
 public class MemberFixtures {

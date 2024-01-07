@@ -4,11 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.message.entity.MessageRoom;
-import v1.amachon.domain.message.repository.MessageRepository;
-import v1.amachon.domain.message.repository.MessageRoomRepository;
+import v1.amachon.member.entity.Member;
+import v1.amachon.member.repository.MemberRepository;
+import v1.amachon.message.entity.MessageRoom;
+import v1.amachon.message.repository.MessageRepository;
+import v1.amachon.message.repository.MessageRoomRepository;
 
 import static org.assertj.core.api.Assertions.*;
 

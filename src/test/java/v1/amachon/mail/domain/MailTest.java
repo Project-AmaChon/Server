@@ -5,9 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import v1.amachon.common.RepositoryTest;
-import v1.amachon.domain.mail.entity.EmailVerification;
-import v1.amachon.domain.mail.entity.exception.InvalidEmailFormatException;
-import v1.amachon.domain.mail.repository.EmailVerificationRepository;
+import v1.amachon.mail.entity.EmailVerification;
+import v1.amachon.mail.entity.exception.InvalidEmailFormatException;
+import v1.amachon.mail.repository.EmailVerificationRepository;
 
 @RepositoryTest
 public class MailTest {

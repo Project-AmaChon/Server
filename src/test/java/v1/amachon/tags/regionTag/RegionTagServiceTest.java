@@ -9,12 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.transaction.annotation.Transactional;
-import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.tags.service.dto.RegionTagDto;
-import v1.amachon.domain.tags.entity.regiontag.RegionTag;
-import v1.amachon.domain.tags.repository.RegionTagRepository;
-import v1.amachon.domain.tags.service.RegionTagService;
+import v1.amachon.member.entity.Member;
+import v1.amachon.member.repository.MemberRepository;
+import v1.amachon.tags.service.dto.RegionTagDto;
+import v1.amachon.tags.entity.regiontag.RegionTag;
+import v1.amachon.tags.repository.RegionTagRepository;
+import v1.amachon.tags.service.RegionTagService;
 
 import java.util.Optional;
 

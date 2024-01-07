@@ -9,18 +9,17 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RestController;
-import v1.amachon.domain.mail.service.EmailService;
-import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.member.repository.auth.LogoutAccessTokenRedisRepository;
-import v1.amachon.domain.member.service.AuthService;
-import v1.amachon.domain.member.service.MemberService;
-import v1.amachon.domain.message.service.MessageService;
-import v1.amachon.domain.project.service.ProjectService;
-import v1.amachon.domain.tags.service.RegionTagService;
-import v1.amachon.domain.tags.service.TechTagService;
-import v1.amachon.global.config.jwt.JwtAuthenticationFilter;
-import v1.amachon.global.config.jwt.JwtTokenUtil;
-import v1.amachon.global.config.security.CustomUserDetailService;
+import v1.amachon.mail.service.EmailService;
+import v1.amachon.member.repository.MemberRepository;
+import v1.amachon.member.service.AuthService;
+import v1.amachon.member.service.MemberService;
+import v1.amachon.message.service.MessageService;
+import v1.amachon.project.service.ProjectService;
+import v1.amachon.tags.service.RegionTagService;
+import v1.amachon.tags.service.TechTagService;
+import v1.amachon.common.config.jwt.JwtAuthenticationFilter;
+import v1.amachon.common.config.jwt.JwtTokenUtil;
+import v1.amachon.common.config.security.CustomUserDetailService;
 
 @WebMvcTest(includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class))
 @Import(JwtTokenUtil.class)

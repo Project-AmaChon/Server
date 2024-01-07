@@ -6,13 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.project.entity.Project;
-import v1.amachon.domain.project.entity.RecruitManagement;
-import v1.amachon.domain.project.repository.ProjectRepository;
-import v1.amachon.domain.project.repository.RecruitManagementRepository;
-import v1.amachon.domain.project.repository.TeamMemberRepository;
+import v1.amachon.member.entity.Member;
+import v1.amachon.member.repository.MemberRepository;
+import v1.amachon.project.entity.Project;
+import v1.amachon.project.entity.RecruitManagement;
+import v1.amachon.project.repository.ProjectRepository;
+import v1.amachon.project.repository.RecruitManagementRepository;
+import v1.amachon.project.repository.TeamMemberRepository;
 
 import java.time.LocalDate;
 

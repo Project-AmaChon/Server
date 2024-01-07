@@ -8,9 +8,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
-import v1.amachon.domain.mail.entity.EmailVerification;
-import v1.amachon.domain.mail.repository.EmailVerificationRepository;
-import v1.amachon.domain.mail.service.EmailService;
+import v1.amachon.mail.entity.EmailVerification;
+import v1.amachon.mail.repository.EmailVerificationRepository;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;

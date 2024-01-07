@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Repository;
-import v1.amachon.global.config.JpaAuditingConfig;
-import v1.amachon.global.config.querydsl.QuerydslConfig;
+import v1.amachon.common.config.JpaAuditingConfig;
+import v1.amachon.common.config.querydsl.QuerydslConfig;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

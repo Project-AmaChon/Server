@@ -4,17 +4,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.project.entity.Project;
-import v1.amachon.domain.project.repository.ProjectRepository;
-import v1.amachon.domain.project.repository.ProjectSearchRepository;
-import v1.amachon.domain.tags.entity.regiontag.RegionTag;
-import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;
-import v1.amachon.domain.tags.entity.techtag.TechTag;
-import v1.amachon.domain.tags.repository.ProjectTechTagRepository;
-import v1.amachon.domain.tags.repository.RegionTagRepository;
-import v1.amachon.domain.tags.repository.TechTagRepository;
+import v1.amachon.member.entity.Member;
+import v1.amachon.member.repository.MemberRepository;
+import v1.amachon.project.entity.Project;
+import v1.amachon.project.repository.ProjectRepository;
+import v1.amachon.project.repository.ProjectSearchRepository;
+import v1.amachon.tags.entity.regiontag.RegionTag;
+import v1.amachon.tags.entity.techtag.ProjectTechTag;
+import v1.amachon.tags.entity.techtag.TechTag;
+import v1.amachon.tags.repository.ProjectTechTagRepository;
+import v1.amachon.tags.repository.RegionTagRepository;
+import v1.amachon.tags.repository.TechTagRepository;
 
 @SpringBootTest
 class ProjectTest {

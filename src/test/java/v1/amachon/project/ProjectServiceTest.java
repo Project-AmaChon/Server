@@ -4,18 +4,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.project.service.dto.project.ProjectCreateRequestDto;
-import v1.amachon.domain.project.repository.ProjectRepository;
-import v1.amachon.domain.project.service.ProjectService;
-import v1.amachon.domain.tags.entity.regiontag.RegionTag;
-import v1.amachon.domain.tags.repository.RegionTagRepository;
+import v1.amachon.member.entity.Member;
+import v1.amachon.member.repository.MemberRepository;
+import v1.amachon.project.service.dto.project.ProjectCreateRequestDto;
+import v1.amachon.project.repository.ProjectRepository;
+import v1.amachon.project.service.ProjectService;
+import v1.amachon.tags.entity.regiontag.RegionTag;
+import v1.amachon.tags.repository.RegionTagRepository;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import v1.amachon.domain.tags.repository.TechTagRepository;
-import v1.amachon.domain.tags.entity.techtag.TechTag;
+import v1.amachon.tags.repository.TechTagRepository;
+import v1.amachon.tags.entity.techtag.TechTag;
 import java.util.List;
 import java.util.stream.Collectors;
 
