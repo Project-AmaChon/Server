@@ -34,13 +34,13 @@
 </br>
 
 ## IA
-![image](https://github.com/Project-AmaChon/Server/assets/81271328/7d34fdd7-321f-4ac2-ae8d-466905d7470a)
+![image](https://github.com/Project-AmaChon/Server/assets/81271328/3fd4674e-d770-4ad0-8a2e-6c10001537b7)
 
-
-</br>
+</br></br>
 
 ## 기술 스택
-![image](https://github.com/Project-AmaChon/Server/assets/81271328/f14678e0-4c45-4688-af4b-0949dd5625d6)
+![image](https://github.com/Project-AmaChon/Server/assets/81271328/447e9444-0ac9-4cdf-a87d-db9fd1ef17f4)
+
 
 
 
