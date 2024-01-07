@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import v1.amachon.domain.base.BaseException;
-import v1.amachon.domain.base.BaseResponseStatus;
+import v1.amachon.domain.common.exception.UnauthorizedException;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.tags.dto.RegionTagDto;
-import v1.amachon.domain.tags.dto.change.ChangeRegionTagDto;
+import v1.amachon.domain.tags.service.dto.RegionTagDto;
+import v1.amachon.domain.tags.service.dto.change.ChangeRegionTagDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.repository.RegionTagRepository;
+import v1.amachon.domain.tags.service.exception.NotFoundRegionTagException;
 import v1.amachon.global.config.security.util.SecurityUtils;
 
 import java.util.List;
@@ -33,20 +33,17 @@ public class RegionTagService {
     }
 
     @Cacheable(value = "regionTag", key = "#tagName")
-    public RegionTagDto getRegionTag(String tagName) throws BaseException {
-        RegionTag tag = regionTagRepository.findByName(tagName).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.INVALID_TAG)
-        );
+    public RegionTagDto getRegionTag(String tagName) {
+        RegionTag tag = regionTagRepository.findByName(tagName)
+                .orElseThrow(NotFoundRegionTagException::new);
         return new RegionTagDto(tag);
     }
 
-    public void changeRegionTag(ChangeRegionTagDto changeRegionTagDto) throws BaseException {
-        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.UNAUTHORIZED)
-        );
-        RegionTag regionTag = regionTagRepository.findByName(changeRegionTagDto.getRegionName()).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.INVALID_TAG)
-        );
+    public void changeRegionTag(ChangeRegionTagDto changeRegionTagDto)  {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
+                .orElseThrow(UnauthorizedException::new);
+        RegionTag regionTag = regionTagRepository.findByName(changeRegionTagDto.getRegionName())
+                .orElseThrow(NotFoundRegionTagException::new);
         member.changeRegion(regionTag);
     }
 }

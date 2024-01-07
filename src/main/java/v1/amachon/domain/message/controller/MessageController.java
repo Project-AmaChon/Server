@@ -2,12 +2,11 @@ package v1.amachon.domain.message.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import v1.amachon.domain.base.BaseException;
-import v1.amachon.domain.base.BaseResponse;
-import v1.amachon.domain.message.dto.MessageDto;
-import v1.amachon.domain.message.dto.SendMessageDto;
-import v1.amachon.domain.message.dto.MessageRoomDto;
+import v1.amachon.domain.message.service.dto.MessageDto;
+import v1.amachon.domain.message.service.dto.SendMessageDto;
+import v1.amachon.domain.message.service.dto.MessageRoomDto;
 import v1.amachon.domain.message.service.MessageService;
 
 import java.util.List;
@@ -31,15 +30,11 @@ public class MessageController {
             @ApiResponse(code = 2010, message = "유저 아이디 값이 올바르지 않습니다.")
     })
     @PostMapping("/messages/{memberId}/send")
-    public BaseResponse<String> sendMessageByMemberId(@RequestHeader("Authorization")String accessToken,
-                                                      @PathVariable("memberId") Long memberId,
-                                                      @RequestBody SendMessageDto sendMessageDto) {
-        try {
-            messageService.sendMessageByMemberId(memberId, sendMessageDto);
-            return new BaseResponse<>("메시지 보내기 성공!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> sendMessageByMemberId(@RequestHeader("Authorization")String accessToken,
+                                                        @PathVariable("memberId") Long memberId,
+                                                        @RequestBody SendMessageDto sendMessageDto) {
+        messageService.sendMessageByMemberId(memberId, sendMessageDto);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -52,15 +47,11 @@ public class MessageController {
             @ApiResponse(code = 2006, message = "해당 유저의 대화방이 아닙니다.")
     })
     @PostMapping("/messages/room/{roomId}/send")
-    public BaseResponse<String> sendMessageByRoomId(@RequestHeader("Authorization")String accessToken,
+    public ResponseEntity<Void> sendMessageByRoomId(@RequestHeader("Authorization")String accessToken,
                                                       @PathVariable("roomId") Long roomId,
                                                       @RequestBody SendMessageDto sendMessageDto) {
-        try {
-            messageService.sendMessageByRoomId(roomId, sendMessageDto);
-            return new BaseResponse<>("메시지 보내기 성공!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+        messageService.sendMessageByRoomId(roomId, sendMessageDto);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -69,12 +60,8 @@ public class MessageController {
     )
     @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
     @GetMapping("/messages/room")
-    public BaseResponse<List<MessageRoomDto>> getMessageRooms(@RequestHeader("Authorization")String accessToken) {
-        try {
-            return new BaseResponse<>(messageService.getMessageRooms());
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<List<MessageRoomDto>> getMessageRooms(@RequestHeader("Authorization")String accessToken) {
+        return ResponseEntity.ok(messageService.getMessageRooms());
     }
 
     @ApiOperation(
@@ -87,13 +74,9 @@ public class MessageController {
             @ApiResponse(code = 2006, message = "해당 유저의 대화방이 아닙니다.")
     })
     @GetMapping("/messages/room/{roomId}")
-    public BaseResponse<List<MessageDto>> getMessageRooms(@RequestHeader("Authorization")String accessToken,
+    public ResponseEntity<List<MessageDto>> getMessageRooms(@RequestHeader("Authorization")String accessToken,
                                                           @PathVariable("roomId") Long roomId) {
-        try {
-            return new BaseResponse<>(messageService.getMessages(roomId));
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+        return ResponseEntity.ok(messageService.getMessages(roomId));
     }
 
     @ApiOperation(
@@ -106,13 +89,9 @@ public class MessageController {
             @ApiResponse(code = 2006, message = "해당 유저의 메시지가 아닙니다.")
     })
     @GetMapping("/messages/room/{roomId}/{messageId}")
-    public BaseResponse<MessageDto> getMessageDetail(@RequestHeader("Authorization")String accessToken,
+    public ResponseEntity<MessageDto> getMessageDetail(@RequestHeader("Authorization")String accessToken,
                                                           @PathVariable("messageId") Long messageId) {
-        try {
-            return new BaseResponse<>(messageService.getMessageDetail(messageId));
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+        return ResponseEntity.ok(messageService.getMessageDetail(messageId));
     }
 
     @ApiOperation(
@@ -125,14 +104,10 @@ public class MessageController {
             @ApiResponse(code = 2006, message = "권한이 없습니다.")
     })
     @PostMapping("/messages/room/{roomId}/{messageId}/delete")
-    public BaseResponse<String> deleteMessage(@RequestHeader("Authorization")String accessToken,
+    public ResponseEntity<Void> deleteMessage(@RequestHeader("Authorization")String accessToken,
                                                      @PathVariable("messageId") Long messageId) {
-        try {
-            messageService.deleteMessage(messageId);
-            return new BaseResponse<>("메세지 삭제 성공!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+        messageService.deleteMessage(messageId);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -145,13 +120,9 @@ public class MessageController {
             @ApiResponse(code = 2006, message = "권한이 없습니다.")
     })
     @PostMapping("/messages/room/{roomId}/leave")
-    public BaseResponse<String> leaveMessageRoom(@RequestHeader("Authorization")String accessToken,
+    public ResponseEntity<Void> leaveMessageRoom(@RequestHeader("Authorization")String accessToken,
                                                      @PathVariable("roomId") Long roomId) {
-        try {
-            messageService.leaveMessageRoom(roomId);
-            return new BaseResponse<>("메세지 방 나가기 성공!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+        messageService.leaveMessageRoom(roomId);
+        return ResponseEntity.noContent().build();
     }
 }

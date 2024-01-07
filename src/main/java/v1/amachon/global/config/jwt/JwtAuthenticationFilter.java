@@ -9,7 +9,11 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import v1.amachon.domain.common.exception.UnauthorizedException;
 import v1.amachon.domain.member.repository.auth.LogoutAccessTokenRedisRepository;
+import v1.amachon.global.config.jwt.exception.ExpiredTokenException;
+import v1.amachon.global.config.jwt.exception.InvalidTokenFormatException;
+import v1.amachon.global.config.jwt.exception.JwtException;
 import v1.amachon.global.config.security.CustomUserDetailService;
 
 import javax.servlet.FilterChain;
@@ -54,25 +58,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void checkLogout(String accessToken) {
         if (logoutAccessTokenRedisRepository.existsById(accessToken)) {
-            throw new IllegalArgumentException("이미 로그아웃된 회원입니다.");
+            throw new UnauthorizedException("이미 로그아웃된 회원입니다.");
         }
     }
 
     private void equalsUsernameFromTokenAndUserDetails(String userDetailsUsername, String tokenUsername) {
         if (!userDetailsUsername.equals(tokenUsername)) {
-            throw new IllegalArgumentException("username이 토큰과 맞지 않습니다.");
+            throw new JwtException("username이 토큰과 맞지 않습니다.");
         }
     }
 
     private void validateAccessToken(String accessToken, UserDetails userDetails) {
         if (!jwtTokenUtil.validateToken(accessToken, userDetails)) {
-            throw new IllegalArgumentException("토큰 검증 실패");
+            throw new InvalidTokenFormatException();
         }
     }
 
     private void accessTokenIsExpired(String accessToken, String username) {
         if (jwtTokenUtil.isTokenExpired(accessToken)) {
-            throw new IllegalArgumentException("토큰 기간 만료. 로그인을 다시해주세요.");
+            throw new ExpiredTokenException();
         }
     }
 

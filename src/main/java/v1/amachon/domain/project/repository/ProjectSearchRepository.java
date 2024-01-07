@@ -7,9 +7,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import v1.amachon.domain.base.BaseEntity;
-import v1.amachon.domain.project.dto.project.ProjectDto;
-import v1.amachon.domain.project.dto.project.ProjectSearchCond;
+import v1.amachon.domain.common.BaseEntity;
+import v1.amachon.domain.project.service.dto.project.ProjectDto;
+import v1.amachon.domain.project.service.dto.project.ProjectSearchCond;
 import v1.amachon.domain.project.entity.Project;
 
 import java.util.List;

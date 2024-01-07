@@ -4,18 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import v1.amachon.domain.base.BaseException;
-import v1.amachon.domain.base.BaseResponseStatus;
+import v1.amachon.domain.common.exception.UnauthorizedException;
 import v1.amachon.domain.member.entity.Member;
 import v1.amachon.domain.member.repository.MemberRepository;
-import v1.amachon.domain.project.repository.ProjectRepository;
-import v1.amachon.domain.tags.dto.change.ChangeTechTagDto;
-import v1.amachon.domain.tags.dto.TechTagDto;
+import v1.amachon.domain.tags.service.dto.change.ChangeTechTagDto;
+import v1.amachon.domain.tags.service.dto.TechTagDto;
 import v1.amachon.domain.tags.entity.techtag.MemberTechTag;
 import v1.amachon.domain.tags.entity.techtag.TechTag;
 import v1.amachon.domain.tags.repository.MemberTechTagRepository;
-import v1.amachon.domain.tags.repository.ProjectTechTagRepository;
 import v1.amachon.domain.tags.repository.TechTagRepository;
+import v1.amachon.domain.tags.service.exception.NotFoundTechTagException;
 import v1.amachon.global.config.security.util.SecurityUtils;
 
 import java.util.List;
@@ -38,22 +36,19 @@ public class TechTagService {
     }
 
     @Cacheable(value = "techTag", key = "#tagName")
-    public TechTagDto getTechTag(String tagName) throws BaseException {
-        TechTag tag = techTagRepository.findByName(tagName).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.INVALID_TAG)
-        );
+    public TechTagDto getTechTag(String tagName)  {
+        TechTag tag = techTagRepository.findByName(tagName)
+                .orElseThrow(NotFoundTechTagException::new);
         return new TechTagDto(tag);
     }
 
-    public void changeTechTags(ChangeTechTagDto changeTechTagDto) throws BaseException {
-        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail()).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.UNAUTHORIZED)
-        );
+    public void changeTechTags(ChangeTechTagDto changeTechTagDto)  {
+        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
+                .orElseThrow(UnauthorizedException::new);
 
         for (String tagName : changeTechTagDto.getTechTagName()) {
-            TechTag tag = techTagRepository.findByName(tagName).orElseThrow(
-                    () -> new BaseException(BaseResponseStatus.INVALID_TAG)
-            );
+            TechTag tag = techTagRepository.findByName(tagName)
+                    .orElseThrow(NotFoundTechTagException::new);
             memberTechTagRepository.save(new MemberTechTag(member, tag));
         }
     }

@@ -5,15 +5,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import v1.amachon.domain.base.BaseException;
-import v1.amachon.domain.base.BaseResponse;
-import v1.amachon.domain.tags.dto.RegionTagDto;
-import v1.amachon.domain.tags.dto.TechTagDto;
-import v1.amachon.domain.tags.dto.change.ChangeTagsDto;
+import v1.amachon.domain.tags.service.dto.RegionTagDto;
+import v1.amachon.domain.tags.service.dto.TechTagDto;
+import v1.amachon.domain.tags.service.dto.change.ChangeTagsDto;
 import v1.amachon.domain.tags.service.RegionTagService;
 import v1.amachon.domain.tags.service.TechTagService;
 
@@ -32,9 +31,8 @@ public class TagsController {
             notes = "기술 태그 선택을 위한 전체 태그를 반환"
     )
     @GetMapping("/tech-tags")
-    public BaseResponse<List<TechTagDto>> getTechTags() {
-        List<TechTagDto> tags = techTagService.getAllTechTags();
-        return new BaseResponse<>(tags);
+    public ResponseEntity<List<TechTagDto>> getTechTags() {
+        return ResponseEntity.ok(techTagService.getAllTechTags());
     }
 
     @ApiOperation(
@@ -42,9 +40,8 @@ public class TagsController {
             notes = "지역 태그 선택을 위한 전체 태그를 반환"
     )
     @GetMapping("/region-tags")
-    public BaseResponse<List<RegionTagDto>> getRegionTags() {
-        List<RegionTagDto> tags = regionTagService.getAllRegionTags();
-        return new BaseResponse<>(tags);
+    public ResponseEntity<List<RegionTagDto>> getRegionTags() {
+        return ResponseEntity.ok(regionTagService.getAllRegionTags());
     }
 
     @ApiOperation(
@@ -56,13 +53,9 @@ public class TagsController {
             @ApiResponse(code = 2040, message = "태그가 올바르지 않습니다."),
     })
     @PostMapping("/change-tags")
-    public BaseResponse<String> changeTags(@RequestBody ChangeTagsDto changeTagsDto) throws BaseException {
-        try {
-            techTagService.changeTechTags(changeTagsDto.getChangeTechTagDto());
-            regionTagService.changeRegionTag(changeTagsDto.getChangeRegionTagDto());
-            return new BaseResponse<>("태그 변경 완료!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> changeTags(@RequestBody ChangeTagsDto changeTagsDto) {
+        techTagService.changeTechTags(changeTagsDto.getChangeTechTagDto());
+        regionTagService.changeRegionTag(changeTagsDto.getChangeRegionTagDto());
+        return ResponseEntity.noContent().build();
     }
 }

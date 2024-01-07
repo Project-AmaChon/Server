@@ -6,10 +6,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import v1.amachon.domain.member.dto.RecommendCond;
+import v1.amachon.domain.member.service.dto.RecommendCond;
 import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.member.entity.QProfile;
-import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
+import v1.amachon.domain.project.service.dto.recruit.RecruitManagementDto;
 
 import java.util.LinkedHashSet;
 import java.util.List;

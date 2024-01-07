@@ -4,14 +4,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.BatchSize;
 import org.springframework.format.annotation.DateTimeFormat;
-import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.common.BaseEntity;
 import v1.amachon.domain.member.entity.Member;
-import v1.amachon.domain.project.dto.project.ProjectModifyDto;
+import v1.amachon.domain.project.service.dto.project.ProjectModifyDto;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
 import v1.amachon.domain.tags.entity.techtag.ProjectTechTag;
-import v1.amachon.domain.tags.entity.techtag.TechTag;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -85,7 +83,7 @@ public class Project extends BaseEntity {
         techTags.clear();
         techTags.addAll(projectTechTags);
     }
-    // 추가: 이미지 목록을 설정하는 메서드
+
     public void changeImages(List<ProjectImage> images) {
         this.images.clear();
         this.images.addAll(images);

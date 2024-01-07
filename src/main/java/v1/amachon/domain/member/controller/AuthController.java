@@ -5,27 +5,22 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import v1.amachon.domain.base.BaseException;
-import v1.amachon.domain.base.BaseResponse;
-import v1.amachon.domain.mail.dto.CertificationDto;
+import v1.amachon.domain.mail.service.dto.CertificationDto;
 import v1.amachon.domain.mail.service.EmailService;
-import v1.amachon.domain.member.dto.join.EmailDto;
-import v1.amachon.domain.member.dto.join.NicknameDto;
-import v1.amachon.domain.member.dto.login.LoginDto;
-import v1.amachon.domain.member.dto.login.TokenDto;
+import v1.amachon.domain.member.service.dto.join.EmailDto;
+import v1.amachon.domain.member.service.dto.join.NicknameDto;
+import v1.amachon.domain.member.service.dto.login.LoginDto;
+import v1.amachon.domain.member.service.dto.login.TokenDto;
 import v1.amachon.domain.member.service.AuthService;
 import v1.amachon.domain.member.service.MemberService;
-
-import javax.mail.MessagingException;
-import java.io.UnsupportedEncodingException;
 
 @RequiredArgsConstructor
 @RestController
 @Api(tags = {"인증 API"})
-
 public class AuthController {
 
     private final AuthService authService;
@@ -38,14 +33,10 @@ public class AuthController {
     )
     @ApiResponse(code = 3011, message = "중복된 이메일 입니다.")
     @PostMapping("/join/send-verification-code")
-    public BaseResponse<String> sendVerificationCode(@RequestBody EmailDto emailDto) throws MessagingException, UnsupportedEncodingException {
-        try{
-            memberService.isDuplicateEmail(emailDto.getEmail());
-            emailService.sendVerificationCode(emailDto.getEmail());
-            return new BaseResponse<>("이메일 인증 코드 발송완료!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> sendVerificationCode(@RequestBody EmailDto emailDto) {
+        memberService.isDuplicateEmail(emailDto.getEmail());
+        emailService.sendVerificationCode(emailDto.getEmail());
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -57,13 +48,9 @@ public class AuthController {
             @ApiResponse(code = 2100, message = "만료된 인증 코드입니다."),
     })
     @PostMapping("/join/certification")
-    public BaseResponse<String> certification(@RequestBody CertificationDto certificationDto) {
-        try {
-            authService.certify(certificationDto);
-            return new BaseResponse<>("이메일 인증 완료!");
-        } catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> certification(@RequestBody CertificationDto certificationDto) {
+        authService.certify(certificationDto);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -72,13 +59,9 @@ public class AuthController {
     )
     @ApiResponse(code = 3012, message = "이미 존재하는 닉네임입니다.")
     @PostMapping("/join/check-nickname")
-    public BaseResponse<String> checkNickname(@RequestBody NicknameDto nicknameDto) {
-        try {
-            memberService.isDuplicateNickname(nicknameDto);
-            return new BaseResponse<>("닉네임 중복 확인 완료!");
-        } catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> checkNickname(@RequestBody NicknameDto nicknameDto) {
+        memberService.isDuplicateNickname(nicknameDto);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -91,12 +74,7 @@ public class AuthController {
             @ApiResponse(code = 3016, message = "탈퇴한 회원입니다.")
     })
     @PostMapping("/login")
-    public BaseResponse<TokenDto> login(@RequestBody LoginDto loginDto) {
-        try{
-            TokenDto tokenDto = authService.login(loginDto);
-            return new BaseResponse<>(tokenDto);
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
+        return ResponseEntity.ok(authService.login(loginDto));
     }
 }

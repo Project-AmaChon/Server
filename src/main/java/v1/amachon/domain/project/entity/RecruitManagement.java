@@ -3,7 +3,7 @@ package v1.amachon.domain.project.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.common.BaseEntity;
 import v1.amachon.domain.member.entity.Member;
 
 import javax.persistence.*;

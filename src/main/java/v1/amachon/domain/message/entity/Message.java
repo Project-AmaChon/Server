@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.common.BaseEntity;
 import v1.amachon.domain.member.entity.Member;
 
 import javax.persistence.*;
@@ -38,6 +38,6 @@ public class Message extends BaseEntity {
         this.messageRoom = messageRoom;
         this.sender = sender;
         this.receiver = receiver;
-
     }
+
 }

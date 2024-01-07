@@ -1,18 +1,15 @@
 package v1.amachon.domain.mail.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import v1.amachon.domain.mail.entity.EmailVerification;
 import v1.amachon.domain.mail.repository.EmailVerificationRepository;
-import v1.amachon.domain.member.repository.MemberRepository;
+import v1.amachon.domain.mail.service.exception.FailureSendMailException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 @Service
@@ -25,53 +22,52 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public void sendVerificationCode(String to) throws MessagingException, UnsupportedEncodingException {
+    public void sendVerificationCode(String to) {
         MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-        String ePw = createKey();
-        String msgg="";
-        msgg+= "<div style='margin:20px;'>";
-        msgg+= "<h1> 인증번호 메일입니다. </h1>";
-        msgg+= "<br>";
-        msgg+= "<p>아래 코드를 복사해 입력해주세요<p>";
-        msgg+= "<br>";
-        msgg+= "<p>감사합니다.<p>";
-        msgg+= "<br>";
-        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-        msgg+= "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
-        msgg+= "<div style='font-size:130%'>";
-        msgg+= "CODE : <strong>";
-        msgg+= ePw+"</strong><div><br/> ";
-        msgg+= "</div>";
 
-        messageHelper.setFrom(sender, "아마촌");
-        messageHelper.setTo(to);
-        messageHelper.setSubject("아마촌 회원 가입 인증 코드가 발송되었습니다.");
-        messageHelper.setText(msgg, true);
+        String ePw = createKey();
+        String subject = "아마촌 회원 가입 인증 코드가 발송되었습니다.";
+        String content = "<div style='margin:20px;'>"
+                + "<h1>인증번호 메일입니다.</h1>"
+                + "<br>"
+                + "<p>아래 코드를 복사해 입력해주세요<p>"
+                + "<br>"
+                + "<p>감사합니다.<p>"
+                + "<br>"
+                + "<div align='center' style='border:1px solid black; font-family:verdana';>"
+                + "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>"
+                + "<div style='font-size:130%'>"
+                + "CODE : <strong>" + ePw + "</strong><div><br/> "
+                + "</div>";
+
+        try {
+            message.setFrom(sender);
+            message.setRecipient(MimeMessage.RecipientType.TO, new javax.mail.internet.InternetAddress(to));
+            message.setSubject(subject, "UTF-8");
+            message.setContent(content, "text/html; charset=utf-8");
+        } catch (MessagingException e) {
+            throw new FailureSendMailException();
+        }
 
         javaMailSender.send(message);
         emailVerificationRepository.save(new EmailVerification(to, ePw));
     }
 
-    public  String createKey() {
+    public String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
-        for (int i = 0; i < 8; i++) { // 인증코드 8자리
-            int index = rnd.nextInt(3); // 0~2 까지 랜덤
-
+        for (int i = 0; i < 8; i++) {
+            int index = rnd.nextInt(3);
             switch (index) {
                 case 0:
                     key.append((char) ((int) (rnd.nextInt(26)) + 97));
-                    //  a~z  (ex. 1+97=98 => (char)98 = 'b')
                     break;
                 case 1:
                     key.append((char) ((int) (rnd.nextInt(26)) + 65));
-                    //  A~Z
                     break;
                 case 2:
                     key.append((rnd.nextInt(10)));
-                    // 0~9
                     break;
             }
         }

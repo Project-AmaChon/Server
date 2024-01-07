@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import v1.amachon.domain.base.BaseEntity;
-import v1.amachon.domain.member.dto.ProfileDto;
-import v1.amachon.domain.member.dto.join.JoinDto;
+import v1.amachon.domain.common.BaseEntity;
+import v1.amachon.domain.member.service.dto.ProfileResponseDto;
+import v1.amachon.domain.member.service.dto.join.JoinDto;
 import v1.amachon.domain.message.entity.MessageRoom;
 import v1.amachon.domain.notification.entity.Notification;
 import v1.amachon.domain.tags.entity.regiontag.RegionTag;
@@ -97,7 +97,7 @@ public class Member extends BaseEntity {
         this.regionTag = regionTag;
     }
 
-    public void changeProfile(ProfileDto profileDto) {
+    public void changeProfile(ProfileResponseDto profileDto) {
         this.profile.changeProfile(profileDto);
     }
 }

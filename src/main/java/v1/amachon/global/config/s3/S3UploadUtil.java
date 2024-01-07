@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import v1.amachon.domain.base.BaseException;
-import v1.amachon.domain.base.BaseResponseStatus;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,11 +31,8 @@ public class S3UploadUtil {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(MultipartFile multipartFile) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
-
-
+    public String upload(MultipartFile multipartFile) {
+        File uploadFile = convert(multipartFile).get();
         return upload(uploadFile, "amachon", multipartFile.getOriginalFilename());
     }
 
@@ -68,32 +63,28 @@ public class S3UploadUtil {
         }
     }
 
-    public void fileDelete(String fileUrl) throws BaseException {
-        try{
-            String fileKey = fileUrl.substring(48);
-            String key = fileKey; // 폴더/파일.확장자
-            final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion("ap-northeast-2").build();
-            try {
-                s3.deleteObject(bucket, key);
-            } catch (AmazonServiceException e) {
-                System.err.println(e.getErrorMessage());
-                System.exit(1);
-            }
+    public void fileDelete(String fileUrl) {
 
-            System.out.println(String.format("[%s] deletion complete", key));
-
-        } catch (Exception exception) {
-            throw new BaseException(BaseResponseStatus.BAD_REQUEST);
+        String fileKey = fileUrl.substring(48);
+        String key = fileKey; // 폴더/파일.확장자
+        final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion("ap-northeast-2").build();
+        try {
+            s3.deleteObject(bucket, key);
+        } catch (AmazonServiceException e) {
+            throw new RuntimeException("파일 삭제에 실패했습니다.");
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
+    private Optional<File> convert(MultipartFile file) {
         File convertFile = new File("/" + UUID.randomUUID());
-        if (convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+        try {
+            if (convertFile.createNewFile()) {
+                FileOutputStream fos = new FileOutputStream(convertFile);
                 fos.write(file.getBytes());
+                return Optional.of(convertFile);
             }
-            return Optional.of(convertFile);
+        } catch (IOException e) {
+            throw new RuntimeException("MultipartFile -> File로 전환이 실패했습니다.");
         }
         return Optional.empty();
     }

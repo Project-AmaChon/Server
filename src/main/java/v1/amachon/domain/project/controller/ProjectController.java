@@ -2,15 +2,13 @@ package v1.amachon.domain.project.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import v1.amachon.domain.base.BaseException;
-import v1.amachon.domain.base.BaseResponse;
-import v1.amachon.domain.project.dto.project.*;
-import v1.amachon.domain.project.dto.recruit.RecruitManagementDto;
+import v1.amachon.domain.project.service.dto.project.*;
+import v1.amachon.domain.project.service.dto.recruit.RecruitManagementDto;
 import v1.amachon.domain.project.service.ProjectService;
 
-import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,15 +32,9 @@ public class ProjectController {
             @ApiResponse(code = 4001, message = "서버 에러입니다.(S3)"),
     })
     @PostMapping("/project")
-    public BaseResponse<String> createProject(@RequestHeader("Authorization")String accessToken, @RequestBody ProjectCreateRequestDto projectCreateDto) {
-        try {
-   	        projectService.createProject(projectCreateDto);
-            return new BaseResponse<>("프로젝트 생성 완료!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Void> createProject(@RequestHeader("Authorization") String accessToken, @RequestBody ProjectCreateRequestDto projectCreateDto) {
+        projectService.createProject(projectCreateDto);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -55,13 +47,9 @@ public class ProjectController {
             @ApiResponse(code = 2003, message = "권한이 없습니다."),
     })
     @GetMapping("/project/{projectId}/modify")
-    public BaseResponse<ProjectModifyDto> getModifyProject(@RequestHeader("Authorization")String accessToken,
-                                                           @PathVariable("projectId") Long projectId) {
-        try {
-            return new BaseResponse<>(projectService.getModifyProject(projectId));
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<ProjectModifyDto> getModifyProject(@RequestHeader("Authorization") String accessToken,
+                                                             @PathVariable("projectId") Long projectId) {
+        return ResponseEntity.ok(projectService.getModifyProject(projectId));
     }
 
     @ApiOperation(
@@ -76,18 +64,12 @@ public class ProjectController {
             @ApiResponse(code = 2220, message = "기술 태그 값이 올바르지 않습니다."),
     })
     @PatchMapping("/project/{projectId}/modify")
-    public BaseResponse<String> modifyProject(@RequestHeader("Authorization")String accessToken,
-                                                        @PathVariable("projectId") Long projectId,
-                                                        @ModelAttribute ProjectModifyDto projectModifyDto,
-                                                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        try {
-            projectService.modifyProject(projectId, projectModifyDto, images);
-            return new BaseResponse<>("프로젝트 수정 성공!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<Void> modifyProject(@RequestHeader("Authorization") String accessToken,
+                                              @PathVariable("projectId") Long projectId,
+                                              @ModelAttribute ProjectModifyDto projectModifyDto,
+                                              @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+        projectService.modifyProject(projectId, projectModifyDto, images);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -100,13 +82,9 @@ public class ProjectController {
             @ApiResponse(code = 2003, message = "권한이 없습니다."),
     })
     @PostMapping("/project/{projectId}/delete")
-    public BaseResponse<String> deleteProject(@RequestHeader("Authorization")String accessToken, @PathVariable("projectId") Long projectId) {
-        try {
-            projectService.deleteProject(projectId);
-            return new BaseResponse<>("프로젝트 삭제 성공!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> deleteProject(@RequestHeader("Authorization") String accessToken, @PathVariable("projectId") Long projectId) {
+        projectService.deleteProject(projectId);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -118,13 +96,9 @@ public class ProjectController {
             @ApiResponse(code = 2240, message = "해당 프로젝트는 존재하지 않습니다.")
     })
     @GetMapping("/project/{projectId}")
-    public BaseResponse<ProjectDetailDto> getProjectDto(@PathVariable("projectId") Long projectId,
-                                                        @RequestHeader("Authorization")String accessToken) {
-        try {
-            return new BaseResponse<>(projectService.getProjectDetailDto(projectId));
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<ProjectDetailDto> getProjectDto(@PathVariable("projectId") Long projectId,
+                                                          @RequestHeader("Authorization") String accessToken) {
+        return ResponseEntity.ok(projectService.getProjectDetailDto(projectId));
     }
 
     @ApiOperation(
@@ -136,13 +110,9 @@ public class ProjectController {
             @ApiResponse(code = 2000, message = "입력값을 확인해주세요."),
     })
     @PostMapping("/project/search")
-    public BaseResponse<List<ProjectDto>> getSearchProjects(@RequestBody ProjectSearchCond cond,
-                                                            @RequestHeader("Authorization")String accessToken) {
-        try {
-            return new BaseResponse<>(projectService.getSearchProjects(cond));
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<List<ProjectDto>> getSearchProjects(@RequestBody ProjectSearchCond cond,
+                                                              @RequestHeader("Authorization") String accessToken) {
+        return ResponseEntity.ok(projectService.getSearchProjects(cond));
     }
 
     @ApiOperation(
@@ -154,9 +124,8 @@ public class ProjectController {
             @ApiResponse(code = 2000, message = "입력값을 확인해주세요."),
     })
     @GetMapping("/home")
-    public BaseResponse<List<ProjectDto>> getRecentProjects(@RequestHeader("Authorization")String accessToken) throws BaseException {
-        List<ProjectDto> projects = projectService.getRecentProjects();
-        return new BaseResponse<>(projects);
+    public ResponseEntity<List<ProjectDto>> getRecentProjects(@RequestHeader("Authorization") String accessToken)  {
+        return ResponseEntity.ok(projectService.getRecentProjects());
     }
 
     @ApiOperation(
@@ -172,14 +141,10 @@ public class ProjectController {
 
     })
     @PostMapping("/project/{projectId}/apply")
-    public BaseResponse<String> projectApply(@PathVariable("projectId") Long projectId,
-                                             @RequestHeader("Authorization")String accessToken) {
-        try {
-            projectService.projectApply(projectId);
-            return new BaseResponse<>("참가 신청 완료!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> projectApply(@PathVariable("projectId") Long projectId,
+                                             @RequestHeader("Authorization") String accessToken) {
+        projectService.projectApply(projectId);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -192,14 +157,10 @@ public class ProjectController {
             @ApiResponse(code = 2070, message = "해당 팀원은 존재하지 않습니다.")
     })
     @PostMapping("/project/{projectId}/kick/{teamMemberId}")
-    public BaseResponse<String> kickTeamMember(@PathVariable("teamMemberId") Long teamMemberId,
-                                             @RequestHeader("Authorization")String accessToken) {
-        try {
-            projectService.kickTeamMember(teamMemberId);
-            return new BaseResponse<>("팀원 내보내기 완료!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> kickTeamMember(@PathVariable("teamMemberId") Long teamMemberId,
+                                               @RequestHeader("Authorization") String accessToken) {
+        projectService.kickTeamMember(teamMemberId);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -212,13 +173,9 @@ public class ProjectController {
             @ApiResponse(code = 2240, message = "해당 프로젝트가 존재하지 않습니다."),
     })
     @GetMapping("/project/{projectId}/recruit-list")
-    public BaseResponse<List<RecruitManagementDto>> getRecruitList(@PathVariable("projectId") Long projectId,
-                                                                   @RequestHeader("Authorization")String accessToken) {
-        try {
-            return new BaseResponse<>(projectService.getRecruitList(projectId));
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<List<RecruitManagementDto>> getRecruitList(@PathVariable("projectId") Long projectId,
+                                                                     @RequestHeader("Authorization") String accessToken) {
+        return ResponseEntity.ok(projectService.getRecruitList(projectId));
     }
 
     @ApiOperation(
@@ -231,13 +188,9 @@ public class ProjectController {
             @ApiResponse(code = 2240, message = "해당 프로젝트가 존재하지 않습니다.")
     })
     @GetMapping("/project/{projectId}/recommend-teamMember")
-    public BaseResponse<List<RecruitManagementDto>> getRecommendMembers(@PathVariable("projectId") Long projectId,
-                                                                        @RequestHeader("Authorization")String accessToken) {
-        try {
-            return new BaseResponse<>(projectService.getRecommendMember(projectId));
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<List<RecruitManagementDto>> getRecommendMembers(@PathVariable("projectId") Long projectId,
+                                                                          @RequestHeader("Authorization") String accessToken) {
+        return ResponseEntity.ok(projectService.getRecommendMember(projectId));
     }
 
     @ApiOperation(
@@ -250,14 +203,10 @@ public class ProjectController {
             @ApiResponse(code = 2050, message = "신청 정보를 찾을 수 없습니다.")
     })
     @GetMapping("/project/apply/accept/{recruitId}")
-    public BaseResponse<String> acceptRecruitApply(@PathVariable("recruitId") Long recruitId,
-                                                   @RequestHeader("Authorization")String accessToken) {
-        try {
-            projectService.recruitAccept(recruitId);
-            return new BaseResponse<>("참가 신청 수락 완료!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> acceptRecruitApply(@PathVariable("recruitId") Long recruitId,
+                                                   @RequestHeader("Authorization") String accessToken) {
+        projectService.recruitAccept(recruitId);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -270,14 +219,10 @@ public class ProjectController {
             @ApiResponse(code = 2050, message = "신청 정보를 찾을 수 없습니다.")
     })
     @GetMapping("/project/apply/reject/{recruitId}")
-    public BaseResponse<String> rejectRecruitApply(@PathVariable("recruitId") Long recruitId,
-                                                   @RequestHeader("Authorization")String accessToken) {
-        try {
-            projectService.recruitReject(recruitId);
-            return new BaseResponse<>("참가 신청 거절 완료!");
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<Void> rejectRecruitApply(@PathVariable("recruitId") Long recruitId,
+                                                   @RequestHeader("Authorization") String accessToken) {
+        projectService.recruitReject(recruitId);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(
@@ -288,11 +233,7 @@ public class ProjectController {
             @ApiResponse(code = 2005, message = "로그인이 필요합니다.")
     })
     @GetMapping("/project/management")
-    public BaseResponse<ProjectManagementDto> getProjectManagement(@RequestHeader("Authorization")String accessToken) {
-        try {
-            return new BaseResponse<>(projectService.getProjectManagement());
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
+    public ResponseEntity<ProjectManagementDto> getProjectManagement(@RequestHeader("Authorization") String accessToken) {
+        return ResponseEntity.ok(projectService.getProjectManagement());
     }
 }

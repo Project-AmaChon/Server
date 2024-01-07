@@ -6,7 +6,7 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.common.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +28,6 @@ public class ProjectImage extends BaseEntity {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    // 추가: 생성자를 통해 Project 엔티티를 매개변수로 받아 설정
     public ProjectImage(String imageUrl, Project project) {
         this.imageUrl = imageUrl;
         this.project = project;

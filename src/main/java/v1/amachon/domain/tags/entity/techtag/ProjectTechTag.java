@@ -3,7 +3,7 @@ package v1.amachon.domain.tags.entity.techtag;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import v1.amachon.domain.base.BaseEntity;
+import v1.amachon.domain.common.BaseEntity;
 import v1.amachon.domain.project.entity.Project;
 
 import javax.persistence.*;

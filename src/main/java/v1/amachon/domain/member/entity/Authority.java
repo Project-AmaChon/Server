@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;

@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import v1.amachon.domain.member.dto.ProfileDto;
+import v1.amachon.domain.member.service.dto.ProfileResponseDto;
 
 import javax.persistence.*;
 
@@ -24,7 +24,7 @@ public class Profile {
     private String blogUrl;
 
     @Builder
-    public Profile(ProfileDto profileDto) {
+    public Profile(ProfileResponseDto profileDto) {
         this.introduction = profileDto.getIntroduction();
         this.profileImageUrl = profileDto.getProfileImageUrl();
         this.description = profileDto.getDescription();
@@ -40,7 +40,7 @@ public class Profile {
         this.introduction = "";
     }
 
-    public void changeProfile(ProfileDto profileDto) {
+    public void changeProfile(ProfileResponseDto profileDto) {
         this.introduction = profileDto.getIntroduction();
         this.description = profileDto.getDescription();
         this.githubUrl = profileDto.getGithubUrl();
