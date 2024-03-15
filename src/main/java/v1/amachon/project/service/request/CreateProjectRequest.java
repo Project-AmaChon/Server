@@ -1,4 +1,4 @@
-package v1.amachon.project.service.dto.project;
+package v1.amachon.project.service.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectCreateRequestDto {
+public class CreateProjectRequest {
     private String title;
     private String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

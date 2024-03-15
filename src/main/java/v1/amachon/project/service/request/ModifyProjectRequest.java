@@ -1,4 +1,4 @@
-package v1.amachon.project.service.dto.project;
+package v1.amachon.project.service.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import v1.amachon.project.entity.Project;
-import v1.amachon.project.entity.ProjectImage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectModifyDto {
+public class ModifyProjectRequest {
     private String title;
     private String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -26,9 +25,8 @@ public class ProjectModifyDto {
     private LocalDate developPeriod;
     private String regionTagName;
     private List<String> techTagNames;
-    private List<String> imageUrls;
 
-    public ProjectModifyDto(Project project) {
+    public ModifyProjectRequest(Project project) {
         this.title = project.getTitle();
         this.description = project.getDescription();
         this.recruitDeadline = project.getRecruitDeadline();
@@ -36,6 +34,6 @@ public class ProjectModifyDto {
         this.developPeriod = project.getDevelopPeriod();
         this.regionTagName = project.getRegionTag().getName();
         this.techTagNames = project.getTechTags().stream().map(t -> t.getTechTag().getName()).collect(Collectors.toList());
-        this.imageUrls = project.getImages().stream().map(ProjectImage::getImageUrl).collect(Collectors.toList());
     }
 }
+

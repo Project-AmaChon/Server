@@ -1,4 +1,4 @@
-package v1.amachon.project.service.dto;
+package v1.amachon.project.service.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,13 +10,13 @@ import v1.amachon.member.entity.Member;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TeamMemberDto {
+public class TeamMemberResponse {
     private Long memberId;
     private Long teamMemberId;
     private String profileImageUrl;
     private String name;
 
-    public TeamMemberDto(Member member, Long teamMemberId) {
+    public TeamMemberResponse(Member member, Long teamMemberId) {
         this.memberId = member.getId();
         this.profileImageUrl = member.getProfile().getProfileImageUrl();
         this.name = member.getNickname();

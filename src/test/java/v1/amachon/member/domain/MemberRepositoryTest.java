@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @RepositoryTest
-class MemberTest {
+class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;

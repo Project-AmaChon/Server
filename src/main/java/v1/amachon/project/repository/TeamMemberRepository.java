@@ -14,7 +14,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             "JOIN FETCH tm.profile WHERE t.project.id = :projectId AND t.status = 'NORMAL'")
     List<TeamMember> findByProjectId(@Param("projectId") Long projectId);
 
-    @Query("SELECT t FROM TeamMember t JOIN FETCH t.member tm JOIN FETCH t.project tp JOIN FETCH tp.leader " +
+    @Query("SELECT t FROM TeamMember t JOIN FETCH t.member JOIN FETCH t.project p JOIN FETCH p.leader " +
             "WHERE t.id = :teamMemberId AND t.status = 'NORMAL'")
-    Optional<TeamMember> findById(@Param("teamMemberId") Long teamMemberId);
+    Optional<TeamMember> findByIdFetch(@Param("teamMemberId") Long teamMemberId);
 }

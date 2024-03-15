@@ -1,4 +1,5 @@
-package v1.amachon.project.service.dto.project;
+package v1.amachon.project.service.response;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProjectDto {
+public class ParticipatingProjectResponse {
     private Long projectId;
     private String title;
     private LocalDate recruitDeadline;
@@ -22,7 +23,7 @@ public class ProjectDto {
     private int currentNumber;
     private List<String> tagNames;
 
-    public ProjectDto(Project project) {
+    public ParticipatingProjectResponse(Project project) {
         this.projectId = project.getId();
         this.title = project.getTitle();
         this.recruitDeadline = project.getRecruitDeadline();

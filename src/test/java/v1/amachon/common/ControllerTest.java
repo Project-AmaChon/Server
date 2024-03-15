@@ -22,7 +22,7 @@ import v1.amachon.common.config.jwt.JwtTokenUtil;
 import v1.amachon.common.config.security.CustomUserDetailService;
 
 @WebMvcTest(includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class))
-@Import(JwtTokenUtil.class)
+@Import({JwtTokenUtil.class, TestSecurityConfig.class})
 public class WebMVCTest {
 
     @Autowired

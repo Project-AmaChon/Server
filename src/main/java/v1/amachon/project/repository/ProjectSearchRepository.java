@@ -1,23 +1,21 @@
 package v1.amachon.project.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import v1.amachon.common.entity.BaseEntity;
-import v1.amachon.project.service.dto.project.ProjectDto;
-import v1.amachon.project.service.dto.project.ProjectSearchCond;
+import v1.amachon.project.service.response.ProjectResponse;
+import v1.amachon.project.service.request.ProjectSearchCond;
 import v1.amachon.project.entity.Project;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static v1.amachon.domain.project.entity.QProject.project;
-import static v1.amachon.domain.tags.entity.techtag.QProjectTechTag.projectTechTag;
-import static v1.amachon.domain.tags.entity.techtag.QTechTag.techTag;
+import static v1.amachon.project.entity.QProject.project;
+import static v1.amachon.tags.entity.techtag.QProjectTechTag.projectTechTag;
+import static v1.amachon.tags.entity.techtag.QTechTag.techTag;
+
 
 @Repository
 public class ProjectSearchRepository {
@@ -40,22 +38,29 @@ public class ProjectSearchRepository {
         return techTagNames.isEmpty() ? null : techTag.name.in(techTagNames);
     }
 
-    public List<ProjectDto> searchProjectByAllCond(ProjectSearchCond cond) {
-        Pageable pageable = PageRequest.of(0, 40);
-        List<Tuple> result = queryFactory.select(project, Expressions.asNumber(projectTechTag.id.count()).as("tag_count"))
+    private BooleanExpression techTagCountEqCond(List<String> techTagNames) {
+        return techTagNames.isEmpty() ? null : projectTechTag.count().eq((long) techTagNames.size());
+    }
+
+    public List<ProjectResponse> searchProjectByAllCond(ProjectSearchCond cond) {
+        List<Project> projects = queryFactory.selectDistinct(project)
                 .from(project)
-                .innerJoin(project.techTags, projectTechTag).on()
-                .innerJoin(projectTechTag.techTag, techTag)
-                .where(keywordLike(cond.getKeyword()),
-                        techTagIn(cond.getTechTagNames()),
-                        regionTagIn(cond.getRegionTagNames()),
-                        project.status.eq(BaseEntity.Status.NORMAL))
-                .groupBy(project.id)
-                .orderBy(Expressions.asNumber(projectTechTag.id.count()).desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .join(project.techTags, projectTechTag)
+                .join(projectTechTag.techTag, techTag)
+                .where(project.in(JPAExpressions
+                        .selectDistinct(project)
+                        .from(project)
+                        .join(project.techTags, projectTechTag)
+                        .join(projectTechTag.techTag, techTag)
+                        .where(keywordLike(cond.getKeyword()),
+                                techTagIn(cond.getTechTagNames()),
+                                regionTagIn(cond.getRegionTagNames()),
+                                project.status.eq(BaseEntity.Status.NORMAL))
+                        .groupBy(project.id)
+                        .having(techTagCountEqCond(cond.getTechTagNames()))
+                        )
+                )
                 .fetch();
-        List<Project> projects = result.stream().map(r -> r.get(project)).collect(Collectors.toList());
-        return projects.stream().map(ProjectDto::new).collect(Collectors.toList());
+        return projects.stream().map(ProjectResponse::new).collect(Collectors.toList());
     }
 }
