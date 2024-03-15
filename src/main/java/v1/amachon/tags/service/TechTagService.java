@@ -36,20 +36,10 @@ public class TechTagService {
     }
 
     @Cacheable(value = "techTag", key = "#tagName")
-    public TechTagDto getTechTag(String tagName)  {
+    public List<String> getTechTagNameWithChildrenTags(String tagName)  {
         TechTag tag = techTagRepository.findByName(tagName)
                 .orElseThrow(NotFoundTechTagException::new);
-        return new TechTagDto(tag);
+        return tag.getTagNamesWithChildrenTags();
     }
 
-    public void changeTechTags(ChangeTechTagDto changeTechTagDto)  {
-        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
-                .orElseThrow(UnauthorizedException::new);
-
-        for (String tagName : changeTechTagDto.getTechTagName()) {
-            TechTag tag = techTagRepository.findByName(tagName)
-                    .orElseThrow(NotFoundTechTagException::new);
-            memberTechTagRepository.save(new MemberTechTag(member, tag));
-        }
-    }
 }

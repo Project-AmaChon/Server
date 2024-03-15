@@ -44,18 +44,18 @@ public class TagsController {
         return ResponseEntity.ok(regionTagService.getAllRegionTags());
     }
 
-    @ApiOperation(
-            value = "태그 선택(변경)",
-            notes = "지역 태그는 1개, 기술 태그는 3개 이하로 선택하여 태그를 설정"
-    )
-    @ApiResponses({
-            @ApiResponse(code = 2005, message = "로그인이 필요합니다."),
-            @ApiResponse(code = 2040, message = "태그가 올바르지 않습니다."),
-    })
-    @PostMapping("/change-tags")
-    public ResponseEntity<Void> changeTags(@RequestBody ChangeTagsDto changeTagsDto) {
-        techTagService.changeTechTags(changeTagsDto.getChangeTechTagDto());
-        regionTagService.changeRegionTag(changeTagsDto.getChangeRegionTagDto());
-        return ResponseEntity.noContent().build();
-    }
+//    @ApiOperation(
+//            value = "태그 선택(변경)",
+//            notes = "지역 태그는 1개, 기술 태그는 3개 이하로 선택하여 태그를 설정"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(code = 2005, message = "로그인이 필요합니다."),
+//            @ApiResponse(code = 2040, message = "태그가 올바르지 않습니다."),
+//    })
+//    @PostMapping("/change-tags")
+//    public ResponseEntity<Void> changeTags(@RequestBody ChangeTagsDto changeTagsDto) {
+//        techTagService.changeTechTags(changeTagsDto.getChangeTechTagDto());
+//        regionTagService.changeRegionTag(changeTagsDto.getChangeRegionTagDto());
+//        return ResponseEntity.noContent().build();
+//    }
 }

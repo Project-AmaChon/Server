@@ -14,6 +14,7 @@ import v1.amachon.tags.repository.RegionTagRepository;
 import v1.amachon.tags.service.exception.NotFoundRegionTagException;
 import v1.amachon.common.config.security.util.SecurityUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 public class RegionTagService {
 
     private final RegionTagRepository regionTagRepository;
-    private final MemberRepository memberRepository;
 
     @Cacheable(value = "regionTags")
     public List<RegionTagDto> getAllRegionTags() {
@@ -33,17 +33,10 @@ public class RegionTagService {
     }
 
     @Cacheable(value = "regionTag", key = "#tagName")
-    public RegionTagDto getRegionTag(String tagName) {
+    public List<String> getRegionTagNameWithChildrenTags(String tagName) {
         RegionTag tag = regionTagRepository.findByName(tagName)
                 .orElseThrow(NotFoundRegionTagException::new);
-        return new RegionTagDto(tag);
-    }
 
-    public void changeRegionTag(ChangeRegionTagDto changeRegionTagDto)  {
-        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
-                .orElseThrow(UnauthorizedException::new);
-        RegionTag regionTag = regionTagRepository.findByName(changeRegionTagDto.getRegionName())
-                .orElseThrow(NotFoundRegionTagException::new);
-        member.changeRegion(regionTag);
+        return tag.getTagNamesWithChildrenTags();
     }
 }

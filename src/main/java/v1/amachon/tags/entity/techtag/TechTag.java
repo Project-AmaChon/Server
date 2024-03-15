@@ -4,10 +4,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import v1.amachon.tags.entity.regiontag.RegionTag;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -38,5 +40,11 @@ public class TechTag {
         }
         this.parent = parent;
         this.children = new ArrayList<>();
+    }
+
+    public List<String> getTagNamesWithChildrenTags() {
+        List<String> tagNames = List.of(name);
+        tagNames.addAll(children.stream().map(TechTag::getName).collect(Collectors.toList()));
+        return tagNames;
     }
 }
