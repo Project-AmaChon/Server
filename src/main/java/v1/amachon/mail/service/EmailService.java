@@ -22,7 +22,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public void sendVerificationCode(String to) {
+    public boolean sendVerificationCode(String to) {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         String ePw = createKey();
@@ -48,9 +48,9 @@ public class EmailService {
         } catch (MessagingException e) {
             throw new FailureSendMailException();
         }
-
         javaMailSender.send(message);
         emailVerificationRepository.save(new EmailVerification(to, ePw));
+        return true;
     }
 
     public String createKey() {

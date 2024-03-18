@@ -40,8 +40,11 @@ public class RegionTag {
     }
 
     public List<String> getTagNamesWithChildrenTags() {
-        List<String> tagNames = List.of(name);
-        tagNames.addAll(children.stream().map(RegionTag::getName).collect(Collectors.toList()));
+        List<String> tagNames = new ArrayList<>();
+        tagNames.add(name);
+        if (children != null || !children.isEmpty()) {
+            tagNames.addAll(children.stream().map(RegionTag::getName).collect(Collectors.toList()));
+        }
         return tagNames;
     }
 }

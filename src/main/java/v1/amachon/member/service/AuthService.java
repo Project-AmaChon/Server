@@ -17,7 +17,6 @@ import v1.amachon.member.entity.Member;
 import v1.amachon.member.entity.auth.RefreshToken;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.member.repository.auth.RefreshTokenRedisRepository;
-import v1.amachon.domain.member.service.exception.*;
 import v1.amachon.member.service.exception.*;
 
 import java.time.LocalDateTime;

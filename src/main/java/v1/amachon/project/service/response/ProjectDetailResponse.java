@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import v1.amachon.project.service.request.TeamMemberDto;
 import v1.amachon.project.entity.Project;
 
 @Data
@@ -25,7 +24,7 @@ public class ProjectDetailResponse {
     private Long leaderId;
     private String regionTagName;
     private List<String> techTagNames;
-    private List<TeamMemberDto> teamMembers;
+    private List<TeamMemberResponse> teamMembers;
 
     public ProjectDetailResponse(Project project) {
         this.projectId = project.getId();
@@ -37,6 +36,6 @@ public class ProjectDetailResponse {
         this.leaderId = project.getLeader().getId();
         this.regionTagName = project.getRegionTag().getName();
         this.techTagNames = project.getTechTags().stream().map(t -> t.getTechTag().getName()).collect(Collectors.toList());
-        this.teamMembers = project.getTeamMembers().stream().map(t -> new TeamMemberDto(t.getMember(), t.getId())).collect(Collectors.toList());
+        this.teamMembers = project.getTeamMembers().stream().map(t -> new TeamMemberResponse(t.getMember(), t.getId())).collect(Collectors.toList());
     }
 }

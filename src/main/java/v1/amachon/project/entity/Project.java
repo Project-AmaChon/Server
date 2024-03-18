@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "project", indexes = {@Index(name = "idx_project_id", columnList = "project_id")})
 public class Project extends BaseEntity {
 
     @Id

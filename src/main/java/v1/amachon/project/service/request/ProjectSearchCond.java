@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +15,6 @@ import java.util.List;
 public class ProjectSearchCond {
 
     public String keyword;
-    public List<String> regionTagNames;
-    public List<String> techTagNames;
+    public Set<String> regionTagNames;
+    public Set<String> techTagNames;
 }

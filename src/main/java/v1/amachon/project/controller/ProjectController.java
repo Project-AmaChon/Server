@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import v1.amachon.common.config.security.AuthMemberEmail;
 import v1.amachon.project.service.request.CreateProjectRequest;
 import v1.amachon.project.service.request.ModifyProjectRequest;
-import v1.amachon.project.service.request.ProjectManagementDto;
 import v1.amachon.project.service.ProjectService;
 import v1.amachon.project.service.response.ModifyProjectResponse;
+import v1.amachon.project.service.response.ProjectManagementResponse;
 
 @RequiredArgsConstructor
 @RestController
@@ -48,9 +48,4 @@ public class ProjectController {
         return ResponseEntity.noContent().build();
     }
 
-    @ApiOperation(value = "프로젝트 관리", notes = "참여중인 프로젝트, 생성한 프로젝트를 조회")
-    @GetMapping("/project/management")
-    public ResponseEntity<ProjectManagementDto> getProjectManagement(@Parameter(hidden = true) @AuthMemberEmail String email) {
-        return ResponseEntity.ok(projectService.getProjectManagement());
-    }
 }

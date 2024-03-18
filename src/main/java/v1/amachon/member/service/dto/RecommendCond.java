@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class RecommendCond {
-    public List<String> regionTagNames;
+    public String regionTagName;
     public List<String> techTagNames;
 
     public RecommendCond(Project project) {
-        this.regionTagNames = Arrays.asList(project.getRegionTag().getName());
+        this.regionTagName = project.getRegionTag().getName();
         this.techTagNames = project.getTechTags().stream().map(t -> t.getTechTag().getName()).collect(Collectors.toList());
     }
 }

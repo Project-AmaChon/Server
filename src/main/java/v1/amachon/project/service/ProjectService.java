@@ -13,6 +13,9 @@ import v1.amachon.project.service.request.*;
 import v1.amachon.project.entity.Project;
 import v1.amachon.project.service.exception.*;
 import v1.amachon.project.service.response.ModifyProjectResponse;
+import v1.amachon.project.service.response.MyProjectResponse;
+import v1.amachon.project.service.response.ParticipatingProjectResponse;
+import v1.amachon.project.service.response.ProjectManagementResponse;
 import v1.amachon.tags.entity.regiontag.RegionTag;
 import v1.amachon.tags.entity.techtag.ProjectTechTag;
 import v1.amachon.tags.entity.techtag.TechTag;
@@ -93,12 +96,4 @@ public class ProjectService {
         project.delete();
    }
 
-    @Transactional(readOnly = true)
-    public ProjectManagementDto getProjectManagement() {
-        Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
-                .orElseThrow(UnauthorizedException::new);
-        List<MyProjectDto> myProject = projectRepository.findByLeaderIdFetchTechTags(member.getId()).stream().map(MyProjectDto::new).collect(Collectors.toList());
-        List<ParticipatingProjectDto> participatingProject = projectRepository.findParticipatingProjectByMemberId(member.getId()).stream().map(ParticipatingProjectDto::new).collect(Collectors.toList());
-        return new ProjectManagementDto(participatingProject, myProject);
-    }
 }

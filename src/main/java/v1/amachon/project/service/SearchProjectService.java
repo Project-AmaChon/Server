@@ -14,8 +14,13 @@ import v1.amachon.project.service.request.ProjectSearchCond;
 import v1.amachon.project.service.exception.NotFoundProjectException;
 import v1.amachon.tags.service.RegionTagService;
 import v1.amachon.tags.service.TechTagService;
+import v1.amachon.tags.service.dto.RegionTagDto;
+import v1.amachon.tags.service.dto.TechTagDto;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -45,20 +50,27 @@ public class SearchProjectService {
     }
 
     public List<ProjectResponse> getSearchProjects(ProjectSearchCond cond) {
-        addChildrenTechTags(cond);
         addChildrenRegionTags(cond);
+        addChildrenTechTags(cond);
         return projectSearchRepository.searchProjectByAllCond(cond);
     }
 
+
     private void addChildrenRegionTags(ProjectSearchCond cond) {
+        Set<String> tagNames = new HashSet<>();
+
         for (String regionTag : cond.getRegionTagNames()) {
-            cond.getRegionTagNames().addAll(regionTagService.getRegionTagNameWithChildrenTags(regionTag));
+            tagNames.addAll(regionTagService.getRegionTagNameWithChildrenTags(regionTag));
         }
+        cond.regionTagNames.addAll(tagNames);
     }
 
     private void addChildrenTechTags(ProjectSearchCond cond) {
+        Set<String> tagNames = new HashSet<>();
+
         for (String techTag : cond.getTechTagNames()) {;
-            cond.getTechTagNames().addAll(techTagService.getTechTagNameWithChildrenTags(techTag));
+            tagNames.addAll(techTagService.getTechTagNameWithChildrenTags(techTag));
         }
+        cond.techTagNames.addAll(tagNames);
     }
 }
