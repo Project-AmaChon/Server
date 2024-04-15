@@ -4,6 +4,7 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import v1.amachon.project.repository.ProjectRepository;
 import v1.amachon.project.service.SearchProjectService;
 import v1.amachon.project.service.response.ProjectDetailResponse;
 import v1.amachon.project.service.response.ProjectResponse;
@@ -17,6 +18,7 @@ import java.util.List;
 public class SearchProjectController {
 
     private final SearchProjectService searchProjectService;
+    private final ProjectRepository projectRepository;
 
     @ApiOperation(value = "프로젝트 상세 조회", notes = "프로젝트 ID를 입력받아 해당 프로젝트의 상세 정보를 조회합니다.")
     @GetMapping("/project/{projectId}")

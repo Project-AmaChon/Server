@@ -10,7 +10,6 @@ import v1.amachon.project.service.request.CreateProjectRequest;
 import v1.amachon.project.service.request.ModifyProjectRequest;
 import v1.amachon.project.service.ProjectService;
 import v1.amachon.project.service.response.ModifyProjectResponse;
-import v1.amachon.project.service.response.ProjectManagementResponse;
 
 @RequiredArgsConstructor
 @RestController
@@ -47,5 +46,4 @@ public class ProjectController {
         projectService.deleteProject(projectId);
         return ResponseEntity.noContent().build();
     }
-
 }
