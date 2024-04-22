@@ -13,7 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(@Param("email") String email);
     Optional<Member> findByNickname(String nickname);
 
-    @Query("SELECT m FROM Member m JOIN FETCH m.authorities a JOIN FETCH m.profile mp JOIN FETCH m.techTags mt " +
+    @Query("SELECT m FROM Member m JOIN FETCH m.profile mp JOIN FETCH m.techTags mt " +
             "JOIN FETCH mt.techTag JOIN FETCH m.regionTag WHERE m.id = :memberId")
     Optional<Member> findById(@Param("memberId") Long memberId);
 

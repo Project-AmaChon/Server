@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import v1.amachon.common.entity.BaseEntity;
-import v1.amachon.member.service.dto.ProfileResponseDto;
+import v1.amachon.member.service.dto.UpdateProfileRequestDto;
 import v1.amachon.member.service.dto.join.JoinDto;
 import v1.amachon.message.entity.MessageRoom;
 import v1.amachon.notification.entity.Notification;
@@ -56,7 +56,7 @@ public class Member extends BaseEntity {
     private List<MessageRoom> messageRooms = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<MemberTechTag> techTags = new HashSet<>();
+    private List<MemberTechTag> techTags = new ArrayList<>();
 
     @Builder
     public Member(String email, String nickname, String password) {
@@ -97,7 +97,7 @@ public class Member extends BaseEntity {
         this.regionTag = regionTag;
     }
 
-    public void changeProfile(ProfileResponseDto profileDto) {
-        this.profile.changeProfile(profileDto);
+    public void changeProfile(UpdateProfileRequestDto updateProfileRequest) {
+        this.profile.changeProfile(updateProfileRequest);
     }
 }

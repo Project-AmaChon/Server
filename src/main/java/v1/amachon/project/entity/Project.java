@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.format.annotation.DateTimeFormat;
 import v1.amachon.common.entity.BaseEntity;
 import v1.amachon.common.exception.BadRequestException;
@@ -41,6 +42,7 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "leader_id")
     private Member leader;
 
+    @BatchSize(size = 10)
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<TeamMember> teamMembers = new ArrayList<>();
 
