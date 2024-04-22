@@ -43,7 +43,7 @@ public class AuthController {
     @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임이 중복되면 DUPLICATE_NICKNAME(3012) 에러를 리턴")
     @PostMapping("/join/check-nickname")
     public ResponseEntity<Void> checkNickname(@RequestBody NicknameDto nicknameDto) {
-        memberService.isDuplicateNickname(nicknameDto);
+        memberService.isDuplicateNickname(nicknameDto.getNickname());
         return ResponseEntity.noContent().build();
     }
 

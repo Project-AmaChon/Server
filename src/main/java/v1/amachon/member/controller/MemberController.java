@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import v1.amachon.member.service.dto.ProfileResponseDto;
 import v1.amachon.member.service.dto.UpdateProfileRequestDto;
 import v1.amachon.member.service.dto.join.JoinDto;
-import v1.amachon.member.service.dto.login.TokenDto;
 import v1.amachon.member.service.MemberService;
 
 import javax.validation.Valid;
@@ -23,8 +22,9 @@ public class MemberController {
 
     @ApiOperation(value = "회원 가입 및 자동 로그인", notes = "회원 가입이 성공적으로 진행될 시 엑세스 토큰 발급")
     @PostMapping("/join")
-    public ResponseEntity<TokenDto> join(@RequestBody @Valid JoinDto joinDto) {
-        return ResponseEntity.ok(memberService.join(joinDto));
+    public ResponseEntity<Void> join(@RequestBody @Valid JoinDto joinDto) {
+        memberService.join(joinDto);
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(value = "마이페이지 조회", notes = "로그인 되어있는 유저의 마이페이지를 조회합니다.")
