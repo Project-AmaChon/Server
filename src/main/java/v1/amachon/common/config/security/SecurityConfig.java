@@ -12,16 +12,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import v1.amachon.common.config.jwt.ExceptionHandlerFilter;
 import v1.amachon.common.config.jwt.JwtAuthenticationFilter;
-import v1.amachon.common.config.jwt.JwtEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtEntryPoint jwtEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
@@ -40,12 +40,7 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-//                .antMatchers("/", "/join", "/login", "/swagger-ui/**").permitAll()
                 .anyRequest().permitAll()
-
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtEntryPoint)
 
                 .and()
                 .logout().disable()
@@ -53,6 +48,7 @@ public class SecurityConfig {
 
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 }

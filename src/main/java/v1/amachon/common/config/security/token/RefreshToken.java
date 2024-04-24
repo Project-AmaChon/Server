@@ -1,4 +1,4 @@
-package v1.amachon.member.entity.auth;
+package v1.amachon.common.config.security.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,23 +9,23 @@ import org.springframework.data.redis.core.TimeToLive;
 import javax.persistence.Id;
 
 @Getter
-@RedisHash("logoutAccessToken")
+@RedisHash("refreshToken")
 @AllArgsConstructor
 @Builder
-public class LogoutAccessToken {
+public class RefreshToken {
 
     @Id
     private String id;
 
-    private String username;
+    private String refreshToken;
 
     @TimeToLive
     private Long expiration;
 
-    public static LogoutAccessToken of(String accessToken, String username, Long remainingMilliSeconds) {
-        return LogoutAccessToken.builder()
-                .id(accessToken)
-                .username(username)
+    public static RefreshToken createRefreshToken(String username, String refreshToken, Long remainingMilliSeconds) {
+        return RefreshToken.builder()
+                .id(username)
+                .refreshToken(refreshToken)
                 .expiration(remainingMilliSeconds / 1000)
                 .build();
     }

@@ -1,11 +1,8 @@
 package v1.amachon.common.config.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import v1.amachon.common.config.jwt.constants.JwtExpiration;
 
@@ -61,9 +58,14 @@ public class JwtTokenUtil {
                 .compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        String username = getUsername(token);
-        return username.equals((userDetails.getUsername()));
+    public Boolean validateToken(String token) {
+        try {
+            if (token.isEmpty()) return false;
+            String username = getUsername(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 
 }

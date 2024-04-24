@@ -1,7 +1,10 @@
 package v1.amachon.common.advice;
 
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import v1.amachon.common.exception.BadRequestException;
@@ -15,34 +18,29 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class CommonErrorControllerAdvice {
 
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler(value = {BadRequestException.class, InvalidFormatException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleBadRequest(Exception e) {
         log.debug("HandleBadRequest : {}", e.getMessage());
-        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        System.out.println("여긴들어옴");
+        return ResponseEntity.status(BAD_REQUEST).body(new ErrorResponse(e.getMessage(), BAD_REQUEST.value()));
     }
 
-    @ExceptionHandler(InvalidFormatException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidFormat(Exception e) {
-        log.debug("HandleBadRequest : {}", e.getMessage());
-        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-    }
-
-
-    @ExceptionHandler(UnauthorizedException.class)
+    @ExceptionHandler(value = {JwtException.class, JwtException.class, UnauthorizedException.class})
     public ResponseEntity<ErrorResponse> handleUnauthorized(Exception e) {
         log.debug("UnauthorizedException : {}", e.getMessage());
-        return ResponseEntity.status(UNAUTHORIZED).build();
+        System.out.println("드루오냐고");
+        return ResponseEntity.status(UNAUTHORIZED).body(new ErrorResponse(e.getMessage(), UNAUTHORIZED.value()));
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(final Exception e) {
         log.debug("NotFoundException : {}", e.getMessage());
-        return ResponseEntity.status(NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity.status(NOT_FOUND).body(new ErrorResponse(e.getMessage(), NOT_FOUND.value()));
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerError(RuntimeException e) {
         log.debug("RuntimeException : {}", e.getMessage());
-        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage()));
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage(), INTERNAL_SERVER_ERROR.value()));
     }
 }
