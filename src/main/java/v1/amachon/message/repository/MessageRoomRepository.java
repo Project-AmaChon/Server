@@ -19,7 +19,7 @@ public interface MessageRoomRepository extends JpaRepository<MessageRoom, Long> 
     Optional<MessageRoom> findByIdFetch(@Param("roomId") Long roomId);
 
     @Query("SELECT m FROM MessageRoom m JOIN FETCH m.from JOIN FETCH m.messages mm " +
-            "JOIN FETCH mm.sender mms JOIN FETCH mms.profile " +
+            "JOIN FETCH mm.sender mms " +
             "WHERE m.id = :roomId AND m.status = 'NORMAL' " +
             "ORDER BY m.lastModifiedDate DESC, mm.lastModifiedDate DESC")
     Optional<MessageRoom> findByIdFetchMessages(@Param("roomId") Long roomId);

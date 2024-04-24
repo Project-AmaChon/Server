@@ -24,7 +24,7 @@ public class MessageController {
                                                         @PathVariable("memberId") Long memberId,
                                                         @RequestBody SendMessageDto sendMessageDto) {
         messageService.sendMessageByMemberId(memberId, sendMessageDto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "메시지 보내기(메시지 방 ID 이용)", notes = "메시지 함의 메시지 방을 통해 메시지를 보낼 때")
@@ -33,7 +33,7 @@ public class MessageController {
                                                       @PathVariable("roomId") Long roomId,
                                                       @RequestBody SendMessageDto sendMessageDto) {
         messageService.sendMessageByRoomId(roomId, sendMessageDto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "메시지 함 조회", notes = "메시지 함의 메시지 방 정보 리스트를 반환")
@@ -61,7 +61,7 @@ public class MessageController {
     public ResponseEntity<Void> deleteMessage(@RequestHeader("Authorization")String accessToken,
                                                      @PathVariable("messageId") Long messageId) {
         messageService.deleteMessage(messageId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "메시지 방 나가기", notes = "메시지 방과 그 방의 메시지를 모두 삭제")
@@ -69,6 +69,6 @@ public class MessageController {
     public ResponseEntity<Void> leaveMessageRoom(@RequestHeader("Authorization")String accessToken,
                                                      @PathVariable("roomId") Long roomId) {
         messageService.leaveMessageRoom(roomId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

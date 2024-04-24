@@ -14,9 +14,9 @@ import v1.amachon.mail.repository.EmailVerificationRepository;
 import v1.amachon.member.service.dto.login.LoginDto;
 import v1.amachon.member.service.dto.login.TokenDto;
 import v1.amachon.member.entity.Member;
-import v1.amachon.member.entity.auth.RefreshToken;
+import v1.amachon.common.config.security.token.RefreshToken;
 import v1.amachon.member.repository.MemberRepository;
-import v1.amachon.member.repository.auth.RefreshTokenRedisRepository;
+import v1.amachon.common.config.security.repository.RefreshTokenRedisRepository;
 import v1.amachon.member.service.exception.*;
 
 import java.time.LocalDateTime;

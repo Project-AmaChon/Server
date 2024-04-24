@@ -22,7 +22,7 @@ public class ProjectController {
     @PostMapping("/project")
     public ResponseEntity<Void> createProject(@RequestBody CreateProjectRequest projectCreateDto) {
         projectService.createProject(projectCreateDto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "프로젝트 수정", notes = "프로젝트 수정 페이지 정보 받아오기")
@@ -37,13 +37,13 @@ public class ProjectController {
     public ResponseEntity<Void> modifyProject(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("projectId") Long projectId,
                                               @RequestBody ModifyProjectRequest modifyProjectRequest) {
         projectService.modifyProject(projectId, modifyProjectRequest);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "프로젝트 삭제", notes = "프로젝트 삭제하기(상태 값 변경(EXPIRED))")
     @PostMapping("/project/{projectId}/delete")
     public ResponseEntity<Void> deleteProject(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("projectId") Long projectId) {
         projectService.deleteProject(projectId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

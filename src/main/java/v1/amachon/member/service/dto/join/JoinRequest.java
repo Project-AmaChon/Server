@@ -11,7 +11,7 @@ import javax.validation.constraints.Email;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JoinDto {
+public class JoinRequest {
     @Email
     private String email;
     private String nickname;

@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static v1.amachon.member.entity.QMember.member;
-import static v1.amachon.member.entity.QProfile.profile;
 import static v1.amachon.tags.entity.regiontag.QRegionTag.regionTag;
 import static v1.amachon.tags.entity.techtag.QMemberTechTag.memberTechTag;
 import static v1.amachon.tags.entity.techtag.QTechTag.techTag;
@@ -46,7 +45,6 @@ public class MemberRecommendRepo {
         Pageable pageable = PageRequest.of(0, 10);
         List<Member> members = queryFactory.select(member)
                 .from(member)
-                .innerJoin(member.profile, profile).fetchJoin()
                 .innerJoin(member.techTags, memberTechTag)
                 .innerJoin(memberTechTag.techTag, techTag)
                 .innerJoin(member.regionTag, regionTag).fetchJoin()

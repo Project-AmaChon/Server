@@ -2,7 +2,7 @@ package v1.amachon.member.service.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import v1.amachon.member.entity.Profile;
+import v1.amachon.member.entity.vo.Profile;
 
 import java.util.List;
 

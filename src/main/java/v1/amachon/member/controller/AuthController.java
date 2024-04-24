@@ -30,21 +30,21 @@ public class AuthController {
     public ResponseEntity<Void> sendVerificationCode(@RequestBody EmailDto emailDto) {
         memberService.isDuplicateEmail(emailDto.getEmail());
         emailService.sendVerificationCode(emailDto.getEmail());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "인증 코드 확인", notes = "인증 코드가 올바르지 않으면 INVALID_CODE(2011) 에러를 리턴")
     @PostMapping("/join/certification")
     public ResponseEntity<Void> certification(@RequestBody CertificationDto certificationDto) {
         authService.certify(certificationDto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "닉네임 중복 확인", notes = "닉네임이 중복되면 DUPLICATE_NICKNAME(3012) 에러를 리턴")
     @PostMapping("/join/check-nickname")
     public ResponseEntity<Void> checkNickname(@RequestBody NicknameDto nicknameDto) {
         memberService.isDuplicateNickname(nicknameDto.getNickname());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "로그인", notes = "아이디(이메일)과 패스워드가 일치하면 정상적으로 로그인")

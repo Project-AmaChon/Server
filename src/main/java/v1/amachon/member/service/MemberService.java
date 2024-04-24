@@ -9,7 +9,7 @@ import v1.amachon.common.config.s3.S3UploadUtil;
 import v1.amachon.common.exception.UnauthorizedException;
 import v1.amachon.member.service.dto.ProfileResponseDto;
 import v1.amachon.member.service.dto.UpdateProfileRequestDto;
-import v1.amachon.member.service.dto.join.JoinDto;
+import v1.amachon.member.service.dto.join.JoinRequest;
 import v1.amachon.member.entity.Member;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.member.service.exception.DuplicatedEmailException;
@@ -30,11 +30,11 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final S3UploadUtil s3UploadUtil;
 
-    public void join(JoinDto joinDto) {
-        isDuplicateEmail(joinDto.getEmail());
-        isDuplicateNickname(joinDto.getNickname());
-        joinDto.setPassword(passwordEncoder.encode(joinDto.getPassword()));
-        memberRepository.save(Member.ofMember(joinDto));
+    public void join(JoinRequest joinRequest) {
+        isDuplicateEmail(joinRequest.getEmail());
+        isDuplicateNickname(joinRequest.getNickname());
+        joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
+        memberRepository.save(Member.ofMember(joinRequest));
     }
 
     public void isDuplicateEmail(String email) {

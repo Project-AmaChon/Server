@@ -81,7 +81,7 @@ public class MessageService {
     }
 
     public List<MessageRoomDto> getMessageRooms() {
-        Member member = memberRepository.findByEmailFetchMessageRoom(SecurityUtils.getLoggedUserEmail())
+        Member member = memberRepository.findFetchMessageRoomByEmail(SecurityUtils.getLoggedUserEmail())
                 .orElseThrow(UnauthorizedException::new);
         return member.getMessageRooms().stream().map(MessageRoomDto::new).collect(Collectors.toList());
     }

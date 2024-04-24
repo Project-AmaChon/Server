@@ -2,7 +2,6 @@ package v1.amachon.common.advice;
 
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,19 +15,17 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 @Slf4j
-public class CommonErrorControllerAdvice {
+public class CommonControllerAdvice {
 
     @ExceptionHandler(value = {BadRequestException.class, InvalidFormatException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleBadRequest(Exception e) {
         log.debug("HandleBadRequest : {}", e.getMessage());
-        System.out.println("여긴들어옴");
         return ResponseEntity.status(BAD_REQUEST).body(new ErrorResponse(e.getMessage(), BAD_REQUEST.value()));
     }
 
-    @ExceptionHandler(value = {JwtException.class, JwtException.class, UnauthorizedException.class})
+    @ExceptionHandler(value = {UnauthorizedException.class})
     public ResponseEntity<ErrorResponse> handleUnauthorized(Exception e) {
         log.debug("UnauthorizedException : {}", e.getMessage());
-        System.out.println("드루오냐고");
         return ResponseEntity.status(UNAUTHORIZED).body(new ErrorResponse(e.getMessage(), UNAUTHORIZED.value()));
     }
 

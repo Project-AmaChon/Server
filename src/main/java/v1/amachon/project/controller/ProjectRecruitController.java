@@ -27,28 +27,28 @@ public class ProjectRecruitController {
     @PostMapping("/project/{projectId}/apply")
     public ResponseEntity<Void> projectApply(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("projectId") Long projectId) {
         projectRecruitService.applyForProject(projectId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "참가 신청 수락", notes = "프로젝트 참가 신청에 대한 수락 요청")
     @GetMapping("/project/apply/accept/{recruitId}")
     public ResponseEntity<Void> acceptRecruitApply(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("recruitId") Long recruitId) {
         projectRecruitService.recruitAccept(recruitId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "참가 신청 거절", notes = "프로젝트 참가 신청에 대한 거절 요청")
     @GetMapping("/project/apply/reject/{recruitId}")
     public ResponseEntity<Void> rejectRecruitApply(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("recruitId") Long recruitId) {
         projectRecruitService.recruitReject(recruitId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "팀원 내보내기", notes = "팀원 추방 기능")
     @PostMapping("/project/{projectId}/kick/{teamMemberId}")
     public ResponseEntity<Void> kickTeamMember(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("teamMemberId") Long teamMemberId) {
         projectRecruitService.kickTeamMember(teamMemberId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "프로젝트 참가 신청 현황", notes = "프로젝트에 참기 신청을 한 사람들의 간단한 프로필 반환")
