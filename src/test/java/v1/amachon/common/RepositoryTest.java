@@ -11,10 +11,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Repository;
 import v1.amachon.common.config.JpaAuditingConfig;
 import v1.amachon.common.config.querydsl.QuerydslConfig;
+import v1.amachon.common.config.security.SecurityConfig;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @DataJpaTest(includeFilters = @Filter(type = FilterType.ANNOTATION, classes = Repository.class))
-@Import({JpaAuditingConfig.class, QuerydslConfig.class})
+@Import({JpaAuditingConfig.class, QuerydslConfig.class, SecurityConfig.class})
 public @interface RepositoryTest {
 }

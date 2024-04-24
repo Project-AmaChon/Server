@@ -18,7 +18,7 @@ import v1.amachon.member.entity.Member;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.member.service.dto.ProfileResponseDto;
 import v1.amachon.member.service.dto.UpdateProfileRequestDto;
-import v1.amachon.member.service.dto.join.JoinDto;
+import v1.amachon.member.service.dto.join.JoinRequest;
 import v1.amachon.member.service.exception.DuplicatedEmailException;
 import v1.amachon.member.service.exception.DuplicatedNicknameException;
 import v1.amachon.member.service.exception.NotFoundMemberException;
@@ -72,13 +72,13 @@ public class MemberServiceTest {
     @Test
     void joinSuccess() {
         // given
-        JoinDto joinDto = JoinDto.builder().email(MemberFixtures.종범_이메일)
+        JoinRequest joinRequest = JoinRequest.builder().email(MemberFixtures.종범_이메일)
                 .password(MemberFixtures.종범_비밀번호)
                 .nickname(MemberFixtures.종범_닉네임)
                 .build();
 
         // when
-        memberService.join(joinDto);
+        memberService.join(joinRequest);
 
         // then
         Assertions.assertThat(memberRepository.findByEmail(MemberFixtures.종범_이메일).get()).isNotNull();
@@ -88,13 +88,13 @@ public class MemberServiceTest {
     @Test
     void joinFailByDuplicateEmail() {
         // given
-        JoinDto joinDto = JoinDto.builder().email(MemberFixtures.정우_이메일)
+        JoinRequest joinRequest = JoinRequest.builder().email(MemberFixtures.정우_이메일)
                 .password(MemberFixtures.정우_비밀번호)
                 .nickname(MemberFixtures.종범_닉네임)
                 .build();
 
         // when, then
-        Assertions.assertThatThrownBy(() -> memberService.join(joinDto))
+        Assertions.assertThatThrownBy(() -> memberService.join(joinRequest))
                 .isInstanceOf(DuplicatedEmailException.class);
     }
 
@@ -102,13 +102,13 @@ public class MemberServiceTest {
     @Test
     void joinFailByDuplicateNickname() {
         // given
-        JoinDto joinDto = JoinDto.builder().email(MemberFixtures.종범_이메일)
+        JoinRequest joinRequest = JoinRequest.builder().email(MemberFixtures.종범_이메일)
                 .password(MemberFixtures.종범_비밀번호)
                 .nickname(MemberFixtures.정우_닉네임)
                 .build();
 
         // when, then
-        Assertions.assertThatThrownBy(() -> memberService.join(joinDto))
+        Assertions.assertThatThrownBy(() -> memberService.join(joinRequest))
                 .isInstanceOf(DuplicatedNicknameException.class);
     }
 
@@ -214,7 +214,7 @@ public class MemberServiceTest {
         RegionTag seoul = regionTagRepository.save(RegionTag.builder().depth(0).name("서울").build());
         RegionTag gangnam_gu = regionTagRepository.save(RegionTag.builder().parent(seoul).depth(1).name("강남구").build());
 
-        member.changeRegion(gangnam_gu);
+        member.changeRegionTag(gangnam_gu);
         memberRepository.save(member);
     }
 
