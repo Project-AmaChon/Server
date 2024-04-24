@@ -1,4 +1,4 @@
-package v1.amachon.member.entity;
+package v1.amachon.member.entity.vo;
 
 import lombok.AccessLevel;
 import lombok.Builder;

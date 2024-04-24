@@ -1,36 +1,31 @@
-package v1.amachon.member.entity;
+package v1.amachon.member.entity.vo;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import v1.amachon.member.entity.Member;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity
+@Embeddable
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
 @Builder
 public class Authority implements GrantedAuthority {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "authority_id")
-    private Long id;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "users_id")
-    private Member member;
 
     private String role;
 
     public static Authority ofMember(Member member) {
         return Authority.builder()
                 .role("ROLE_USER")
-                .member(member)
+                .build();
+    }
+
+    public static Authority ofManager(Member member) {
+        return Authority.builder()
+                .role("ROLE_MANAGER")
                 .build();
     }
 
