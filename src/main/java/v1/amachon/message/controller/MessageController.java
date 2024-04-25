@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import v1.amachon.message.service.dto.MessageDto;
-import v1.amachon.message.service.dto.SendMessageDto;
+import v1.amachon.message.service.dto.SendMessageRequest;
 import v1.amachon.message.service.dto.MessageRoomDto;
 import v1.amachon.message.service.MessageService;
 
@@ -22,8 +22,8 @@ public class MessageController {
     @PostMapping("/messages/{memberId}/send")
     public ResponseEntity<Void> sendMessageByMemberId(@RequestHeader("Authorization")String accessToken,
                                                         @PathVariable("memberId") Long memberId,
-                                                        @RequestBody SendMessageDto sendMessageDto) {
-        messageService.sendMessageByMemberId(memberId, sendMessageDto);
+                                                        @RequestBody SendMessageRequest sendMessageRequest) {
+        messageService.sendMessageByMemberId(memberId, sendMessageRequest);
         return ResponseEntity.ok().build();
     }
 
@@ -31,8 +31,8 @@ public class MessageController {
     @PostMapping("/messages/room/{roomId}/send")
     public ResponseEntity<Void> sendMessageByRoomId(@RequestHeader("Authorization")String accessToken,
                                                       @PathVariable("roomId") Long roomId,
-                                                      @RequestBody SendMessageDto sendMessageDto) {
-        messageService.sendMessageByRoomId(roomId, sendMessageDto);
+                                                      @RequestBody SendMessageRequest sendMessageRequest) {
+        messageService.sendMessageByRoomId(roomId, sendMessageRequest);
         return ResponseEntity.ok().build();
     }
 

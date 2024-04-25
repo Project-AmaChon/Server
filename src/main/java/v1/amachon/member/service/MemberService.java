@@ -59,7 +59,7 @@ public class MemberService {
     }
 
     public ProfileResponseDto getProfile(Long id) {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdFetchTags(id)
                 .orElseThrow(NotFoundMemberException::new);
         List<String> techTags = member.getTechTags().stream().map(mt -> mt.getTechTag().getName()).collect(Collectors.toList());
         return new ProfileResponseDto(member.getProfile(), member.getNickname(), techTags, member.getRegionTag().getName());
@@ -72,7 +72,7 @@ public class MemberService {
         if (!member.getProfile().getProfileImageUrl().isEmpty()) {
             s3UploadUtil.fileDelete(member.getProfile().getProfileImageUrl());
         }
-        member.getProfile().changeProfileImage(profileImageUrl);
+        member.changeProfileImage(profileImageUrl);
         memberRepository.save(member);
     }
 

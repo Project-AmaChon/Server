@@ -6,11 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import v1.amachon.common.exception.UnauthorizedException;
 import v1.amachon.member.entity.Member;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.common.config.redis.CacheKey;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     @Cacheable(value = CacheKey.USER, key = "#username", unless = "#result == null")
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmailWithAuthorities(username).orElseThrow(() -> new NoSuchElementException("없는 유저 입니다."));
+        Member member = memberRepository.findByEmailWithAuthorities(username).orElseThrow(() -> new UnauthorizedException());
         return CustomUserDetails.of(member);
     }
 }

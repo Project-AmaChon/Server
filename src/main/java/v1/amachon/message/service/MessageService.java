@@ -3,13 +3,14 @@ package v1.amachon.message.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import v1.amachon.common.exception.BadRequestException;
 import v1.amachon.common.exception.UnauthorizedException;
 import v1.amachon.common.entity.BaseEntity;
 import v1.amachon.member.entity.Member;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.member.service.exception.NotFoundMemberException;
 import v1.amachon.message.service.dto.MessageDto;
-import v1.amachon.message.service.dto.SendMessageDto;
+import v1.amachon.message.service.dto.SendMessageRequest;
 import v1.amachon.message.service.dto.MessageRoomDto;
 import v1.amachon.message.entity.Message;
 import v1.amachon.message.entity.MessageRoom;
@@ -32,25 +33,7 @@ public class MessageService {
     private final MessageRoomRepository messageRoomRepository;
     private final MemberRepository memberRepository;
 
-    public void send(MessageRoom messageRoom, SendMessageDto sendMessageDto) {
-        Message from = Message.builder().messageRoom(messageRoom)
-                .sender(messageRoom.getFrom())
-                .receiver(messageRoom.getTo())
-                .content(sendMessageDto.getContent())
-                .build();
-        Message to = Message.builder().messageRoom(messageRoom.getToSend())
-                .sender(messageRoom.getFrom())
-                .receiver(messageRoom.getTo())
-                .content(sendMessageDto.getContent())
-                .build();
-        messageRepository.save(from);
-        messageRepository.save(to);
-        messageRoom.sendMessage(from, to);
-        messageRoomRepository.save(messageRoom);
-        messageRoomRepository.save(messageRoom.getToSend());
-    }
-
-    public void sendMessageByMemberId(Long memberId, SendMessageDto sendMessageDto) {
+    public void sendMessageByMemberId(Long memberId, SendMessageRequest sendMessageRequest) {
         Member from = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
                 .orElseThrow(UnauthorizedException::new);
         Member to = memberRepository.findById(memberId).orElseThrow(
@@ -66,24 +49,41 @@ public class MessageService {
         } else if (messageRoom.get().getStatus() == BaseEntity.Status.EXPIRED) {
             messageRoom.get().init();
         }
-        send(messageRoom.get(), sendMessageDto);
+        send(messageRoom.get(), sendMessageRequest);
     }
 
-    public void sendMessageByRoomId(Long roomId, SendMessageDto sendMessageDto) {
+    public void sendMessageByRoomId(Long roomId, SendMessageRequest sendMessageRequest) {
         Member member = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
                 .orElseThrow(UnauthorizedException::new);
         MessageRoom messageRoom = messageRoomRepository.findByIdFetch(roomId)
                 .orElseThrow(NotFoundMessageRoomException::new);
         if (member.getId() != messageRoom.getFrom().getId()) {
-            throw new RuntimeException();
+            throw new BadRequestException();
         }
-        send(messageRoom, sendMessageDto);
+        send(messageRoom, sendMessageRequest);
+    }
+
+    public void send(MessageRoom messageRoom, SendMessageRequest sendMessageRequest) {
+        Message from = Message.builder().messageRoom(messageRoom)
+                .sender(messageRoom.getFrom())
+                .receiver(messageRoom.getTo())
+                .content(sendMessageRequest.getContent())
+                .build();
+        Message to = Message.builder().messageRoom(messageRoom.getToSend())
+                .sender(messageRoom.getFrom())
+                .receiver(messageRoom.getTo())
+                .content(sendMessageRequest.getContent())
+                .build();
+        messageRepository.save(from);
+        messageRepository.save(to);
+        messageRoom.sendMessage(from, to);
+        messageRoomRepository.save(messageRoom);
+        messageRoomRepository.save(messageRoom.getToSend());
     }
 
     public List<MessageRoomDto> getMessageRooms() {
-        Member member = memberRepository.findFetchMessageRoomByEmail(SecurityUtils.getLoggedUserEmail())
-                .orElseThrow(UnauthorizedException::new);
-        return member.getMessageRooms().stream().map(MessageRoomDto::new).collect(Collectors.toList());
+        List<MessageRoom> messageRooms = messageRoomRepository.findByFromEmail(SecurityUtils.getLoggedUserEmail());
+        return messageRooms.stream().map(MessageRoomDto::new).collect(Collectors.toList());
     }
 
     public List<MessageDto> getMessages(Long roomId) {
@@ -94,7 +94,7 @@ public class MessageService {
         messageRoom.initUnReadMessageCount();
         messageRoomRepository.save(messageRoom);
         if (member.getId() != messageRoom.getFrom().getId()) {
-            throw new RuntimeException();
+            throw new BadRequestException();
         }
         return messageRoom.getMessages().stream().map(MessageDto::new).collect(Collectors.toList());
     }
@@ -105,7 +105,7 @@ public class MessageService {
         Message message = messageRepository.findByIdFetch(messageId)
                 .orElseThrow(NotFoundMessageException::new);
         if (member.getId() != message.getSender().getId()) {
-            throw new RuntimeException();
+            throw new BadRequestException();
         }
         message.getMessageRoom().initUnReadMessageCount();
         return new MessageDto(message);
@@ -117,7 +117,7 @@ public class MessageService {
         Message message = messageRepository.findByIdFetch(messageId)
                 .orElseThrow(NotFoundMessageException::new);
         if (member.getId() != message.getSender().getId()) {
-            throw new RuntimeException();
+            throw new BadRequestException();
         }
         message.expired();
         messageRepository.save(message);
@@ -129,11 +129,10 @@ public class MessageService {
         MessageRoom messageRoom = messageRoomRepository.findByIdFetchMessages(roomId)
                 .orElseThrow(NotFoundMessageException::new);
         if (member.getId() != messageRoom.getFrom().getId()) {
-            throw new RuntimeException();
+            throw new BadRequestException();
         }
         for (Message message : messageRoom.getMessages()) {
             message.expired();
-            messageRepository.save(message);
         }
         messageRoom.expired();
     }

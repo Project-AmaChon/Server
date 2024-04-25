@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import v1.amachon.common.config.security.AuthMemberEmail;
+import v1.amachon.common.config.security.AuthenticatedMemberEmail;
 import v1.amachon.project.service.request.CreateProjectRequest;
 import v1.amachon.project.service.request.ModifyProjectRequest;
 import v1.amachon.project.service.ProjectService;
@@ -27,14 +27,14 @@ public class ProjectController {
 
     @ApiOperation(value = "프로젝트 수정", notes = "프로젝트 수정 페이지 정보 받아오기")
     @GetMapping("/project/{projectId}/modify")
-    public ResponseEntity<ModifyProjectResponse> getModifyProject(@Parameter(hidden = true) @AuthMemberEmail String email,
+    public ResponseEntity<ModifyProjectResponse> getModifyProject(@Parameter(hidden = true) @AuthenticatedMemberEmail String email,
                                                                   @PathVariable("projectId") Long projectId) {
         return ResponseEntity.ok(projectService.getModifyProject(projectId));
     }
 
     @ApiOperation(value = "프로젝트 수정", notes = "프로젝트 수정하기")
     @PatchMapping("/project/{projectId}/modify")
-    public ResponseEntity<Void> modifyProject(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("projectId") Long projectId,
+    public ResponseEntity<Void> modifyProject(@Parameter(hidden = true) @AuthenticatedMemberEmail String email, @PathVariable("projectId") Long projectId,
                                               @RequestBody ModifyProjectRequest modifyProjectRequest) {
         projectService.modifyProject(projectId, modifyProjectRequest);
         return ResponseEntity.ok().build();
@@ -42,7 +42,7 @@ public class ProjectController {
 
     @ApiOperation(value = "프로젝트 삭제", notes = "프로젝트 삭제하기(상태 값 변경(EXPIRED))")
     @PostMapping("/project/{projectId}/delete")
-    public ResponseEntity<Void> deleteProject(@Parameter(hidden = true) @AuthMemberEmail String email, @PathVariable("projectId") Long projectId) {
+    public ResponseEntity<Void> deleteProject(@Parameter(hidden = true) @AuthenticatedMemberEmail String email, @PathVariable("projectId") Long projectId) {
         projectService.deleteProject(projectId);
         return ResponseEntity.ok().build();
     }

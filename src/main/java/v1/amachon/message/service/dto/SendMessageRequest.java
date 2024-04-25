@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendMessageDto {
+public class SendMessageRequest {
     private String content;
 }

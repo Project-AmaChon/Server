@@ -87,4 +87,8 @@ public class Member extends BaseEntity {
     public void changeProfile(UpdateProfileRequestDto updateProfileRequest) {
         this.profile.changeProfile(updateProfileRequest);
     }
+
+    public void changeProfileImage(String imageUrl) {
+        this.profile.changeProfileImage(imageUrl);
+    }
 }

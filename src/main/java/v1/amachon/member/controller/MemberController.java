@@ -10,7 +10,6 @@ import v1.amachon.member.service.dto.UpdateProfileRequestDto;
 import v1.amachon.member.service.dto.join.JoinRequest;
 import v1.amachon.member.service.MemberService;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 
