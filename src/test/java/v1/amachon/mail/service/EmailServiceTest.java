@@ -35,16 +35,15 @@ public class EmailServiceTest {
     @DisplayName("인증 이메일을 전송할 수 있다.")
     public void testSendVerificationCode() throws MessagingException {
         // Given
-        String to = "test@example.com";
-        String expectedVerificationCode = "testVerificationCode";
         MimeMessage message = new MimeMessage(Session.getDefaultInstance(new Properties()));
         message.setFrom("test@test.com");
 
-        // When
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
         when(javaMailSender.createMimeMessage()).thenReturn(message);
-        doReturn(expectedVerificationCode).when(emailService).createKey();
-        emailService.sendVerificationCode(to);
+        doReturn(any(String.class)).when(emailService).createKey();
+
+        // When
+        emailService.sendVerificationCode(any(String.class));
 
         // Then
         verify(javaMailSender, times(1)).send(any(MimeMessage.class));

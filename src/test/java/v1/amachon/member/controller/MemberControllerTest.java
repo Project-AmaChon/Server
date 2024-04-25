@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MemberControllerTest extends ControllerTest {
 
-    @DisplayName("올바르지 않은 토큰을 사용 시 401 에러를 반환")
+    @DisplayName("올바르지 않은 토큰을 사용 시 401 에러를 반환한다")
     @ParameterizedTest
     @ValueSource(strings = {"invalid token", "Bearer 1234", "Bearer "})
     void invalidToken(String token) throws Exception {
@@ -63,5 +63,22 @@ public class MemberControllerTest extends ControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @DisplayName("로그인되지 않은 사용자는 마이페이지를 조회할 수 없다")
+    @Test
+    void failGetMyPageByNotLoggedUser() throws Exception {
+        // when, then
+        mockMvc.perform(get("/my-page"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("프로필 조회 시 정상적이지 않은 프로필 ID인 경우 400 에러를 반환한다")
+    @Test
+    void notFoundUserProfile() throws Exception {
+        // when, then
+        mockMvc.perform(get("/profile/user"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 
 }

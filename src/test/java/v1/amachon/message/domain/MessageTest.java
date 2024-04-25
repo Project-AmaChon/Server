@@ -1,4 +1,4 @@
-package v1.amachon.message;
+package v1.amachon.message.domain;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,6 @@ import v1.amachon.message.entity.MessageRoom;
 import v1.amachon.message.repository.MessageRepository;
 import v1.amachon.message.repository.MessageRoomRepository;
 
-import static org.assertj.core.api.Assertions.*;
 import static v1.amachon.fixtures.MemberFixtures.정우_이메일;
 import static v1.amachon.fixtures.MemberFixtures.종범_이메일;
 
@@ -58,6 +57,5 @@ class MessageTest {
 
         // then
         Assertions.assertThat(findMessage).isNotNull();
-
     }
 }

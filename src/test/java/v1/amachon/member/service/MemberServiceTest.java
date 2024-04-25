@@ -3,13 +3,12 @@ package v1.amachon.member.service;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import v1.amachon.common.IntegrationTest;
 import v1.amachon.common.config.s3.S3UploadUtil;
 import v1.amachon.common.exception.UnauthorizedException;
 import v1.amachon.fixtures.MemberFixtures;
@@ -36,10 +35,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class MemberServiceTest {
+public class MemberServiceTest extends IntegrationTest {
 
     @Autowired
     private MemberRepository memberRepository;

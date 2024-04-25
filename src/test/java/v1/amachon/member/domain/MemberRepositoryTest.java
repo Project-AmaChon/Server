@@ -6,10 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import v1.amachon.common.RepositoryTest;
 import v1.amachon.member.entity.Member;
-import v1.amachon.member.entity.vo.Profile;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.fixtures.MemberFixtures;
-import v1.amachon.member.service.dto.UpdateProfileRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
