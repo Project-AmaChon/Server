@@ -53,6 +53,7 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
         this.password = password;
         this.profile = Profile.builder().build();
+        this.authorities.add(Authority.ofMember());
     }
 
     public static Member ofMember(JoinRequest joinRequest) {
@@ -61,7 +62,6 @@ public class Member extends BaseEntity {
                 .email(joinRequest.getEmail())
                 .password(joinRequest.getPassword())
                 .build();
-        member.addAuthority(Authority.ofMember(member));
         return member;
     }
 

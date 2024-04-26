@@ -17,13 +17,13 @@ public class Authority implements GrantedAuthority {
 
     private String role;
 
-    public static Authority ofMember(Member member) {
+    public static Authority ofMember() {
         return Authority.builder()
                 .role("ROLE_USER")
                 .build();
     }
 
-    public static Authority ofManager(Member member) {
+    public static Authority ofManager() {
         return Authority.builder()
                 .role("ROLE_MANAGER")
                 .build();
