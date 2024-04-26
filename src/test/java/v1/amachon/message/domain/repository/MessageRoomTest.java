@@ -1,4 +1,4 @@
-package v1.amachon.message.domain;
+package v1.amachon.message.domain.repository;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
