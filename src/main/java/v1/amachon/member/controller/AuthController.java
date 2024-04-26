@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import v1.amachon.common.config.security.AuthenticatedMemberEmail;
 import v1.amachon.mail.service.dto.CertificationDto;
 import v1.amachon.mail.service.EmailService;
 import v1.amachon.member.service.dto.join.EmailDto;

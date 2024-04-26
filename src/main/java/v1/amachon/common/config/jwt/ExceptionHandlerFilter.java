@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import v1.amachon.common.advice.ErrorResponse;
 import v1.amachon.common.config.jwt.exception.JwtException;
+import v1.amachon.common.exception.UnauthorizedException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -22,17 +23,19 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (JwtException ex) {
-            setErrorResponse(HttpStatus.UNAUTHORIZED, request, response, ex);
+        } catch (JwtException e) {
+            setErrorResponse(HttpStatus.UNAUTHORIZED, request, response, e);
+        } catch (UnauthorizedException e) {
+            setErrorResponse(HttpStatus.UNAUTHORIZED, request, response, e);
         }
     }
 
     public void setErrorResponse(HttpStatus status, HttpServletRequest request,
-                                 HttpServletResponse response, Throwable ex) throws IOException {
+                                 HttpServletResponse response, Throwable e) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         response.setStatus(status.value());
         response.setContentType("application/json; charset=UTF-8");
 
-        response.getWriter().write(objectMapper.writeValueAsString(new ErrorResponse(ex.getMessage(), status.value())));
+        response.getWriter().write(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage(), status.value())));
     }
 }
