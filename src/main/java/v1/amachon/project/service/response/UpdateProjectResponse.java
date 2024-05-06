@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ModifyProjectResponse {
+public class UpdateProjectResponse {
     private String title;
     private String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -26,7 +26,7 @@ public class ModifyProjectResponse {
     private String regionTagName;
     private List<String> techTagNames;
 
-    public ModifyProjectResponse(Project project) {
+    public UpdateProjectResponse(Project project) {
         this.title = project.getTitle();
         this.description = project.getDescription();
         this.recruitDeadline = project.getRecruitDeadline();

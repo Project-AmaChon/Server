@@ -33,27 +33,27 @@ public class Member extends BaseEntity {
     @Embedded
     private Profile profile;
 
-    @ElementCollection
-    @CollectionTable(name = "authority", joinColumns = @JoinColumn(name = "member_id"))
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Authority> authorities = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_tag_id")
     private RegionTag regionTag;
 
-    @OneToMany(mappedBy = "from", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "from", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MessageRoom> messageRooms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberTechTag> techTags = new ArrayList<>();
 
     @Builder
-    public Member(String email, String nickname, String password) {
+    public Member(Long id, String email, String nickname, String password) {
+        this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         this.profile = Profile.builder().build();
-        this.authorities.add(Authority.ofMember());
+        this.authorities.add(Authority.ofMember(this));
     }
 
     public static Member ofMember(JoinRequest joinRequest) {

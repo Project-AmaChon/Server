@@ -18,6 +18,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             "JOIN FETCH rm.profile WHERE p.id = :projectId AND p.status = 'NORMAL'")
     Optional<Project> getRecruitListFetch(@Param("projectId") Long projectId);
 
+    @Query("SELECT p FROM Project p JOIN FETCH p.leader l LEFT JOIN FETCH p.recruitManagements r LEFT JOIN FETCH r.member rm " +
+            "LEFT JOIN FETCH rm.profile WHERE l.id = :leaderId AND p.status = 'NORMAL'")
+    List<Project> findByLeaderId(@Param("leaderId") Long leaderId);
+
     @Query("SELECT p FROM Project p JOIN FETCH p.leader JOIN FETCH p.techTags t JOIN FETCH t.techTag " +
             "JOIN FETCH p.regionTag WHERE p.id = :projectId AND p.status = 'NORMAL'")
     Optional<Project> findByIdFetch(@Param("projectId") Long projectId);

@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import v1.amachon.common.entity.BaseEntity;
 import v1.amachon.common.exception.BadRequestException;
 import v1.amachon.member.entity.Member;
-import v1.amachon.project.service.request.ModifyProjectRequest;
+import v1.amachon.project.service.request.UpdateProjectRequest;
 import v1.amachon.project.service.exception.ProjectApplyDeniedException;
 import v1.amachon.tags.entity.regiontag.RegionTag;
 import v1.amachon.tags.entity.techtag.ProjectTechTag;
@@ -43,17 +43,17 @@ public class Project extends BaseEntity {
     private Member leader;
 
     @BatchSize(size = 10)
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<TeamMember> teamMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ProjectTechTag> techTags = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_tag_id")
     private RegionTag regionTag;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<RecruitManagement> recruitManagements = new ArrayList<>();
 
     @Builder
@@ -74,17 +74,20 @@ public class Project extends BaseEntity {
     public void addRecruitManagement(RecruitManagement recruitManagement) {
         recruitManagements.add(recruitManagement);
     }
-    public void addTechTag(ProjectTechTag projectTechTag) {
-        techTags.add(projectTechTag);
-    }
-    public void modifyProject(ModifyProjectRequest modifyProjectRequest, RegionTag regionTag) {
+    public void updateTechTags(List<ProjectTechTag> projectTechTags) {
         techTags.clear();
-        this.title = modifyProjectRequest.getTitle();
-        this.description = modifyProjectRequest.getDescription();
-        this.recruitDeadline = modifyProjectRequest.getRecruitDeadline();
-        this.developPeriod = modifyProjectRequest.getDevelopPeriod();
-        this.recruitNumber = modifyProjectRequest.getRecruitNumber();
+        techTags.addAll(projectTechTags);
+    }
+
+    public void updateRegionTag(RegionTag regionTag) {
         this.regionTag = regionTag;
+    }
+    public void updateProject(UpdateProjectRequest updateProjectRequest) {
+        this.title = updateProjectRequest.getTitle();
+        this.description = updateProjectRequest.getDescription();
+        this.recruitDeadline = updateProjectRequest.getRecruitDeadline();
+        this.developPeriod = updateProjectRequest.getDevelopPeriod();
+        this.recruitNumber = updateProjectRequest.getRecruitNumber();
     }
 
     public void delete() {
@@ -107,14 +110,14 @@ public class Project extends BaseEntity {
     }
 
     public void apply(Member member) {
-        List<Long> teamMembersId = teamMembers.stream().map(TeamMember::getId).collect(Collectors.toList());
-        List<Long> applicantsId = recruitManagements.stream().map(r -> r.getMember().getId()).collect(Collectors.toList());
+        List<String> teamMembersEmail = teamMembers.stream().map(t -> t.getMember().getEmail()).collect(Collectors.toList());
+        List<String> applicantsEmail = recruitManagements.stream().map(r -> r.getMember().getEmail()).collect(Collectors.toList());
 
-        if (leader.getId().equals(member.getId())) {
+        if (leader.getEmail().equals(member.getEmail())) {
             throw new BadRequestException();
         }
 
-        if (teamMembersId.contains(member.getId()) || applicantsId.contains(member.getId())) {
+        if (teamMembersEmail.contains(member.getEmail()) || applicantsEmail.contains(member.getEmail())) {
             throw new ProjectApplyDeniedException();
         }
 

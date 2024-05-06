@@ -28,6 +28,5 @@ public class ProjectTechTag extends BaseEntity {
     public ProjectTechTag(Project project, TechTag techTag) {
         this.project = project;
         this.techTag = techTag;
-        project.addTechTag(this);
     }
 }

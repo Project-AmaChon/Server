@@ -20,6 +20,7 @@ public class ProjectResponse {
     private LocalDate recruitDeadline;
     private int recruitNumber;
     private int currentNumber;
+    private String regionTagName;
     private List<String> tagNames;
 
     public ProjectResponse(Project project) {
@@ -28,6 +29,7 @@ public class ProjectResponse {
         this.recruitDeadline = project.getRecruitDeadline();
         this.recruitNumber = project.getRecruitNumber();
         this.currentNumber = project.getTeamMembers().size();
+        this.regionTagName = project.getRegionTag().getName();
         this.tagNames = project.getTechTags().stream().map(p -> p.getTechTag().getName()).collect(Collectors.toList());
     }
 }

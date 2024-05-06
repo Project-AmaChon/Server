@@ -15,6 +15,6 @@ import java.util.Set;
 public class ProjectSearchCond {
 
     public String keyword;
-    public Set<String> regionTagNames;
-    public Set<String> techTagNames;
+    public List<String> regionTagNames;
+    public List<String> techTagNames;
 }

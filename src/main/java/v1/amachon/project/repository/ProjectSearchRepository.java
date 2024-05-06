@@ -10,7 +10,6 @@ import v1.amachon.project.service.request.ProjectSearchCond;
 import v1.amachon.project.entity.Project;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static v1.amachon.project.entity.QProject.project;
@@ -31,16 +30,16 @@ public class ProjectSearchRepository {
         return (keyword == null || keyword.length() == 0) ? null : project.title.like("%" + keyword + "%");
     }
 
-    private BooleanExpression regionTagIn(Set<String> regionTagNames) {
-        return regionTagNames.isEmpty() ? null : project.regionTag.name.in(regionTagNames);
+    private BooleanExpression regionTagIn(List<String> regionTagNames) {
+        return regionTagNames == null || regionTagNames.isEmpty() ? null : project.regionTag.name.in(regionTagNames);
     }
 
-    private BooleanExpression techTagIn(Set<String> techTagNames) {
-        return techTagNames.isEmpty() ? null : techTag.name.in(techTagNames);
+    private BooleanExpression techTagIn(List<String> techTagNames) {
+        return techTagNames == null || techTagNames.isEmpty() ? null : techTag.name.in(techTagNames);
     }
 
-    private BooleanExpression techTagCountEqCond(Set<String> techTagNames) {
-        return techTagNames.isEmpty() ? null : projectTechTag.count().eq((long) techTagNames.size());
+    private BooleanExpression techTagCountEqCond(List<String> techTagNames) {
+        return techTagNames == null || techTagNames.isEmpty() ? null : projectTechTag.count().eq((long) techTagNames.size());
     }
 
     public List<ProjectResponse> searchProjectByAllCond(ProjectSearchCond cond) {

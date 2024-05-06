@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class ProjectRecruitService {
+public class RecruitProjectService {
 
     private final ProjectRepository projectRepository;
     private final MemberRepository memberRepository;

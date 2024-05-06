@@ -548,63 +548,63 @@
 //        MemberTechTag 로제3 = memberTechTagRepository.save(new MemberTechTag(로제, aws));
 //
 //
-//        이정우.changeRegion(화성시);
+//        이정우.changeRegionTag(화성시);
 //        이정우.changeTechTag(Arrays.asList(이정우1, 이정우2, 이정우3));
-//        박종범.changeRegion(용인시_처인구);
+//        박종범.changeRegionTag(용인시_처인구);
 //        박종범.changeTechTag(Arrays.asList(박종범1, 박종범2, 박종범3));
-//        전재욱.changeRegion(의정부시);
+//        전재욱.changeRegionTag(의정부시);
 //        전재욱.changeTechTag(Arrays.asList(전재욱1, 전재욱2, 전재욱3));
-//        전승현.changeRegion(성남시_분당구);
+//        전승현.changeRegionTag(성남시_분당구);
 //        전승현.changeTechTag(Arrays.asList(전승현1, 전승현2, 전승현3));
-//        허규범.changeRegion(수원시_영통구);
+//        허규범.changeRegionTag(수원시_영통구);
 //        허규범.changeTechTag(Arrays.asList(허규범1, 허규범2, 허규범3));
-//        카리나.changeRegion(화성시);
+//        카리나.changeRegionTag(화성시);
 //        카리나.changeTechTag(Arrays.asList(카리나1, 카리나2, 카리나3));
-//        윈터.changeRegion(화성시);
+//        윈터.changeRegionTag(화성시);
 //        윈터.changeTechTag(Arrays.asList(윈터1, 윈터2, 윈터3));
-//        닝닝.changeRegion(용인시_처인구);
+//        닝닝.changeRegionTag(용인시_처인구);
 //        닝닝.changeTechTag(Arrays.asList(닝닝1, 닝닝2, 닝닝3));
-//        지젤.changeRegion(용인시_처인구);
+//        지젤.changeRegionTag(용인시_처인구);
 //        지젤.changeTechTag(Arrays.asList(지젤1, 지젤2, 지젤3));
-//        카즈하.changeRegion(수원시_영통구);
+//        카즈하.changeRegionTag(수원시_영통구);
 //        카즈하.changeTechTag(Arrays.asList(카즈하1, 카즈하2, 카즈하3));
-//        김채원.changeRegion(의정부시);
+//        김채원.changeRegionTag(의정부시);
 //        김채원.changeTechTag(Arrays.asList(김채원1, 김채원2, 김채원3));
-//        허윤진.changeRegion(화성시);
+//        허윤진.changeRegionTag(화성시);
 //        허윤진.changeTechTag(Arrays.asList(허윤진1, 허윤진2, 허윤진3));
-//        사쿠라.changeRegion(성남시_분당구);
+//        사쿠라.changeRegionTag(성남시_분당구);
 //        사쿠라.changeTechTag(Arrays.asList(사쿠라1, 사쿠라2, 사쿠라3));
-//        홍은채.changeRegion(의정부시);
+//        홍은채.changeRegionTag(의정부시);
 //        홍은채.changeTechTag(Arrays.asList(홍은채1, 홍은채2, 홍은채3));
-//        장원영.changeRegion(화성시);
+//        장원영.changeRegionTag(화성시);
 //        장원영.changeTechTag(Arrays.asList(장원영1, 장원영2, 장원영3));
-//        레이.changeRegion(화성시);
+//        레이.changeRegionTag(화성시);
 //        레이.changeTechTag(Arrays.asList(레이1, 레이2, 레이3));
-//        안유진.changeRegion(성남시_분당구);
+//        안유진.changeRegionTag(성남시_분당구);
 //        안유진.changeTechTag(Arrays.asList(안유진1, 안유진2, 안유진3));
-//        이서.changeRegion(수원시_영통구);
+//        이서.changeRegionTag(수원시_영통구);
 //        이서.changeTechTag(Arrays.asList(이서1, 이서2, 이서3));
-//        가을.changeRegion(강남구);
+//        가을.changeRegionTag(강남구);
 //        가을.changeTechTag(Arrays.asList(가을1, 가을2, 가을3));
-//        리즈.changeRegion(해운대구);
+//        리즈.changeRegionTag(해운대구);
 //        리즈.changeTechTag(Arrays.asList(리즈1, 리즈2, 리즈3));
-//        하니.changeRegion(인제군);
+//        하니.changeRegionTag(인제군);
 //        하니.changeTechTag(Arrays.asList(하니1, 하니2, 하니3));
-//        민지.changeRegion(화성시);
+//        민지.changeRegionTag(화성시);
 //        민지.changeTechTag(Arrays.asList(민지1, 민지2, 민지3));
-//        해린.changeRegion(화성시);
+//        해린.changeRegionTag(화성시);
 //        해린.changeTechTag(Arrays.asList(해린1, 해린2, 해린3));
-//        다니엘.changeRegion(강동구);
+//        다니엘.changeRegionTag(강동구);
 //        다니엘.changeTechTag(Arrays.asList(다니엘1, 다니엘2, 다니엘3));
-//        혜인.changeRegion(광주시);
+//        혜인.changeRegionTag(광주시);
 //        혜인.changeTechTag(Arrays.asList(혜인1, 혜인2, 혜인3));
-//        제니.changeRegion(강남구);
+//        제니.changeRegionTag(강남구);
 //        제니.changeTechTag(Arrays.asList(제니1, 제니2, 제니3));
-//        리사.changeRegion(영등포구);
+//        리사.changeRegionTag(영등포구);
 //        리사.changeTechTag(Arrays.asList(리사1, 리사2, 리사3));
-//        지수.changeRegion(의정부시);
+//        지수.changeRegionTag(의정부시);
 //        지수.changeTechTag(Arrays.asList(지수1, 지수2, 지수3));
-//        로제.changeRegion(영등포구);
+//        로제.changeRegionTag(영등포구);
 //        로제.changeTechTag(Arrays.asList(로제1, 로제2, 로제3));
 //
 //        memberRepository.save(이정우);
@@ -1043,7 +1043,7 @@
 ////        teamMemberRepository.save(new TeamMember(project31, 카즈하));
 //
 //
-//        for (int i = 0; i < 1000; i++) {
+//        for (int i = 0; i < 10; i++) {
 //            Project project = Project.builder().title("더미" + i).description("백엔드 모집" + i)
 //                    .leader(로제).regionTag(강남구).recruitDeadline(LocalDate.now()).recruitNumber(5).developPeriod(LocalDate.now().plusDays(3L)).build();
 //            projectRepository.save(project);
