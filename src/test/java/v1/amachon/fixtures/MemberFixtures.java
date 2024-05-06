@@ -11,26 +11,31 @@ public class MemberFixtures {
     public static final String 정우_이메일 = "acg1111@naver.com";
     public static final String 정우_닉네임 = "정우";
     public static final String 정우_비밀번호 = "1111";
+    public static final Long 정우_ID = 1L;
 
     // 종범
     public static final String 종범_이메일 = "acg2222@naver.com";
     public static final String 종범_닉네임 = "종범";
     public static final String 종범_비밀번호 = "2222";
+    public static final Long 종범_ID = 2L;
 
     // 승현
     public static final String 승현_이메일 = "acg3333@naver.com";
     public static final String 승현_닉네임 = "승현";
     public static final String 승현_비밀번호 = "3333";
+    public static final Long 승현_ID = 3L;
 
     // 재욱
     public static final String 재욱_이메일 = "acg4444@naver.com";
     public static final String 재욱_닉네임 = "재욱";
     public static final String 재욱_비밀번호 = "4444";
+    public static final Long 재욱_ID = 4L;
 
     // 규범
     public static final String 규범_이메일 = "acg5555@naver.com";
     public static final String 규범_닉네임 = "규범";
     public static final String 규범_비밀번호 = "5555";
+    public static final Long 규범_ID = 5L;
 
     public static final UpdateProfileRequestDto 공통_프로필 = new UpdateProfileRequestDto("자기 소개", "설명", "깃허브 url", "블로그 url");
     public static final String 공통_프로필_이미지_URL = "imageUrl";

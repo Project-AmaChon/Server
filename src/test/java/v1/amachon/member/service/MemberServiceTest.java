@@ -7,6 +7,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import v1.amachon.common.IntegrationTest;
 import v1.amachon.common.config.s3.S3UploadUtil;
@@ -25,6 +26,7 @@ import v1.amachon.tags.entity.regiontag.RegionTag;
 import v1.amachon.tags.entity.techtag.MemberTechTag;
 import v1.amachon.tags.entity.techtag.TechTag;
 import v1.amachon.tags.repository.MemberTechTagRepository;
+import v1.amachon.tags.repository.ProjectTechTagRepository;
 import v1.amachon.tags.repository.RegionTagRepository;
 import v1.amachon.tags.repository.TechTagRepository;
 
@@ -35,7 +37,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MemberServiceTest extends IntegrationTest {
 
     @Autowired
@@ -53,12 +54,15 @@ public class MemberServiceTest extends IntegrationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private ProjectTechTagRepository projectTechTagRepository;
+
     @MockBean
     public S3UploadUtil s3UploadUtil;
 
     private MemberService memberService;
 
-    @BeforeAll
+    @BeforeEach
     void setUp() {
         memberService = new MemberService(memberRepository, passwordEncoder, s3UploadUtil);
         Member member = memberRepository.save(MemberFixtures.정우());

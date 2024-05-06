@@ -12,7 +12,6 @@ import v1.amachon.common.config.security.SecurityConfig;
 import v1.amachon.common.config.security.repository.LogoutAccessTokenRedisRepository;
 import v1.amachon.fixtures.MemberFixtures;
 import v1.amachon.mail.service.EmailService;
-import v1.amachon.member.entity.Member;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.common.config.jwt.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import org.springframework.context.annotation.FilterType;
 import v1.amachon.member.service.AuthService;
 import v1.amachon.member.service.MemberService;
 import v1.amachon.message.service.MessageService;
-import v1.amachon.project.service.ProjectRecruitService;
+import v1.amachon.project.service.RecruitProjectService;
 import v1.amachon.project.service.ProjectService;
 import v1.amachon.project.service.SearchProjectService;
 import v1.amachon.tags.service.RegionTagService;
@@ -76,7 +75,7 @@ public class ControllerTest {
     protected ProjectService projectService;
 
     @MockBean
-    protected ProjectRecruitService projectRecruitService;
+    protected RecruitProjectService recruitProjectService;
 
     @MockBean
     protected SearchProjectService searchProjectService;
