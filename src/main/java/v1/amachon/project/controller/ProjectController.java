@@ -27,8 +27,7 @@ public class ProjectController {
 
     @ApiOperation(value = "프로젝트 수정", notes = "프로젝트 수정 페이지 정보 받아오기")
     @GetMapping("/project/{projectId}/modify")
-    public ResponseEntity<UpdateProjectResponse> getModifyProject(@Parameter(hidden = true) @AuthenticatedMemberEmail String email,
-                                                                  @PathVariable("projectId") Long projectId) {
+    public ResponseEntity<UpdateProjectResponse> getModifyProject(@Parameter(hidden = true) @AuthenticatedMemberEmail String email, @PathVariable("projectId") Long projectId) {
         return ResponseEntity.ok(projectService.getUpdateProjectResponse(projectId));
     }
 

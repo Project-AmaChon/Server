@@ -30,7 +30,6 @@ public class SearchProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectSearchRepository projectSearchRepository;
-
     private final RegionTagService regionTagService;
     private final TechTagService techTagService;
 

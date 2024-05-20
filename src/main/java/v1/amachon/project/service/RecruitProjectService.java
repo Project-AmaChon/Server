@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import v1.amachon.common.config.security.util.SecurityUtils;
 import v1.amachon.common.exception.UnauthorizedException;
 import v1.amachon.member.entity.Member;
+import v1.amachon.member.service.exception.NotFoundMemberException;
 import v1.amachon.project.repository.MemberRecommendRepo;
 import v1.amachon.member.repository.MemberRepository;
 import v1.amachon.member.service.dto.RecommendCond;
@@ -36,9 +37,9 @@ public class RecruitProjectService {
     private final MemberRecommendRepo memberRecommendRepo;
     private final TeamMemberRepository teamMemberRepository;
 
-    public void applyForProject(Long projectId) {
-        Member currentMember = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
-                .orElseThrow(UnauthorizedException::new);
+    public void applyForProject(Long projectId, String applicantEmail) {
+        Member currentMember = memberRepository.findByEmail(applicantEmail)
+                .orElseThrow(NotFoundMemberException::new);
         Project project = projectRepository.findByIdFetchRecruitments(projectId)
                 .orElseThrow(NotFoundProjectException::new);
 
@@ -97,10 +98,11 @@ public class RecruitProjectService {
         return memberRecommendRepo.getRecommendMemberByCond(cond);
     }
 
+    @Transactional(readOnly = true)
     private void verifyProjectOwner(Project project) {
         Member currentMember = memberRepository.findByEmail(SecurityUtils.getLoggedUserEmail())
                 .orElseThrow(UnauthorizedException::new);
-        if (currentMember.getId().equals(project.getLeader().getId())) {
+        if (!currentMember.getId().equals(project.getLeader().getId())) {
             throw new FailureProjectModifyException();
         }
     }

@@ -26,7 +26,7 @@ public class ProjectRecruitController {
     @ApiOperation(value = "프로젝트 참가 신청", notes = "프로젝트에 참가 신청을 하고, 신청이 수락되면 팀 멤버로 등록")
     @PostMapping("/project/{projectId}/apply")
     public ResponseEntity<Void> projectApply(@Parameter(hidden = true) @AuthenticatedMemberEmail String email, @PathVariable("projectId") Long projectId) {
-        recruitProjectService.applyForProject(projectId);
+        recruitProjectService.applyForProject(projectId, email);
         return ResponseEntity.ok().build();
     }
 

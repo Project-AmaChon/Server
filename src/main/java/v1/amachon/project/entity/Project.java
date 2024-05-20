@@ -53,7 +53,7 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "region_tag_id")
     private RegionTag regionTag;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<RecruitManagement> recruitManagements = new ArrayList<>();
 
     @Builder
